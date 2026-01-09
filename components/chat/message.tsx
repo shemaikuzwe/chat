@@ -4,6 +4,7 @@ import { BotMessage } from "~/components/ai/bot-message";
 import { useMemo } from "react";
 import { RegenerateFunc } from "~/lib/types";
 import { UIMessage } from "~/lib/ai/types";
+import { FilePreview } from "./file-preview";
 
 interface MessageProps {
   message: UIMessage;
@@ -31,7 +32,7 @@ export default function Message({
         <UserMessage>
           <div className="ml-1 flex flex-col items-start gap-2 w-full">
             {files.map((part, index) => (
-              <ViewAttachment key={index} attachment={part} />
+              <FilePreview file={part} key={index} message={text} />
             ))}
             {text}
           </div>

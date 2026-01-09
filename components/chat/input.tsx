@@ -10,9 +10,6 @@ import React, {
 } from "react";
 import { sleep } from "~/lib/utils";
 import { LoadingButton } from "~/components/ai/spinner-message";
-import AttachmentPreview, {
-  Loading,
-} from "~/components/chat/attachment-preview";
 import type { FileUIPart } from "ai";
 import { useUploadThing } from "~/lib/uploadthing";
 import { toast } from "sonner";
@@ -20,6 +17,7 @@ import { deleteAttachment } from "~/lib/server/actions";
 import { Separator } from "../ui/separator";
 import { ModelSelector } from "./model-select";
 import type { Model } from "~/lib/ai/models";
+import { AttachmentPreview, Loading } from "./attachment-preview";
 
 interface InputFieldProps {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -78,7 +76,7 @@ function InputField({
           {
             url: file.ufsUrl,
             contentType: file.type,
-            name: file.name,
+            filename: file.name,
             type: "file",
             mediaType: file.type,
           },
@@ -122,7 +120,7 @@ function InputField({
           setOPtimisticAttachments((prev) => [
             ...prev,
             {
-              name: file.name,
+              filename: file.name,
               contentType: file.type,
               url: URL.createObjectURL(file),
               isUploading: true,
@@ -145,7 +143,7 @@ function InputField({
         setOPtimisticAttachments((prev) => [
           ...prev,
           {
-            name: file.name,
+            filename: file.name,
             contentType: file.type,
             url: URL.createObjectURL(file),
             isUploading: true,
@@ -168,15 +166,15 @@ function InputField({
     >
       {optimisticAttachments.length > 0 && (
         <>
-          <div className="p-2 ">
+          <div className="p-2">
             <div className="flex items-center gap-2">
               {optimisticAttachments.map((a, index) => (
                 <div key={index}>
                   {a.isUploading ? (
-                    <Loading key={index} attachment={a} />
+                    <Loading key={index} file={a} />
                   ) : (
                     <AttachmentPreview
-                      attachment={a}
+                      file={a}
                       key={index}
                       handleRemove={removeAttachement}
                     />

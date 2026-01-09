@@ -21,7 +21,6 @@ import { LoginForm } from "../auth/login-form";
 import { useSession } from "~/lib/auth/auth-client";
 import { useQueryClient } from "@tanstack/react-query";
 import { type Chat as TChat, UIMessage } from "~/lib/ai/types";
-
 interface ChatProps {
   initialMessages: UIMessage[];
   chatId: string;
