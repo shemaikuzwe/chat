@@ -16,9 +16,10 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "@ai-sdk/google": "^2.0.13",
-    "@ai-sdk/groq": "^2.0.17",
+    "@ai-sdk/google": "^3.0.7",
+    "@ai-sdk/groq": "^3.0.5",
     "@ai-sdk/react": "^2.0.38",
+    "@exalabs/ai-sdk": "^1.0.5",
     "@openrouter/ai-sdk-provider": "1.5.4",
     "@radix-ui/react-alert-dialog": "1.1.4",
     "@radix-ui/react-avatar": "1.1.1",
@@ -41,8 +42,7 @@
     "@uploadthing/react": "^7.3.3",
     "@upstash/ratelimit": "^2.0.6",
     "@upstash/redis": "^1.35.3",
-    "ai": "^5.0.38",
-    "babel-plugin-react-compiler": "19.0.0-beta-201e55d-20241215",
+    "ai": "^6.0.30",
     "better-auth": "^1.4.9",
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.1",

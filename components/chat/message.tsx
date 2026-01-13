@@ -1,5 +1,4 @@
 import { UserMessage } from "~/components/ai/user-message";
-import ViewAttachment from "~/components/chat/view-attachment";
 import { BotMessage } from "~/components/ai/bot-message";
 import { useMemo } from "react";
 import { RegenerateFunc } from "~/lib/types";
@@ -37,15 +36,13 @@ export default function Message({
             {text}
           </div>
         </UserMessage>
-      ) : (
-        <>
-          <BotMessage
-            isLoading={loading}
-            regenerate={regenerate}
-            message={message}
-          />
-        </>
-      )}
+      ) :
+        <BotMessage
+          isLoading={loading}
+          regenerate={regenerate}
+          message={message}
+        />
+      }
     </div>
   );
 }

@@ -15,7 +15,7 @@ interface MessageProps {
 
 const Messages = forwardRef<HTMLDivElement, MessageProps>(function Messages(
   { messages, error, isLoading, regenerate }: MessageProps,
-  ref
+  ref,
 ) {
   return (
     <div
@@ -26,35 +26,32 @@ const Messages = forwardRef<HTMLDivElement, MessageProps>(function Messages(
     >
       {messages.map((message) => (
         <div key={message.id} className={"flex flex-col w-full"}>
-          <Message
-            loading={isLoading}
-            message={message}
-            regenerate={regenerate}
-          />
+          {error && messages[messages.length - 1]?.id === message.id ? (
+            <div className="flex flex-col w-full">
+              <BotMessage
+                isLoading={isLoading}
+                className="text-red-500"
+                regenerate={regenerate}
+              >
+                Unable to generate response. Please try again
+              </BotMessage>
+
+              {!isLoading ? (
+                <ButtonRow message={message} reload={regenerate} content={""} />
+              ) : null}
+            </div>
+          ) : (
+            <Message
+              loading={isLoading}
+              message={message}
+              regenerate={regenerate}
+            />
+          )}
         </div>
       ))}
       {isLoading && messages[messages.length - 1].role === "user" && (
         <div className="flex flex-col w-full">
           <SpinnerMessage />
-        </div>
-      )}
-      {error && (
-        <div className="flex flex-col w-full">
-          <BotMessage
-            isLoading={isLoading}
-            className="text-red-500"
-            regenerate={regenerate}
-          >
-            Unable to generate response. Please try again
-          </BotMessage>
-
-          {!isLoading ? (
-            <ButtonRow
-              messageId={messages[messages.length - 1].id}
-              reload={regenerate}
-              content={""}
-            />
-          ) : null}
         </div>
       )}
     </div>

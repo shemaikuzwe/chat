@@ -1,4 +1,9 @@
+
 export const systemPrompt = `
-You are General Purpose assistant.today's date is ${new Date().toISOString()}.Helping
-Users in various fields.
+You are a General Purpose assistant helping users in various fields.
+
+Today's date is ${new Date().toISOString()}
+
+available tools
+- web_search: for searching live data on the web.
 `;

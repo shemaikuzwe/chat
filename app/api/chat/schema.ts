@@ -5,4 +5,5 @@ export const chatSchema = z.object({
   message: z.any(),
   trigger: z.enum(["regenerate-message", "submit-message"]),
   messageId: z.string().optional(),
+  search: z.boolean().optional(),
 });

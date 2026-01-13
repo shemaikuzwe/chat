@@ -10,6 +10,7 @@ import {
 } from "~/components/ui/reasoning";
 import { Fragment } from "react";
 import { UIMessage } from "~/lib/ai/types";
+import SourcesView from "../chat/source-view";
 
 export function BotMessage({
   className,
@@ -24,12 +25,13 @@ export function BotMessage({
   regenerate: RegenerateFunc;
   message?: UIMessage;
 }) {
+  console.log("message", message);
   return (
     <div className="group relative flex items-start  md:-ml-12">
       <div
         className={cn(
-          "flex size-[24px] shrink-0 select-none items-center justify-center rounded-md  bg-primary text-primary-foreground",
-          className
+          "flex size-6 shrink-0 select-none items-center justify-center rounded-md  bg-primary text-primary-foreground",
+          className,
         )}
       >
         <AssitantIcon size={18} />
@@ -37,7 +39,7 @@ export function BotMessage({
       <div
         className={cn(
           "ml-1 flex-1 flex-col text-sm md:text-sm lg:text-base ",
-          className
+          className,
         )}
       >
         {message
@@ -69,6 +71,19 @@ export function BotMessage({
                       ) : null}
                     </Fragment>
                   );
+                case "file":
+                  return (
+                    <div key={index}>
+                      {msg.filename}
+                      {msg.url}
+                      {msg.mediaType}
+                    </div>
+                  );
+                case "tool-web_search":
+                  return <SourcesView key={index} sources={msg?.output?.results} />;
+
+                // case 'tool-image':
+                //       return <ImageGenerationView key={index} invocation={part} />;
               }
             })
           : children}

@@ -6,15 +6,17 @@ import { Separator } from "~/components/ui/separator";
 import { Card, CardContent } from "~/components/ui/card";
 import { AssitantIcon } from "../ui/icons";
 import Provider from "./provider";
+import { getLastUsedLoginMethod } from "~/lib/auth/auth-client";
 
 export function LoginCard({
   setIsOpen,
 }: {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const lastMethod = getLastUsedLoginMethod();
   return (
     <Card className="overflow-hidden border-none max-w-4xl w-full">
-      <CardContent className="p-0 flex flex-col md:flex-row min-h-[580px]">
+      <CardContent className="p-0 flex flex-col md:flex-row min-h-145">
         <div className="flex-1 p-8 flex flex-col relative">
           <Button
             variant="ghost"
@@ -34,7 +36,7 @@ export function LoginCard({
             <p className="text-muted-foreground text-sm">
               Sign in or create your Chat account
             </p>
-            <Provider name="google" />
+            <Provider name="google" lastUsed={lastMethod === "google"} />
 
             <div className="w-full flex items-center gap-4 py-2">
               <Separator className="flex-1" />
@@ -45,7 +47,7 @@ export function LoginCard({
             </div>
 
             <div className="w-full space-y-4">
-              <Provider name="github" />
+              <Provider name="github" lastUsed={lastMethod === "github"} />
             </div>
 
             <p className="text-[11px] text-muted-foreground leading-relaxed">

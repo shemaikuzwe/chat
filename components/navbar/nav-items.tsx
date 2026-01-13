@@ -35,9 +35,15 @@ export default function NavItems() {
             <SidebarGroup className="group-data-[collapsible=icon]:hidden">
               <SidebarGroupLabel>Today</SidebarGroupLabel>
               <SidebarGroupContent className="list-none">
-                {groupedChats.today.map((chat) => (
-                  <NavItem key={chat.id} chat={chat} />
-                ))}
+                {groupedChats?.today
+                  .sort(
+                    (a, b) =>
+                      new Date(b.updatedAt).getTime() -
+                      new Date(a.updatedAt).getTime(),
+                  )
+                  .map((chat) => (
+                    <NavItem key={chat.id} chat={chat} />
+                  ))}
               </SidebarGroupContent>
             </SidebarGroup>
           )}

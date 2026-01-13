@@ -2,10 +2,11 @@ import "server-only";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { fileTypeFromBuffer } from "file-type";
-import { generateObject, UIMessage, convertToModelMessages } from "ai";
+import { UIMessage, convertToModelMessages, generateText, Output } from "ai";
 import { z } from "zod";
 import { UTApi } from "uploadthing/server";
 import { google } from "@ai-sdk/google";
+import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 
 export const utpapi = new UTApi({
   token: process.env.UPLOADTHING_TOKEN,
@@ -16,18 +17,15 @@ export const ratelimit = new Ratelimit({
 });
 
 async function getChatTitle(messages: UIMessage[]) {
-  const modelMessages = convertToModelMessages(messages);
-  const title = await generateObject({
+  const modelMessages = await convertToModelMessages(messages);
+  const { output } = await generateText({
     model: google("gemini-2.5-flash"),
     system: `you are a chat title generator assistant  based The main context in chat messages.
     if you are given a chat message generate a small title for it`,
     messages: modelMessages,
-    schema: z.object({
-      title: z.string().describe("chat title"),
-    }),
+    output: Output.text(),
   });
-
-  return title.object.title;
+  return output;
 }
 async function getFileType(buffer: ArrayBuffer) {
   const fileType = await fileTypeFromBuffer(buffer);

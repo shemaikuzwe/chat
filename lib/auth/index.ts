@@ -3,12 +3,16 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { headers } from "next/headers";
 import { db } from "../drizzle";
+import { lastLoginMethod } from "better-auth/plugins";
 
 const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL,
   database: drizzleAdapter(db, {
     provider: "pg",
   }),
+  plugins: [
+    lastLoginMethod(),
+  ],
   account: {
     accountLinking: {
       trustedProviders: [

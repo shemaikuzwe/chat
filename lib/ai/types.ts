@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { UIMessage as TUIMessage } from "ai";
-import { Chat as TChat } from "../drizzle";
 
 export const messageMetadataSchema = z.object({
   createdAt: z.number().optional(),

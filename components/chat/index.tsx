@@ -34,7 +34,7 @@ export default function Chat({
   const [_new, setChatId] = useLocalStorage<string | null>("chatId", null);
   const [input, setInput] = useState("");
   const { data, isPending } = useSession();
-
+  const [search, setSearch] = useState(false);
   const isLoggedIn = isPending ? true : !!data?.user;
   const queryClient = useQueryClient();
   const path = usePathname();
@@ -58,6 +58,7 @@ export default function Chat({
                   trigger,
                   id,
                   messageId,
+                  search,
                 },
               };
             case "submit-message":
@@ -68,6 +69,7 @@ export default function Chat({
                   id,
                   message: messages[messages.length - 1],
                   messageId,
+                  search,
                 },
               };
           }
@@ -84,7 +86,6 @@ export default function Chat({
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!input) return;
-    console.log(attachments);
     sendMessage({ text: input, files: attachments });
     const isNew = !path.includes(chatId);
     setInput("");
@@ -195,6 +196,8 @@ export default function Chat({
               setSelectedModel={setSelectedModel}
               stop={stop}
               handleChange={(e) => setInput(e.target.value)}
+              search={search}
+              setSearch={setSearch}
             />
           </div>
         </div>

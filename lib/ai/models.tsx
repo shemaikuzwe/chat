@@ -71,6 +71,12 @@ export const models: Model[] = [
     icon: DeepSeek,
   },
   {
+    id: "glm/glm-4.5-air",
+    name: "GLM 4.5 AIR",
+    model: withMiddleware(openrouter.chat("glm/glm-4.5-air:free")),
+    icon: OpenRouter,
+  },
+  {
     id: "qwen/qwen3-4b",
     name: "Qwen 2.5 32B",
     model: withMiddleware(openrouter.chat("qwen/qwen3-4b:free")),

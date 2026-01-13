@@ -2,18 +2,27 @@ import type { NextRequest } from "next/server";
 import { systemPrompt } from "~/lib/ai/prompt";
 import { chatSchema } from "./schema";
 import { models } from "~/lib/ai/models";
-import { convertToModelMessages, generateId, streamText } from "ai";
+import {
+  convertToModelMessages,
+  generateId,
+  stepCountIs,
+  streamText,
+} from "ai";
 import { getChatById, saveChatData } from "~/lib/server";
 import { cookies } from "next/headers";
 import { after } from "next/server";
 import { createResumableStreamContext } from "resumable-stream/ioredis";
 import { generateMessageId } from "~/lib/ai/utis";
+import { webSearch } from "@exalabs/ai-sdk";
+import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 
+export const maxDuration = 799;
 export async function POST(request: NextRequest) {
   const body = await request.json();
   const parsedBody = chatSchema.parse(body);
 
-  const { id, message, trigger, messageId } = parsedBody;
+  const { id, message, trigger, messageId, search } = parsedBody;
+  console.log("search", search);
   const cookieStore = await cookies();
   const modelId = cookieStore.get("model.id")?.value;
   const model = models.find((m) => m.id === modelId) ?? models[0];
@@ -37,10 +46,10 @@ export async function POST(request: NextRequest) {
       0,
       messages[messageIndex].role === "assistant"
         ? messageIndex
-        : messageIndex + 1
+        : messageIndex + 1,
     );
   }
-  const coreMessage = convertToModelMessages(messages);
+  const coreMessage = await convertToModelMessages(messages);
 
   await saveChatData({
     id: id,
@@ -51,6 +60,11 @@ export async function POST(request: NextRequest) {
     model: model.model,
     messages: coreMessage,
     system: systemPrompt,
+    tools: {
+      web_search: webSearch({ numResults: 5 }),
+    },
+    stopWhen: stepCountIs(10),
+    activeTools: ["web_search"],
   });
 
   return result.toUIMessageStreamResponse({
@@ -67,7 +81,7 @@ export async function POST(request: NextRequest) {
         console.log("total tokens:", part.totalUsage.totalTokens);
         console.log("output tokens:", part.totalUsage.outputTokens);
         console.log("Input tokens:", part.totalUsage.inputTokens);
-        console.log("reasoning tokens:", part.totalUsage.reasoningTokens);
+        console.log("reasoning tokens:", part.totalUsage.outputTokenDetails);
 
         return {
           totalTokens: part.totalUsage.outputTokens,

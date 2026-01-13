@@ -1,6 +1,13 @@
 import { Button } from "~/components/ui/button";
 import Textarea from "react-textarea-autosize";
-import { Paperclip, Send, TriangleAlert } from "lucide-react";
+import {
+  Globe,
+  GlobeLockIcon,
+  Paperclip,
+  SearchIcon,
+  Send,
+  TriangleAlert,
+} from "lucide-react";
 import React, {
   ChangeEvent,
   ClipboardEventHandler,
@@ -30,6 +37,8 @@ interface InputFieldProps {
   optimisticAttachments: Array<FileUIPart & { isUploading?: boolean }>;
   selectedModel: Model;
   setSelectedModel: React.Dispatch<React.SetStateAction<Model>>;
+  search: boolean;
+  setSearch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 function InputField({
   handleChange,
@@ -42,6 +51,8 @@ function InputField({
   optimisticAttachments,
   selectedModel,
   setSelectedModel,
+  search,
+  setSearch,
 }: InputFieldProps) {
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const attachementRef = useRef<HTMLInputElement | null>(null);
@@ -248,11 +259,20 @@ function InputField({
         </div>
       </div>
 
-      <div className="flex items-center border-t border-border px-3 py-1.5">
+      <div className="flex gap-4 items-center border-t border-border px-3 py-1.5">
         <ModelSelector
           selectedModel={selectedModel}
           onModelSelect={setSelectedModel}
         />
+        <Button
+          variant={search ? "secondary" : "outline"}
+          size={"sm"}
+          type="button"
+          onClick={() => setSearch(!search)}
+        >
+          {search ? <Globe /> : <GlobeLockIcon />}
+          Search
+        </Button>
       </div>
     </form>
   );

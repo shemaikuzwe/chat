@@ -54,7 +54,7 @@ export default function UserButton({ session }: Props) {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="center"
-        className="w-60 space-y-1 mb-2  pb-2 px-2 pt-0 mx-2 rounded-md bg-muted/50"
+        className="w-60 space-y-1 mb-2  pb-2 px-2 pt-0 mx-2 rounded-md"
       >
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
