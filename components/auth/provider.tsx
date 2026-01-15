@@ -27,9 +27,9 @@ export default function Provider({ name, lastUsed }: Props) {
         <Button
           onClick={login}
           disabled={isPending}
-          variant={name === "google" ? "default" : "outline"}
+          variant={"outline"}
           size={"lg"}
-          className={"w-full flex gap-2 p-3 rounded-md"}
+          className={"w-full flex gap-2 p-3"}
         >
           {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {name === "google" ? (

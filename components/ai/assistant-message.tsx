@@ -12,7 +12,7 @@ import { Fragment } from "react";
 import { UIMessage } from "~/lib/ai/types";
 import SourcesView from "../chat/source-view";
 
-export function BotMessage({
+export function AssistantMessage({
   className,
   regenerate,
   isLoading,
@@ -25,7 +25,6 @@ export function BotMessage({
   regenerate: RegenerateFunc;
   message?: UIMessage;
 }) {
-  console.log("message", message);
   return (
     <div className="group relative flex items-start  md:-ml-12">
       <div

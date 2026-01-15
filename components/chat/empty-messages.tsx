@@ -13,7 +13,7 @@ export default function EmptyScreen({ onSubmit }: Props) {
   const [text] = useAnimatedText(
     `${name ? name + " !" : ""}  How can I Assist you ?`,
     {
-      duration: 4,
+      duration: 2,
       shouldAnimate: true,
     },
   );

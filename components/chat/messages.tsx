@@ -1,22 +1,26 @@
 "use client";
-import { forwardRef } from "react";
-import { UIMessage } from "ai";
-import { BotMessage } from "~/components/ai/bot-message";
 import { RegenerateFunc } from "~/lib/types";
 import Message from "./message";
 import { SpinnerMessage } from "../ai/spinner-message";
 import ButtonRow from "../ai/button-row";
+import { UIMessage } from "~/lib/ai/types";
+import { AssistantMessage } from "../ai/assistant-message";
+
 interface MessageProps {
   messages: UIMessage[];
   error: Error | undefined;
   isLoading: boolean;
   regenerate: RegenerateFunc;
+  ref: React.Ref<HTMLDivElement>;
 }
 
-const Messages = forwardRef<HTMLDivElement, MessageProps>(function Messages(
-  { messages, error, isLoading, regenerate }: MessageProps,
+export default function Messages({
+  messages,
+  error,
+  isLoading,
+  regenerate,
   ref,
-) {
+}: MessageProps) {
   return (
     <div
       ref={ref}
@@ -28,13 +32,13 @@ const Messages = forwardRef<HTMLDivElement, MessageProps>(function Messages(
         <div key={message.id} className={"flex flex-col w-full"}>
           {error && messages[messages.length - 1]?.id === message.id ? (
             <div className="flex flex-col w-full">
-              <BotMessage
+              <AssistantMessage
                 isLoading={isLoading}
                 className="text-red-500"
                 regenerate={regenerate}
               >
                 Unable to generate response. Please try again
-              </BotMessage>
+              </AssistantMessage>
 
               {!isLoading ? (
                 <ButtonRow message={message} reload={regenerate} content={""} />
@@ -56,7 +60,4 @@ const Messages = forwardRef<HTMLDivElement, MessageProps>(function Messages(
       )}
     </div>
   );
-});
-Messages.displayName = "Messages";
-
-export default Messages;
+}
