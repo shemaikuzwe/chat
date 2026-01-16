@@ -1,4 +1,3 @@
-import { Card, CardContent } from "~/components/ui/card";
 import { useSession } from "~/lib/auth/auth-client";
 import { useAnimatedText } from "~/lib/hooks";
 
@@ -11,9 +10,9 @@ export default function EmptyScreen({ onSubmit }: Props) {
   const session = useSession();
   const name = session.data?.user?.name?.split(" ")[0];
   const [text] = useAnimatedText(
-    `${name ? name + " !" : ""}  How can I Assist you ?`,
+    `${name ? name  +" !" : ""}  How can I Assist you ?`,
     {
-      duration: 2,
+      duration: 1,
       shouldAnimate: true,
     },
   );

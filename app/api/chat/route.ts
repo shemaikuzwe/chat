@@ -1,7 +1,6 @@
 import type { NextRequest } from "next/server";
 import { systemPrompt } from "~/lib/ai/prompt";
 import { chatSchema } from "./schema";
-import { models } from "~/lib/ai/models";
 import {
   convertToModelMessages,
   generateId,
@@ -10,11 +9,12 @@ import {
 } from "ai";
 import { getChatById, saveChatData } from "~/lib/server";
 import { cookies } from "next/headers";
-import { after } from "next/server";
+import { after, NextResponse } from "next/server";
 import { createResumableStreamContext } from "resumable-stream/ioredis";
 import { generateMessageId } from "~/lib/ai/utis";
 import { webSearch } from "@exalabs/ai-sdk";
-import { createOpenRouter } from "@openrouter/ai-sdk-provider";
+import { getModelByIdOrDefault } from "~/lib/server/ai";
+import { modelProvider } from "~/lib/ai/models";
 
 export const maxDuration = 799;
 export async function POST(request: NextRequest) {
@@ -25,7 +25,11 @@ export async function POST(request: NextRequest) {
   console.log("search", search);
   const cookieStore = await cookies();
   const modelId = cookieStore.get("model.id")?.value;
-  const model = models.find((m) => m.id === modelId) ?? models[0];
+  const model = await getModelByIdOrDefault(modelId);
+  console.log("model", model);
+  if (!model) return NextResponse.json("Unimplemented", { status: 405 });
+
+
   const chat = await getChatById(id);
   let messages = chat?.messages ?? [];
   if (trigger === "submit-message") {
@@ -57,7 +61,7 @@ export async function POST(request: NextRequest) {
     streamId: null,
   });
   const result = streamText({
-    model: model.model,
+    model: modelProvider[model.provider](model.model),
     messages: coreMessage,
     system: systemPrompt,
     tools: {
@@ -74,7 +78,7 @@ export async function POST(request: NextRequest) {
       if (part.type === "start") {
         return {
           createdAt: Date.now(),
-          model: model.name,
+          model: model?.name,
         };
       }
       if (part.type === "finish") {

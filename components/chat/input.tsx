@@ -4,7 +4,6 @@ import {
   Globe,
   GlobeLockIcon,
   Paperclip,
-  SearchIcon,
   Send,
   TriangleAlert,
 } from "lucide-react";
@@ -23,7 +22,6 @@ import { toast } from "sonner";
 import { deleteAttachment } from "~/lib/server/actions";
 import { Separator } from "../ui/separator";
 import { ModelSelector } from "./model-select";
-import type { Model } from "~/lib/ai/models";
 import { AttachmentPreview, Loading } from "./attachment-preview";
 
 interface InputFieldProps {
@@ -35,8 +33,6 @@ interface InputFieldProps {
   setAttachments: React.Dispatch<React.SetStateAction<FileUIPart[]>>;
   setOPtimisticAttachments: React.Dispatch<React.SetStateAction<FileUIPart[]>>;
   optimisticAttachments: Array<FileUIPart & { isUploading?: boolean }>;
-  selectedModel: Model;
-  setSelectedModel: React.Dispatch<React.SetStateAction<Model>>;
   search: boolean;
   setSearch: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -49,14 +45,13 @@ function InputField({
   setAttachments,
   setOPtimisticAttachments,
   optimisticAttachments,
-  selectedModel,
-  setSelectedModel,
   search,
   setSearch,
 }: InputFieldProps) {
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const attachementRef = useRef<HTMLInputElement | null>(null);
   const [isPending, startTransition] = useTransition();
+
   function onKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
       e.currentTarget.form?.requestSubmit();
@@ -260,10 +255,7 @@ function InputField({
       </div>
 
       <div className="flex gap-4 items-center border-t border-border px-3 py-1.5">
-        <ModelSelector
-          selectedModel={selectedModel}
-          onModelSelect={setSelectedModel}
-        />
+        <ModelSelector />
         <Button
           variant={search ? "secondary" : "outline"}
           size={"sm"}

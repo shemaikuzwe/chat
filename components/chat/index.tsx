@@ -16,7 +16,6 @@ import { AutoScroller } from "./auto-scoller";
 import { Model, models } from "~/lib/ai/models";
 import { DefaultChatTransport, FileUIPart } from "ai";
 import { generateMessageId } from "~/lib/ai/utis";
-import cookies from "js-cookie";
 import { LoginForm } from "../auth/login-form";
 import { useSession } from "~/lib/auth/auth-client";
 import { useQueryClient } from "@tanstack/react-query";
@@ -38,9 +37,6 @@ export default function Chat({
   const isLoggedIn = isPending ? true : !!data?.user;
   const queryClient = useQueryClient();
   const path = usePathname();
-  const [selectedModel, setSelectedModel] = useState<Model>(() => {
-    return models.find((model) => model.isDefault) || models[0];
-  });
   const [attachments, setAttachments] = useState<Array<FileUIPart>>([]);
   const [optimisticAttachments, setOptimisticAttachments] =
     useOptimistic<Array<FileUIPart & { isUploading?: boolean }>>(attachments);
@@ -117,13 +113,6 @@ export default function Chat({
     handleScroll,
   } = useScroll<HTMLDivElement>();
   const isMobile = useIsMobile();
-
-  useEffect(() => {
-    cookies.set("model.id", selectedModel.id.toString(), {
-      expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-    });
-  }, [selectedModel]);
-
   return (
     <div className="flex flex-col h-screen w-full overflow-hidden">
       {!isLoggedIn ? (
@@ -192,8 +181,6 @@ export default function Chat({
               optimisticAttachments={optimisticAttachments}
               setAttachments={setAttachments}
               setOPtimisticAttachments={setOptimisticAttachments}
-              selectedModel={selectedModel}
-              setSelectedModel={setSelectedModel}
               stop={stop}
               handleChange={(e) => setInput(e.target.value)}
               search={search}

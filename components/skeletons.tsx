@@ -73,3 +73,9 @@ export default function UserSkelton() {
     </div>
   );
 }
+
+export function ModelSelectorSkelton(){
+  return(
+    <Skeleton className="h-10 w-30" />
+  )
+}

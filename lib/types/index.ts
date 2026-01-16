@@ -35,3 +35,9 @@ export type RegenerateFunc = ({
 }?: {
   messageId?: string | undefined;
 } & ChatRequestOptions) => Promise<void>;
+
+export type ModelMeta = {
+  input: string;
+  output: string;
+  reasoning: boolean;
+};

@@ -3,12 +3,16 @@ import {
   boolean,
   index,
   json,
+  pgEnum,
   pgTable,
   text,
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
 import { UIMessage } from "../ai/types";
+import { nanoid } from "nanoid";
+import { ModelMeta } from "../types";
+import { modelTypes, providers } from "../constants/models";
 
 const timestamps = {
   createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
@@ -108,7 +112,24 @@ export const chats = pgTable(
     },
   ],
 );
+// for ai inference
+export const provider = pgEnum("provider", providers);
+// for icons
+export const type = pgEnum("type", modelTypes);
 
+export const model = pgTable("model", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => nanoid(9)),
+  name: text("name").notNull(),
+  model: text("model").notNull(),
+  type: type().notNull(),
+  provider: provider().notNull(),
+  isPremium: boolean("is_premium").default(true),
+  isDefault: boolean().default(false),
+  meta: json("meta").$type<ModelMeta>(),
+  ...timestamps,
+});
 export const userRelations = relations(user, ({ many }) => {
   return {
     accounts: many(account),
