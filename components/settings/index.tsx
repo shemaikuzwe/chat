@@ -8,7 +8,7 @@ import AccountSecurity from "./account";
 
 export function Settings() {
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-8 h-full">
+    <div className=" mx-10 p-6 space-y-8 overflow-y-auto h-full w-full">
       <h1 className="text-3xl font-bold">Settings</h1>
 
       <Tabs defaultValue="personalization" className="w-full">

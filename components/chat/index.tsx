@@ -13,13 +13,13 @@ import { Button } from "~/components/ui/button";
 import Link from "next/link";
 import { useIsMobile } from "~/lib/hooks/use-mobile";
 import { AutoScroller } from "./auto-scoller";
-import { Model, models } from "~/lib/ai/models";
 import { DefaultChatTransport, FileUIPart } from "ai";
 import { generateMessageId } from "~/lib/ai/utis";
 import { LoginForm } from "../auth/login-form";
 import { useSession } from "~/lib/auth/auth-client";
-import { useQueryClient } from "@tanstack/react-query";
 import { type Chat as TChat, UIMessage } from "~/lib/ai/types";
+import { useTRPC } from "~/lib/backend/trpc/client";
+
 interface ChatProps {
   initialMessages: UIMessage[];
   chatId: string;
@@ -30,12 +30,12 @@ export default function Chat({
   initialMessages,
   chatTitle,
 }: ChatProps) {
+  const trpc = useTRPC();
   const [_new, setChatId] = useLocalStorage<string | null>("chatId", null);
   const [input, setInput] = useState("");
   const { data, isPending } = useSession();
   const [search, setSearch] = useState(false);
   const isLoggedIn = isPending ? true : !!data?.user;
-  const queryClient = useQueryClient();
   const path = usePathname();
   const [attachments, setAttachments] = useState<Array<FileUIPart>>([]);
   const [optimisticAttachments, setOptimisticAttachments] =
@@ -75,7 +75,7 @@ export default function Chat({
       generateId: generateMessageId,
       onFinish: (data) => {
         setChatId(chatId);
-        queryClient.invalidateQueries({ queryKey: ["chats"] });
+        trpc.chat.getUserChats.invalidate();
       },
     });
 
@@ -87,19 +87,22 @@ export default function Chat({
     setInput("");
     setAttachments([]);
     if (isNew) {
-      queryClient.setQueryData(["chats"], (prevChats: TChat[]): TChat[] => {
-        return [
-          ...(prevChats || []),
-          {
-            id: chatId,
-            title: "New Chat",
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            userId: data?.user?.id ?? "",
-            isPending: true,
-          },
-        ];
-      });
+      trpc.chat.getUserChats.setData(
+        undefined,
+        (prevChats: TChat[] | undefined): TChat[] => {
+          return [
+            ...(prevChats || []),
+            {
+              id: chatId,
+              title: "New Chat",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              userId: data?.user?.id ?? "",
+              isPending: true,
+            },
+          ];
+        },
+      );
       history.pushState(null, "", `/chat/${chatId}`);
     }
   }

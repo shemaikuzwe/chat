@@ -10,26 +10,17 @@ import {
 import { Button } from "~/components/ui/button";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { cn } from "~/lib/utils";
-import { useQuery } from "@tanstack/react-query";
 import type { Model } from "~/lib/drizzle";
 import cookies from "js-cookie";
 import { ModelSelectorSkelton } from "../skeletons";
+import { trpc } from "~/lib/backend/trpc/client";
 
 export function ModelSelector() {
   const [searchQuery, setSearchQuery] = useState("");
   const [open, setOpen] = useState(false);
   const [selectedModel, setSelectedModel] = useState<Model>();
 
-  const { data: models, isLoading } = useQuery<Model[]>({
-    queryKey: ["models"],
-    queryFn: async () => {
-      const res = await fetch("/api/models");
-      if (!res.ok) {
-        throw new Error("failed to get models");
-      }
-      return res.json();
-    },
-  });
+  const { data: models, isLoading } = trpc.models.useQuery()
 
   useEffect(() => {
     if (selectedModel) {
@@ -74,25 +65,25 @@ export function ModelSelector() {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild disabled={isLoading}>
         {isLoading ? (
-         <ModelSelectorSkelton/>
+          <ModelSelectorSkelton />
         )
-        :<Button
-          variant="outline"
-          className="w-fit max-w-xs justify-between h-auto p-1.5 focus-within:bg-transparent bg-none outline-hidden border-none shadow-none"
-          onClick={() => setOpen(!open)}
-        >
-          {selectedModel && (
-            <div key={selectedModel.id} className="flex items-center space-x-3">
-              <div className="shrink-0">
-                {SelectedModelIcon && <SelectedModelIcon size={28} />}
+          : <Button
+            variant="outline"
+            className="w-fit max-w-xs justify-between h-auto p-1.5 focus-within:bg-transparent bg-none outline-hidden border-none shadow-none"
+            onClick={() => setOpen(!open)}
+          >
+            {selectedModel && (
+              <div key={selectedModel.id} className="flex items-center space-x-3">
+                <div className="shrink-0">
+                  {SelectedModelIcon && <SelectedModelIcon size={28} />}
+                </div>
+                <div className="flex-1 min-w-0 text-left">
+                  <div className="font-medium text-sm">{selectedModel.name}</div>
+                </div>
               </div>
-              <div className="flex-1 min-w-0 text-left">
-                <div className="font-medium text-sm">{selectedModel.name}</div>
-              </div>
-            </div>
-          )}
-        </Button>
-}
+            )}
+          </Button>
+        }
       </PopoverTrigger>
 
       <PopoverContent className="w-100 p-0" align="start">

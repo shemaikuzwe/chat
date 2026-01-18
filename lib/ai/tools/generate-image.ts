@@ -1,27 +1,36 @@
-import { google } from '@ai-sdk/google';
-import { openai } from '@ai-sdk/openai';
-import { UIToolInvocation, tool, generateImage } from 'ai';
-import { z } from 'zod';
+import { google } from "@ai-sdk/google";
+import { generateText, UIToolInvocation, tool } from "ai";
+import { z } from "zod";
+import { uploadImage } from "~/lib/server/helpers";
 
 export const generateImageTool = tool({
-  description: 'Generate an image',
+  description: "Generate an image",
   inputSchema: z.object({
-    prompt:z.string().min(1),
+    prompt: z.string().min(1),
+    maxImagesPerCall: z.number().default(1),
   }),
-  async execute({prompt}) {
-    const result = await generateImage({
-      model:google("gemini-2.5-flash-image-preview"),
+  async execute({ prompt, maxImagesPerCall }) {
+    console.log("started generating image", prompt, maxImagesPerCall);
+    const result = await generateText({
+      model: google("gemini-2.5-flash-image"),
       prompt,
     });
-
-    return {
-      mediaType: result.image.mediaType,
-      base64: result.image.base64,
-    };
+    console.log("getting here", result);
+    const files = result.files;
+    const res = await uploadImage(files);
+    if (!res) {
+      throw new Error("Image upload failed");
+    }
+    console.log("res", res);
+    return res;
   },
-  toModelOutput: ({ output: { mediaType, base64 } }) => ({
-    type: 'content',
-    value: [{ type: 'image-data', data: base64, mediaType }],
+  toModelOutput: ({ output }) => ({
+    type: "content",
+    value: output.map((f) => ({
+      type: "image-data",
+      data: f.url,
+      mediaType: f.mediaType,
+    })),
   }),
 });
 

@@ -6,6 +6,7 @@ import { cn } from "~/lib/utils";
 import { Geist } from "next/font/google";
 import type { Metadata } from "next";
 import Providers from "~/components/providers";
+import { TRPCProvider } from "~/lib/backend/trpc/client";
 
 export const metadata: Metadata = {
   title: {
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
   },
-  metadataBase: new URL("https://-Chat.vercel.app"),
+  metadataBase: new URL("https://chat.vercel.app"),
   keywords: [
     "Programming assistant",
     " analysis",
@@ -43,17 +44,19 @@ export default function RootLayout({
         className={cn("font-sans antialiased", geist.className)}
         suppressContentEditableWarning
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Providers>
-            <TooltipProvider>{children}</TooltipProvider>
-          </Providers>
-          <Toaster />
-        </ThemeProvider>
+        <TRPCProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Providers>
+              <TooltipProvider>{children}</TooltipProvider>
+            </Providers>
+            <Toaster />
+          </ThemeProvider>
+        </TRPCProvider>
       </body>
     </html>
   );

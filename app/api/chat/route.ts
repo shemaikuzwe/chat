@@ -15,8 +15,9 @@ import { generateMessageId } from "~/lib/ai/utis";
 import { webSearch } from "@exalabs/ai-sdk";
 import { getModelByIdOrDefault } from "~/lib/server/ai";
 import { modelProvider } from "~/lib/ai/models";
+import { generateImageTool } from "~/lib/ai/tools/generate-image";
 
-export const maxDuration = 799;
+export const maxDuration = 300;
 export async function POST(request: NextRequest) {
   const body = await request.json();
   const parsedBody = chatSchema.parse(body);
@@ -26,7 +27,6 @@ export async function POST(request: NextRequest) {
   const cookieStore = await cookies();
   const modelId = cookieStore.get("model.id")?.value;
   const model = await getModelByIdOrDefault(modelId);
-  console.log("model", model);
   if (!model) return NextResponse.json("Unimplemented", { status: 405 });
 
 
@@ -66,9 +66,10 @@ export async function POST(request: NextRequest) {
     system: systemPrompt,
     tools: {
       web_search: webSearch({ numResults: 5 }),
+      generate_image: generateImageTool,
     },
     stopWhen: stepCountIs(10),
-    activeTools: ["web_search"],
+    activeTools: ["web_search","generate_image"],
   });
 
   return result.toUIMessageStreamResponse({

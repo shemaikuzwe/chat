@@ -7,18 +7,11 @@ import {
   SidebarMenuItem,
 } from "../ui/sidebar";
 import { groupChats } from "~/lib/utils";
-import { useQuery } from "@tanstack/react-query";
 import { MessageSquarePlus } from "lucide-react";
 import { ChatsSkeleton } from "../skeletons";
-import { Chat } from "~/lib/ai/types";
+import { trpc } from "~/lib/backend/trpc/client";
 export default function NavItems() {
-  const { data: chats, isLoading } = useQuery<Array<Chat>>({
-    queryKey: ["chats"],
-    queryFn: async () => {
-      const res = await fetch("/api/chats");
-      return res.json();
-    },
-  });
+  const { data: chats, isLoading } = trpc.chat.getUserChats.useQuery();
   const groupedChats = groupChats(chats || []);
 
   return (

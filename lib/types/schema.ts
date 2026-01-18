@@ -19,4 +19,20 @@ const editChatSchema = z.object({
     }),
 });
 
-export { fileSchema, editChatSchema };
+const customizationSchema = z.object({
+  name: z.string().min(1, {
+    message: "Name is required",
+  }).optional(),
+  occupation: z.string().min(1, {
+    message: "Occupation is required",
+  }).optional(),
+  bio: z.string().min(1, {
+    message: "Bio is required",
+  }).optional(),
+  customInstructions: z.string().min(1, {
+    message: "Custom instructions is required",
+  }).optional(),
+});
+type Customization = z.infer<typeof customizationSchema>;
+
+export { fileSchema, editChatSchema, customizationSchema, type Customization };

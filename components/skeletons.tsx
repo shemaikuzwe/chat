@@ -74,8 +74,16 @@ export default function UserSkelton() {
   );
 }
 
-export function ModelSelectorSkelton(){
-  return(
+export function ModelSelectorSkelton() {
+  return (
     <Skeleton className="h-10 w-30" />
   )
 }
+
+export function ImageSkeleton() {
+  return (
+    <div className="flex flex-col gap-2">
+      <Skeleton className="h-70 w-70" />
+    </div>
+  )
+} 

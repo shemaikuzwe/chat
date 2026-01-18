@@ -72,7 +72,7 @@ export default function ButtonRow({ content, reload, message }: Props) {
 
   return (
     <div className="flex gap-2 mt-2 justify-end">
-      <div className="flex justify-center items-center gap-2 italic">
+      <div className="flex justify-center items-center gap-2 font-sans italic">
         {message?.metadata?.model && (
           <span className="text-sm">{message.metadata.model}</span>
         )}

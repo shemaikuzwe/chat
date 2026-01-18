@@ -29,10 +29,9 @@ export default function NavItem({ chat }: NavItemProps) {
   const isActive = pathname === path;
   const [newChat, setNewChat] = useLocalStorage<string | null>("chatId", null);
   const animate = chat.id === newChat;
-  const queryClient = useQueryClient();
 
   const onSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: ["chats"] });
+    // queryClient.invalidateQueries({ queryKey: ["chats"] });
   };
   const [text] = useAnimatedText(chat?.title || "New chat", {
     shouldAnimate: animate,

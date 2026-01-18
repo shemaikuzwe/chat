@@ -1,4 +1,4 @@
-import {useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -25,8 +25,8 @@ import {
 } from "lucide-react";
 import type { Chat } from "~/lib/ai/types";
 import { usePathname, useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { trpc } from "~/lib/backend/trpc/client";
 
 interface Props {
   chat: Chat;
@@ -36,21 +36,17 @@ interface Props {
 export function DeleteDialog({ chat, onSuccess }: Props) {
   const pathname = usePathname();
   const router = useRouter();
-  const { mutate, isPending } = useMutation({
-    mutationFn: async () => {
-      const res = await fetch(`/api/chats/${chat.id}`, { method: "DELETE" });
-      return res.json();
-    },
-    onSuccess: () => {
-      if (pathname.includes(chat.id)) {
-        router.replace("/");
-      }
-      onSuccess?.();
-    },
-    onError: () => {
-      toast.error("Failed to delete chat");
-    },
-  });
+  const { mutate, isPending, isSuccess, isError } =
+    trpc.chat.deleteChat.useMutation();
+  if (isSuccess) {
+    if (pathname.includes(chat.id)) {
+      router.replace("/");
+    }
+    onSuccess?.();
+  }
+  if (isError) {
+    toast.error("Failed to delete chat");
+  }
 
   return (
     <Dialog>
@@ -63,7 +59,7 @@ export function DeleteDialog({ chat, onSuccess }: Props) {
           Delete
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-106">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <AlertCircle className="w-5 h-5 text-red-500" />
@@ -83,7 +79,7 @@ export function DeleteDialog({ chat, onSuccess }: Props) {
           </DialogClose>
 
           <Button
-            onClick={() => mutate()}
+            onClick={() => mutate({ id: chat.id })}
             variant="destructive"
             disabled={isPending}
           >
@@ -106,23 +102,11 @@ export function DeleteDialog({ chat, onSuccess }: Props) {
 }
 
 export function RenameDialog({ chat, onSuccess }: Props) {
-  const [title, setTitle] = useState(chat.title);
-  const { mutate, isPending } = useMutation({
-    mutationFn: async () => {
-      const res = await fetch(`/api/chats/${chat.id}`, {
-        method: "PATCH",
-        body: JSON.stringify({ title }),
-      });
-      return res.json();
-    },
-    onSuccess: () => {
-      onSuccess?.();
-    },
-    onError: () => {
-      toast.error("Failed to rename chat");
-    },
-  });
-
+  const [title, setTitle] = useState(chat.title ?? "");
+  const { mutate, isPending, isSuccess } = trpc.chat.updateTitle.useMutation();
+  if (isSuccess) {
+    onSuccess?.();
+  }
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -131,7 +115,7 @@ export function RenameDialog({ chat, onSuccess }: Props) {
           Rename
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-106">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Edit3 className="w-5 h-5" />
@@ -157,7 +141,7 @@ export function RenameDialog({ chat, onSuccess }: Props) {
 
           <Button
             disabled={isPending || title === chat.title || !title.trim()}
-            onClick={() => mutate()}
+            onClick={() => mutate({ id: chat.id, title: title })}
           >
             {isPending ? (
               <>
@@ -189,7 +173,7 @@ export function ShareDialog({ chat }: Props) {
           Share
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-106">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Link className="w-5 h-5" />

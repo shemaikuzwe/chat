@@ -15,11 +15,11 @@ import { ModelMeta } from "../types";
 import { modelTypes, providers } from "../constants/models";
 
 const timestamps = {
-  createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
-  updatedAt: timestamp("updated_at", { mode: "date" })
+  createdAt: timestamp("created_at", { mode: "string" }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { mode: "string" })
     .notNull()
     .defaultNow()
-    .$onUpdate(() => new Date()),
+    .$onUpdate(() => new Date().toISOString()),
 };
 
 export const user = pgTable("user", {
@@ -33,6 +33,17 @@ export const user = pgTable("user", {
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
+});
+
+export const userPreferences = pgTable("user_preferences", {
+  userId: text("user_id")
+    .primaryKey()
+    .references(() => user.id, { onDelete: "cascade" }),
+  nickName: text("nick_name"),
+  occupation: text("occupation"),
+  bio: text("bio"),
+  customInstructions: text("custom_instructions"),
+  ...timestamps,
 });
 
 export const session = pgTable(
@@ -130,11 +141,25 @@ export const model = pgTable("model", {
   meta: json("meta").$type<ModelMeta>(),
   ...timestamps,
 });
-export const userRelations = relations(user, ({ many }) => {
+
+export const userPreferencesRelations = relations(
+  userPreferences,
+  ({ one }) => ({
+    user: one(user, {
+      fields: [userPreferences.userId],
+      references: [user.id],
+    }),
+  }),
+);
+export const userRelations = relations(user, ({ many, one }) => {
   return {
     accounts: many(account),
     chats: many(chats),
     sessions: many(session),
+    userPreferences: one(userPreferences, {
+      fields: [user.id],
+      references: [userPreferences.userId],
+    }),
   };
 });
 

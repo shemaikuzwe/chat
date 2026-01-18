@@ -2,11 +2,15 @@ import "server-only";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { fileTypeFromBuffer } from "file-type";
-import { UIMessage, convertToModelMessages, generateText, Output } from "ai";
-import { z } from "zod";
+import {
+  UIMessage,
+  convertToModelMessages,
+  GeneratedFile,
+  generateText,
+  Output,
+} from "ai";
 import { UTApi } from "uploadthing/server";
 import { google } from "@ai-sdk/google";
-import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 
 export const utpapi = new UTApi({
   token: process.env.UPLOADTHING_TOKEN,
@@ -32,4 +36,21 @@ async function getFileType(buffer: ArrayBuffer) {
   return fileType;
 }
 
-export { getChatTitle, getFileType };
+async function uploadImage(files: GeneratedFile[]) {
+  const imageFiles = files.filter((f) => f.mediaType.startsWith("image/"));
+  const uploadFiles = imageFiles.map(
+    (f) => new File([Buffer.from(f.base64)], "image", { type: f.mediaType })
+  );
+  const result = await utpapi.uploadFiles(uploadFiles);
+  return result.map((res) => {
+    if (res.error) {
+      return null;
+    }
+    return {
+      url: res.data?.ufsUrl,
+      mediaType: res.data?.type,
+    };
+  });
+}
+
+export { getChatTitle, getFileType, uploadImage };

@@ -6,4 +6,5 @@ Today's date is ${new Date().toISOString()}
 
 available tools
 - web_search: for searching live data on the web.
+- generate_image: for generating images.
 `;
