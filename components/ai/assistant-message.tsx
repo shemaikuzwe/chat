@@ -44,49 +44,50 @@ export function AssistantMessage({
       >
         {message
           ? message.parts.map((msg, index) => {
-            switch (msg.type) {
-              case "reasoning":
-                return (
-                  <Fragment key={index}>
-                    <Reasoning
-                      isStreaming={
-                        isLoading && index === message.parts.length - 1
-                      }
-                    >
-                      <ReasoningTrigger />
-                      <ReasoningContent>{msg.text}</ReasoningContent>
-                    </Reasoning>
-                  </Fragment>
-                );
-              case "text":
-                return (
-                  <Fragment key={index}>
-                    <Markdown isAnimating={isLoading}>{msg.text}</Markdown>
-                    {!isLoading ? (
-                      <ButtonRow
-                        message={message}
-                        reload={regenerate}
-                        content={msg.type}
-                      />
-                    ) : null}
-                  </Fragment>
-                );
-              case "file":
-                return (
-                  <div key={index}>
-                    {msg.filename}
-                    {msg.url}
-                    {msg.mediaType}
-                  </div>
-                );
-              case "tool-web_search":
-                return <SourcesView key={index} sources={msg?.output?.results} />;
+              switch (msg.type) {
+                case "reasoning":
+                  return (
+                    <Fragment key={index}>
+                      <Reasoning
+                        isStreaming={
+                          isLoading && index === message.parts.length - 1
+                        }
+                      >
+                        <ReasoningTrigger />
+                        <ReasoningContent>{msg.text}</ReasoningContent>
+                      </Reasoning>
+                    </Fragment>
+                  );
+                case "text":
+                  return (
+                    <Fragment key={index}>
+                      <Markdown isAnimating={isLoading}>{msg.text}</Markdown>
+                      {!isLoading ? (
+                        <ButtonRow
+                          message={message}
+                          reload={regenerate}
+                          content={msg.type}
+                        />
+                      ) : null}
+                    </Fragment>
+                  );
+                case "file":
+                  return (
+                    <div key={index}>
+                      {msg.filename}
+                      {msg.url}
+                      {msg.mediaType}
+                    </div>
+                  );
+                case "tool-web_search":
+                  return (
+                    <SourcesView key={index} sources={msg?.output?.results} />
+                  );
 
-              case 'tool-generate_image':
-        
-                return <ImageGenerationView key={index} invocation={msg} />;
-            }
-          })
+                case "tool-generate_image":
+                  return <ImageGenerationView key={index} invocation={msg} />;
+              }
+            })
           : children}
       </div>
     </div>

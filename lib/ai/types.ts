@@ -9,9 +9,9 @@ export const messageMetadataSchema = z.object({
 export type MessageMetadata = z.infer<typeof messageMetadataSchema>;
 export type UIMessage = TUIMessage<MessageMetadata>;
 export type Chat = {
-  title: string|null;
-  createdAt: string | Date;
-  updatedAt: string | Date;
+  title: string | null;
+  createdAt: string;
+  updatedAt: string;
   id: string;
   userId: string;
   isPending?: boolean;

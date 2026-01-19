@@ -11,7 +11,7 @@ export default function Personalization() {
         <h2 className="text-xl font-semibold">Profile</h2>
         <div className="flex items-center space-x-4 space-y-2">
           <Avatar className="w-16 h-16 border-2 border-border">
-            <AvatarImage src="/placeholder.svg" alt="user" />
+            <AvatarImage src={data?.user?.image ?? ""} alt="user" />
             <AvatarFallback className="bg-muted text-xl font-bold">
               {data?.user?.name.split(" ")[0][0] || "U"}
             </AvatarFallback>

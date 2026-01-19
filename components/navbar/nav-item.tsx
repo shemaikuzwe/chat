@@ -14,10 +14,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { DeleteDialog, RenameDialog, ShareDialog } from "../dialogs";
-import { useQueryClient } from "@tanstack/react-query";
+import { DeleteDialog, RenameDialog, ShareDialog } from "../dialogs";;
 import { Chat } from "~/lib/ai/types";
 import { Loader2, MoreHorizontal } from "lucide-react";
+import { useTRPC } from "~/lib/backend/trpc/client";
 
 interface NavItemProps {
   chat: Chat;
@@ -29,9 +29,10 @@ export default function NavItem({ chat }: NavItemProps) {
   const isActive = pathname === path;
   const [newChat, setNewChat] = useLocalStorage<string | null>("chatId", null);
   const animate = chat.id === newChat;
+  const trpc = useTRPC();
 
   const onSuccess = () => {
-    // queryClient.invalidateQueries({ queryKey: ["chats"] });
+    trpc.chat.getUserChats.invalidate();
   };
   const [text] = useAnimatedText(chat?.title || "New chat", {
     shouldAnimate: animate,

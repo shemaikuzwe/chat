@@ -9,13 +9,13 @@ import {
 } from "./ui/dropdown-menu";
 import { DeleteDialog, RenameDialog, ShareDialog } from "./dialogs";
 import type { Chat } from "~/lib/ai/types";
-import { useQueryClient } from "@tanstack/react-query";
+import { useTRPC } from "~/lib/backend/trpc/client";
 
 export default function ChatOptionsMenu({ chat }: { chat: Chat }) {
-  const queryClient = useQueryClient();
+  const trpc = useTRPC();
 
   const onSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: ["chats"] });
+    trpc.chat.getUserChats.invalidate();
   };
 
   return (

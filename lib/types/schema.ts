@@ -20,18 +20,18 @@ const editChatSchema = z.object({
 });
 
 const customizationSchema = z.object({
-  name: z.string().min(1, {
-    message: "Name is required",
-  }).optional(),
-  occupation: z.string().min(1, {
-    message: "Occupation is required",
-  }).optional(),
-  bio: z.string().min(1, {
-    message: "Bio is required",
-  }).optional(),
-  customInstructions: z.string().min(1, {
-    message: "Custom instructions is required",
-  }).optional(),
+  name: z.string().max(20, {
+    message: "Name is too long",
+  }),
+  occupation: z.string().max(20, {
+    message: "Occupation is too long",
+  }),
+  bio: z.string().max(50, {
+    message: "Bio is too long",
+  }),
+  customInstructions: z.string().max(50, {
+    message: "Custom instructions is too long",
+  }),
 });
 type Customization = z.infer<typeof customizationSchema>;
 

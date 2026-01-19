@@ -38,16 +38,18 @@ export function DeleteDialog({ chat, onSuccess }: Props) {
   const router = useRouter();
   const { mutate, isPending, isSuccess, isError } =
     trpc.chat.deleteChat.useMutation();
-  if (isSuccess) {
-    if (pathname.includes(chat.id)) {
-      router.replace("/");
-    }
-    onSuccess?.();
-  }
-  if (isError) {
-    toast.error("Failed to delete chat");
-  }
 
+  useEffect(() => {
+    if (isSuccess) {
+      onSuccess?.();
+    }
+  }, [isSuccess]);
+  useEffect(() => {
+    if (isError) {
+      toast.error("Failed to delete chat");
+    }
+  }, [isError]);
+  
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -104,9 +106,11 @@ export function DeleteDialog({ chat, onSuccess }: Props) {
 export function RenameDialog({ chat, onSuccess }: Props) {
   const [title, setTitle] = useState(chat.title ?? "");
   const { mutate, isPending, isSuccess } = trpc.chat.updateTitle.useMutation();
-  if (isSuccess) {
-    onSuccess?.();
-  }
+  useEffect(() => {
+    if (isSuccess) {
+      onSuccess?.();
+    }
+  }, [isSuccess]);
   return (
     <Dialog>
       <DialogTrigger asChild>

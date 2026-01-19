@@ -87,22 +87,19 @@ export default function Chat({
     setInput("");
     setAttachments([]);
     if (isNew) {
-      trpc.chat.getUserChats.setData(
-        undefined,
-        (prevChats: TChat[] | undefined): TChat[] => {
-          return [
-            ...(prevChats || []),
-            {
-              id: chatId,
-              title: "New Chat",
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              userId: data?.user?.id ?? "",
-              isPending: true,
-            },
-          ];
-        },
-      );
+      trpc.chat.getUserChats.setData(undefined, (prevChats) => {
+        return [
+          ...(prevChats || []),
+          {
+            id: chatId,
+            title: "New Chat",
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            userId: data?.user?.id ?? "",
+            isPending: true,
+          },
+        ];
+      });
       history.pushState(null, "", `/chat/${chatId}`);
     }
   }

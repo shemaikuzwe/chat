@@ -2,14 +2,19 @@ import "server-only";
 import { db } from "~/lib/drizzle";
 import { cache } from "react";
 import { getChatTitle } from "~/lib/server/helpers";
-import { chats } from "~/lib/drizzle/schema";
+import { chats, userPreferences } from "~/lib/drizzle/schema";
 import { getSession } from "../auth";
 import { UIMessage } from "../ai/types";
+import { Customization } from "../types/schema";
 
 export const getChats = cache(async (userId: string | undefined) => {
   if (!userId) return [];
   try {
     const chats = await db.query.chats.findMany({
+      columns: {
+        messages: false,
+        activeStreamId: false,
+      },
       where: (chat, { eq }) => eq(chat.userId, userId),
       orderBy: (chat, { desc }) => desc(chat.updatedAt),
     });
@@ -72,7 +77,6 @@ export async function saveChatData({
     return null;
   }
 }
-
 export const getUserChats = async () => {
   try {
     const session = await getSession();
@@ -92,3 +96,20 @@ export const getUserChats = async () => {
     return [];
   }
 };
+
+export async function saveUserPreferences(userId: string, data: Customization) {
+  await db
+    .insert(userPreferences)
+    .values({
+      userId,
+      nickName: data.name,
+      ...data,
+    })
+    .onConflictDoUpdate({
+      target: userPreferences.userId,
+      set: {
+        nickName: data.name,
+        ...data,
+      },
+    });
+}
