@@ -5,19 +5,18 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "~/components/ui/sidebar";
-import { cn } from "~/lib/utils";
 import { usePathname } from "next/navigation";
 import { useAnimatedText, useLocalStorage } from "~/lib/hooks";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { DeleteDialog, RenameDialog, ShareDialog } from "../dialogs";;
 import { Chat } from "~/lib/ai/types";
-import { Loader2, MoreHorizontal } from "lucide-react";
-import { useTRPC } from "~/lib/backend/trpc/client";
+import { Loader2 } from "lucide-react";
+import ChatOptionsMenu from "../chat-options";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "../ui/context-menu";
+import { DeleteDialog, RenameDialog, ShareDialog } from "../dialogs";
 
 interface NavItemProps {
   chat: Chat;
@@ -29,11 +28,7 @@ export default function NavItem({ chat }: NavItemProps) {
   const isActive = pathname === path;
   const [newChat, setNewChat] = useLocalStorage<string | null>("chatId", null);
   const animate = chat.id === newChat;
-  const trpc = useTRPC();
 
-  const onSuccess = () => {
-    trpc.chat.getUserChats.invalidate();
-  };
   const [text] = useAnimatedText(chat?.title || "New chat", {
     shouldAnimate: animate,
     duration: 1,
@@ -43,37 +38,35 @@ export default function NavItem({ chat }: NavItemProps) {
   });
   return (
     <SidebarMenuItem>
-      <SidebarMenuButton
-        asChild
-        isActive={isActive}
-        className="group/chat-item"
-      >
-        <Link href={path}>
-          <span className="truncate">{text}</span>
-          {chat?.isPending && (
-            <Loader2 className="w-4 h-4 animate-spin ml-auto" />
-          )}
-        </Link>
-      </SidebarMenuButton>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <SidebarMenuAction showOnHover>
-            <MoreHorizontal />
-            <span className="sr-only">More</span>
-          </SidebarMenuAction>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-32" align="end">
-          <DropdownMenuItem asChild>
+      <ContextMenu>
+        <ContextMenuTrigger asChild>
+          <SidebarMenuButton
+            asChild
+            isActive={isActive}
+            className="group/chat-item"
+          >
+            <Link href={path}>
+              <span className="truncate">{text}</span>
+              {chat?.isPending && (
+                <Loader2 className="w-4 h-4 animate-spin ml-auto" />
+              )}
+            </Link>
+          </SidebarMenuButton>
+        </ContextMenuTrigger>
+        <ContextMenuContent className="w-32 mx-3">
+          <ContextMenuItem asChild>
+            <RenameDialog chat={chat} />
+          </ContextMenuItem>
+          <ContextMenuItem asChild>
             <ShareDialog chat={chat} />
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <RenameDialog chat={chat} onSuccess={onSuccess} />
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <DeleteDialog chat={chat} onSuccess={onSuccess} />
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+          </ContextMenuItem>
+          <ContextMenuItem asChild>
+            <DeleteDialog chat={chat} />
+          </ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
+
+      <ChatOptionsMenu chat={chat} />
     </SidebarMenuItem>
   );
 }

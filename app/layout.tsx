@@ -52,9 +52,10 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Providers>
+              <Toaster />
+           
               <TooltipProvider>{children}</TooltipProvider>
             </Providers>
-            <Toaster />
           </ThemeProvider>
         </TRPCProvider>
       </body>

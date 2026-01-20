@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { UIMessage as TUIMessage } from "ai";
+import { UIMessage as TUIMessage,UITools } from "ai";
+import { GenerateImageUIToolInvocation } from "./tools/generate-image";
 
 export const messageMetadataSchema = z.object({
   createdAt: z.number().optional(),

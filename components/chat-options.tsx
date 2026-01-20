@@ -10,6 +10,7 @@ import {
 import { DeleteDialog, RenameDialog, ShareDialog } from "./dialogs";
 import type { Chat } from "~/lib/ai/types";
 import { useTRPC } from "~/lib/backend/trpc/client";
+import { SidebarMenuAction } from "./ui/sidebar";
 
 export default function ChatOptionsMenu({ chat }: { chat: Chat }) {
   const trpc = useTRPC();
@@ -21,9 +22,10 @@ export default function ChatOptionsMenu({ chat }: { chat: Chat }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant={"ghost"} size={"icon"}>
+        <SidebarMenuAction showOnHover>
           <Ellipsis />
-        </Button>
+          <span className="sr-only">More</span>
+        </SidebarMenuAction>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="rounded-lg w-32 mx-3 ">
         <DropdownMenuItem asChild>

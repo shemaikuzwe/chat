@@ -20,7 +20,7 @@ export function ModelSelector() {
   const [open, setOpen] = useState(false);
   const [selectedModel, setSelectedModel] = useState<Model>();
 
-  const { data: models, isLoading } = trpc.models.useQuery()
+  const { data: models, isLoading } = trpc.models.useQuery();
 
   useEffect(() => {
     if (selectedModel) {
@@ -31,16 +31,18 @@ export function ModelSelector() {
   }, [selectedModel]);
 
   useEffect(() => {
-    if (models) {
+    if (models && !selectedModel) {
       const modelId = cookies.get("model.id");
-      if (modelId) {  
-        const selectedModel = models.find((m) => m.id === modelId);
-        if (selectedModel) setSelectedModel(selectedModel);
+      const cookieModel = modelId ? models.find((m) => m.id === modelId) : null;
+
+      if (cookieModel) {
+        setSelectedModel(cookieModel);
+      } else {
+        const defaultModel = models.find((m) => m.isDefault);
+        if (defaultModel) setSelectedModel(defaultModel);
       }
-      const selectModel = models.find((m) => m.isDefault);
-      if (selectModel) setSelectedModel(selectModel);
-    }   
-  }, [models]);
+    }
+  }, [models, selectedModel]);
 
   const filteredModels = useMemo(() => {
     return models?.filter((model) => {
@@ -66,24 +68,29 @@ export function ModelSelector() {
       <PopoverTrigger asChild disabled={isLoading}>
         {isLoading ? (
           <ModelSelectorSkelton />
-        )
-          : <Button
+        ) : (
+          <Button
             variant="outline"
             className="w-fit max-w-xs justify-between h-auto p-1.5 focus-within:bg-transparent bg-none outline-hidden border-none shadow-none"
             onClick={() => setOpen(!open)}
           >
             {selectedModel && (
-              <div key={selectedModel.id} className="flex items-center space-x-3">
+              <div
+                key={selectedModel.id}
+                className="flex items-center space-x-3"
+              >
                 <div className="shrink-0">
                   {SelectedModelIcon && <SelectedModelIcon size={28} />}
                 </div>
                 <div className="flex-1 min-w-0 text-left">
-                  <div className="font-medium text-sm">{selectedModel.name}</div>
+                  <div className="font-medium text-sm">
+                    {selectedModel.name}
+                  </div>
                 </div>
               </div>
             )}
           </Button>
-        }
+        )}
       </PopoverTrigger>
 
       <PopoverContent className="w-100 p-0" align="start">
@@ -122,9 +129,7 @@ export function ModelSelector() {
                       }
                     }}
                   >
-                    <div className="shrink-0 ">
-                      {<Icon size={18} />}
-                    </div>
+                    <div className="shrink-0 ">{<Icon size={18} />}</div>
                     <div className="flex min-w-0">
                       <div className="font-medium text-sm">{model.name}</div>
                     </div>

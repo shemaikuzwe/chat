@@ -1,4 +1,4 @@
-import { Pencil, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
@@ -21,6 +21,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
+import { SessionsSkeleton } from "../skeletons";
 
 export default function AccountSecurity() {
   const {
@@ -72,7 +73,10 @@ export default function AccountSecurity() {
         </AlertDialog>
       </div>
 
-      {sessions?.data &&
+      {isLoading ? (
+        <SessionsSkeleton />
+      ) : (
+        sessions?.data &&
         sessions?.data?.length > 0 &&
         sessions?.data.map((session) => (
           <Session
@@ -81,7 +85,8 @@ export default function AccountSecurity() {
             isCurrent={data?.session.id === session.id}
             refetch={refetch}
           />
-        ))}
+        ))
+      )}
       <Card className="border-destructive/50">
         <CardHeader>
           <CardTitle className="text-xl text-destructive">

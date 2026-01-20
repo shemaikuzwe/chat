@@ -75,9 +75,7 @@ export default function UserSkelton() {
 }
 
 export function ModelSelectorSkelton() {
-  return (
-    <Skeleton className="h-10 w-30" />
-  )
+  return <Skeleton className="h-10 w-30" />;
 }
 
 export function ImageSkeleton() {
@@ -85,5 +83,35 @@ export function ImageSkeleton() {
     <div className="flex flex-col gap-2">
       <Skeleton className="h-70 w-70" />
     </div>
-  )
-} 
+  );
+}
+
+export function SessionSkeleton() {
+  return (
+    <div className="mt-4 rounded-lg border border-border/50 bg-card/50 p-4">
+      <div className="flex items-start justify-between">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <Skeleton className="h-4 w-48" />
+            <Skeleton className="h-5 w-16 rounded-full" />
+          </div>
+          <div className="space-y-1">
+            <Skeleton className="h-3 w-40" />
+            <Skeleton className="h-3 w-32" />
+          </div>
+        </div>
+        <Skeleton className="h-8 w-8 rounded-md" />
+      </div>
+    </div>
+  );
+}
+
+export function SessionsSkeleton() {
+  return (
+    <div className="space-y-2">
+      {Array.from({ length: 2 }).map((_, i) => (
+        <SessionSkeleton key={i} />
+      ))}
+    </div>
+  );
+}
