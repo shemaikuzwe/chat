@@ -1,7 +1,7 @@
-import { ChevronRight, MessageSquarePlus } from "lucide-react";
+import { ChevronRight, MessageSquarePlus, Loader2 } from "lucide-react";
 
 import NavItem from "~/components/navbar/nav-item";
-import { trpc } from "~/lib/backend/trpc/client";
+import { Chat } from "~/lib/ai/types";
 import { groupChats } from "~/lib/utils";
 
 import { ChatsSkeleton } from "../skeletons";
@@ -15,8 +15,13 @@ import {
   SidebarMenuItem,
 } from "../ui/sidebar";
 
-export default function NavItems() {
-  const { data: chats, isLoading } = trpc.chat.getUserChats.useQuery();
+interface NavItemsProps {
+  chats: Chat[];
+  isLoading: boolean;
+  isFetchingNextPage: boolean;
+}
+
+export default function NavItems({ chats, isLoading, isFetchingNextPage }: NavItemsProps) {
   const groupedChats = groupChats(chats || []);
 
   return (
@@ -122,6 +127,11 @@ export default function NavItems() {
                 ))}
               </SidebarGroupContent>
             </SidebarGroup>
+          )}
+          {isFetchingNextPage && (
+            <div className="flex justify-center p-2">
+              <Loader2 className="size-4 animate-spin text-muted-foreground" />
+            </div>
           )}
         </>
       ) : (

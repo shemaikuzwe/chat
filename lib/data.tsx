@@ -1,6 +1,6 @@
 import React from "react";
 
-import { NextJsIcon, PrismaIcon, ReactIcon, NodejsIcon, DrizzleORM } from "~/components/ui/icons";
+import { NextJsIcon, ReactIcon, NodejsIcon, DrizzleORM } from "~/components/ui/icons";
 
 const exampleMessages: Array<{ heading: string; icon: React.ReactNode }> = [
   {

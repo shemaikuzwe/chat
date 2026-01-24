@@ -1,22 +1,13 @@
 "use client";
-import { Ellipsis } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { Chat, User } from "~/lib/drizzle";
 
-import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardFooter, CardTitle } from "~/components/ui/card";
 import { IconUser } from "~/components/ui/icons";
 import { Separator } from "~/components/ui/separator";
 import { formatTime } from "~/lib/utils";
 
 import ChatOptions from "./chat-options";
-import { DeleteDialog, RenameDialog, ShareDialog } from "./dialogs";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
 
 interface Props {
   chat: Chat & { user: User };

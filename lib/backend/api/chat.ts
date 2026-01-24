@@ -9,11 +9,30 @@ import { chats } from "~/lib/drizzle/schema";
 import { getChatById, getChats } from "~/lib/server";
 
 export const chatRouter = router({
-  getUserChats: protectedProcedure.query(async ({ ctx }) => {
-    const auth = ctx.auth;
-    const chats = await getChats(auth.user.id);
-    return chats;
-  }),
+  getUserChats: protectedProcedure
+    .input(
+      z.object({
+        cursor: z.number().nullish(),
+        limit: z.number().min(1).max(100).default(50),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const auth = ctx.auth;
+      const limit = input.limit;
+      const offset = input.cursor ?? 0;
+
+      const chats = await getChats(auth.user.id, limit, offset);
+
+      let nextCursor: typeof offset | undefined = undefined;
+      if (chats.length === limit) {
+        nextCursor = offset + limit;
+      }
+
+      return {
+        chats,
+        nextCursor,
+      };
+    }),
   getChatById: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input }) => {
     const { id } = input;
     const chat = await getChatById(id);

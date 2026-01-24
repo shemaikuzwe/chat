@@ -26,7 +26,7 @@ function useAnimatedText(text: string, options: AnimatedTextOptions) {
       },
     });
     return () => controls.stop();
-  }, [text.length, options.duration, animatedIndex]);
+  }, [text.length, options.duration, animatedIndex, duration, onComplete, shouldAnimate, text]);
   return [text.split("").slice(0, textIndex).join(""), isAnimating] as const;
 }
 

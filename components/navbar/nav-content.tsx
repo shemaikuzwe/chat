@@ -3,6 +3,7 @@ import Link from "next/link";
 import React, { Suspense } from "react";
 
 import { useSession } from "~/lib/auth/auth-client";
+import { trpc } from "~/lib/backend/trpc/client";
 
 import { LoginForm } from "../auth/login-form";
 import UserSkelton from "../skeletons";
@@ -29,6 +30,30 @@ export default function NavContent() {
   const session = useSession();
   const isPending = session.isPending;
   const isLoggedIn = !!session?.data;
+
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, isRefetching } =
+    trpc.chat.getUserChats.useInfiniteQuery(
+      {
+        limit: 50,
+      },
+      {
+        getNextPageParam: (lastPage) => lastPage.nextCursor,
+        initialCursor: 0,
+      },
+    );
+
+  const chats = data?.pages.flatMap((page) => page.chats) ?? [];
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+    const target = e.target as HTMLDivElement;
+    const offset = 50;
+    const isAtBottom = target.scrollTop + target.clientHeight >= target.scrollHeight - offset;
+
+    if (isAtBottom && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  };
+
   return (
     <Sidebar
       data-collapsed={collapsed}
@@ -49,9 +74,9 @@ export default function NavContent() {
       </SidebarHeader>
       <SidebarContent>
         {isPending ? null : isLoggedIn ? (
-          <ScrollArea className="grow">
+          <ScrollArea className="grow" onScrollCapture={handleScroll}>
             <NavLinks />
-            <NavItems />
+            <NavItems chats={chats} isLoading={isLoading} isFetchingNextPage={isFetchingNextPage} />
           </ScrollArea>
         ) : (
           <SidebarMenu>

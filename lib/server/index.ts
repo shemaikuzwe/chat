@@ -11,7 +11,7 @@ import { UIMessage } from "../ai/types";
 import { getSession } from "../auth";
 import { Customization } from "../types/schema";
 
-export const getChats = cache(async (userId: string | undefined) => {
+export const getChats = cache(async (userId: string | undefined, limit = 50, offset = 0) => {
   if (!userId) return [];
   try {
     const chats = await db.query.chats.findMany({
@@ -29,6 +29,8 @@ export const getChats = cache(async (userId: string | undefined) => {
       },
       where: (chat, { eq }) => eq(chat.userId, userId),
       orderBy: (chat, { desc }) => desc(chat.updatedAt),
+      limit,
+      offset,
     });
     return chats.map(({ parentChat, ...chat }) => ({
       ...chat,
@@ -115,7 +117,7 @@ export const getUserChats = async () => {
       },
     });
     return chats;
-  } catch (e) {
+  } catch {
     return [];
   }
 };

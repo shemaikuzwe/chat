@@ -2,10 +2,9 @@
 import { Ellipsis } from "lucide-react";
 import type { Chat } from "~/lib/ai/types";
 
-import { trpc, useTRPC } from "~/lib/backend/trpc/client";
+import { useTRPC } from "~/lib/backend/trpc/client";
 
 import { ArchiveAction, DeleteDialog, PinAction, RenameDialog, ShareDialog } from "./dialogs";
-import { Button } from "./ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,

@@ -18,10 +18,9 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "~/components/ui/context-menu";
-import { SidebarMenuAction, SidebarMenuButton, SidebarMenuItem } from "~/components/ui/sidebar";
+import { SidebarMenuButton, SidebarMenuItem } from "~/components/ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 import { Chat } from "~/lib/ai/types";
-import { trpc, useTRPC } from "~/lib/backend/trpc/client";
 import { useAnimatedText, useLocalStorage } from "~/lib/hooks";
 
 import ChatOptionsMenu from "../chat-options";

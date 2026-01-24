@@ -1,10 +1,8 @@
 "use client";
 
-import { FileIcon, Download, Eye } from "lucide-react";
+import { FileIcon } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 
-import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardFooter } from "~/components/ui/card";
 import { Attachment } from "~/lib/types";
 

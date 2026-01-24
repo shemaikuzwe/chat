@@ -26,8 +26,7 @@ export default function Customization() {
       mutate(value);
     },
   });
-  const { mutate, isPending, isError, isSuccess, error } =
-    trpc.user.saveUserPreferences.useMutation();
+  const { mutate, isPending, isError, isSuccess } = trpc.user.saveUserPreferences.useMutation();
   useEffect(() => {
     if (isSuccess) {
       toast.success("Success", {
@@ -35,7 +34,6 @@ export default function Customization() {
       });
     }
     if (isError) {
-      console.log(error);
       toast.error("Error", {
         description: "Something went wrong",
       });

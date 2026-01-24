@@ -21,12 +21,7 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
   },
   metadataBase: new URL("https://chat.vercel.app"),
-  keywords: [
-    "Programming assistant",
-    " analysis",
-    "AI-powered coding",
-    " debugging",
-  ],
+  keywords: ["Programming assistant", " analysis", "AI-powered coding", " debugging"],
 };
 
 const geist = Geist({
@@ -42,10 +37,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={cn("font-sans antialiased", geist.className)}
-        suppressContentEditableWarning
-      >
+      <body className={cn("font-sans antialiased", geist.className)} suppressContentEditableWarning>
         <TRPCProvider>
           <ThemeProvider
             attribute="class"
