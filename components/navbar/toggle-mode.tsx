@@ -1,7 +1,8 @@
 "use client";
 import { useTheme } from "next-themes";
-import { Switch } from "../ui/switch";
 import { useState } from "react";
+
+import { Switch } from "../ui/switch";
 
 export default function ModeToggle() {
   const { setTheme, theme } = useTheme();
@@ -13,11 +14,7 @@ export default function ModeToggle() {
   }
   return (
     <div className="flex gap-2">
-      <Switch
-        onClick={toggleMode}
-        checked={checked}
-        className=" bg-foreground"
-      />
+      <Switch onClick={toggleMode} checked={checked} className=" bg-foreground" />
     </div>
   );
 }

@@ -1,12 +1,14 @@
+import { useForm } from "@tanstack/react-form";
+import { useEffect } from "react";
+import { toast } from "sonner";
+
+import { trpc } from "~/lib/backend/trpc/client";
+import { customizationSchema } from "~/lib/types/schema";
+
 import { Button } from "../ui/button";
+import { Field, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import { useForm } from "@tanstack/react-form";
-import { customizationSchema } from "~/lib/types/schema";
-import { Field, FieldLabel } from "../ui/field";
-import { trpc } from "~/lib/backend/trpc/client";
-import { toast } from "sonner";
-import { useEffect } from "react";
 
 export default function Customization() {
   const { data } = trpc.user.getUserPreferences.useQuery();
@@ -24,7 +26,7 @@ export default function Customization() {
       mutate(value);
     },
   });
-  const { mutate, isPending, isError, isSuccess,error } =
+  const { mutate, isPending, isError, isSuccess, error } =
     trpc.user.saveUserPreferences.useMutation();
   useEffect(() => {
     if (isSuccess) {
@@ -59,13 +61,10 @@ export default function Customization() {
         <form.Field
           name="name"
           children={(field) => {
-            const isInvalid =
-              field.state.meta.isTouched && !field.state.meta.isValid;
+            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
             return (
               <Field data-invalid={isInvalid} className="space-y-2">
-                <FieldLabel htmlFor={field.name}>
-                  What should we call you?
-                </FieldLabel>
+                <FieldLabel htmlFor={field.name}>What should we call you?</FieldLabel>
                 <div className="relative">
                   <Input
                     id="name"
@@ -73,9 +72,9 @@ export default function Customization() {
                     onChange={(e) => field.handleChange(e.target.value)}
                     name={field.name}
                     placeholder="Enter your nick name"
-                    className="bg-transparent border-border pr-12 focus-visible:ring-1 focus-visible:ring-ring"
+                    className="border-border bg-transparent pr-12 focus-visible:ring-1 focus-visible:ring-ring"
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+                  <span className="absolute top-1/2 right-3 -translate-y-1/2 text-xs text-muted-foreground">
                     {field.state.value.length}/50
                   </span>
                 </div>
@@ -86,8 +85,7 @@ export default function Customization() {
         <form.Field
           name="occupation"
           children={(field) => {
-            const isInvalid =
-              field.state.meta.isTouched && !field.state.meta.isValid;
+            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
             return (
               <Field data-invalid={isInvalid} className="space-y-2">
                 <FieldLabel htmlFor={field.name}>What do you do?</FieldLabel>
@@ -98,9 +96,9 @@ export default function Customization() {
                     onChange={(e) => field.handleChange(e.target.value)}
                     name={field.name}
                     placeholder="Developer, Designer, Student, etc."
-                    className="bg-transparent border-border pr-12 focus-visible:ring-1 focus-visible:ring-ring"
+                    className="border-border bg-transparent pr-12 focus-visible:ring-1 focus-visible:ring-ring"
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+                  <span className="absolute top-1/2 right-3 -translate-y-1/2 text-xs text-muted-foreground">
                     {field.state.value.length}/50
                   </span>
                 </div>
@@ -111,13 +109,10 @@ export default function Customization() {
         <form.Field
           name="bio"
           children={(field) => {
-            const isInvalid =
-              field.state.meta.isTouched && !field.state.meta.isValid;
+            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
             return (
               <Field data-invalid={isInvalid} className="space-y-2">
-                <FieldLabel htmlFor={field.name}>
-                  Tell us about yourself
-                </FieldLabel>
+                <FieldLabel htmlFor={field.name}>Tell us about yourself</FieldLabel>
                 <div className="relative">
                   <Textarea
                     id="bio"
@@ -126,9 +121,9 @@ export default function Customization() {
                     onChange={(e) => field.handleChange(e.target.value)}
                     name={field.name}
                     placeholder="Interests, values, or preferences to keep in mind"
-                    className="bg-transparent border-border pr-12 focus-visible:ring-1 focus-visible:ring-ring"
+                    className="border-border bg-transparent pr-12 focus-visible:ring-1 focus-visible:ring-ring"
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+                  <span className="absolute top-1/2 right-3 -translate-y-1/2 text-xs text-muted-foreground">
                     {field.state.value.length}/50
                   </span>
                 </div>
@@ -139,13 +134,10 @@ export default function Customization() {
         <form.Field
           name="customInstructions"
           children={(field) => {
-            const isInvalid =
-              field.state.meta.isTouched && !field.state.meta.isValid;
+            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
             return (
               <Field data-invalid={isInvalid} className="space-y-2">
-                <FieldLabel htmlFor={field.name}>
-                  Custom Instructions
-                </FieldLabel>
+                <FieldLabel htmlFor={field.name}>Custom Instructions</FieldLabel>
                 <div className="relative">
                   <Textarea
                     value={field.state.value}
@@ -153,9 +145,9 @@ export default function Customization() {
                     name={field.name}
                     rows={3}
                     placeholder="Don't say you are absolutely right, don't use emojis"
-                    className="bg-transparent border-border pr-12 focus-visible:ring-1 focus-visible:ring-ring"
+                    className="border-border bg-transparent pr-12 focus-visible:ring-1 focus-visible:ring-ring"
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+                  <span className="absolute top-1/2 right-3 -translate-y-1/2 text-xs text-muted-foreground">
                     {field.state.value.length}/50
                   </span>
                 </div>
@@ -164,9 +156,7 @@ export default function Customization() {
           }}
         />
 
-        <Button disabled={isPending}>
-          {isPending ? "Saving..." : "Save Preferences"}
-        </Button>
+        <Button disabled={isPending}>{isPending ? "Saving..." : "Save Preferences"}</Button>
       </form>
     </section>
   );

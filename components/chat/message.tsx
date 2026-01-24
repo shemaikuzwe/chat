@@ -1,8 +1,10 @@
-import { UserMessage } from "~/components/ai/user-message";
-import { AssistantMessage } from "~/components/ai/assistant-message";
 import { useMemo } from "react";
-import { RegenerateFunc } from "~/lib/types";
+
+import { AssistantMessage } from "~/components/ai/assistant-message";
+import { UserMessage } from "~/components/ai/user-message";
 import { UIMessage } from "~/lib/ai/types";
+import { RegenerateFunc } from "~/lib/types";
+
 import { FilePreview } from "./file-preview";
 
 interface MessageProps {
@@ -10,11 +12,7 @@ interface MessageProps {
   regenerate: RegenerateFunc;
   loading: boolean;
 }
-export default function Message({
-  message,
-  regenerate,
-  loading,
-}: MessageProps) {
+export default function Message({ message, regenerate, loading }: MessageProps) {
   const { text, files } = useMemo(() => {
     const parts = message?.parts || [];
     let text = parts.find((part) => part?.type === "text")?.text ?? "";
@@ -26,10 +24,10 @@ export default function Message({
   }, [message]);
 
   return (
-    <div key={message.id} className={"flex flex-col w-full"}>
+    <div key={message.id} className={"flex w-full flex-col"}>
       {message.role === "user" ? (
         <UserMessage>
-          <div className="ml-1 flex flex-col items-start gap-2 w-full">
+          <div className="ml-1 flex w-full flex-col items-start gap-2">
             {files.map((part, index) => (
               <FilePreview file={part} key={index} message={text} />
             ))}
@@ -37,11 +35,7 @@ export default function Message({
           </div>
         </UserMessage>
       ) : (
-        <AssistantMessage
-          isLoading={loading}
-          regenerate={regenerate}
-          message={message}
-        />
+        <AssistantMessage isLoading={loading} regenerate={regenerate} message={message} />
       )}
     </div>
   );

@@ -1,28 +1,19 @@
-import { Button } from "~/components/ui/button";
-import Textarea from "react-textarea-autosize";
-import {
-  Globe,
-  GlobeLockIcon,
-  Paperclip,
-  Send,
-  TriangleAlert,
-} from "lucide-react";
-import React, {
-  ChangeEvent,
-  ClipboardEventHandler,
-  useEffect,
-  useRef,
-  useTransition,
-} from "react";
-import { sleep } from "~/lib/utils";
-import { LoadingButton } from "~/components/ai/spinner-message";
 import type { FileUIPart } from "ai";
-import { useUploadThing } from "~/lib/uploadthing";
+import { Globe, GlobeLockIcon, Paperclip, Send, TriangleAlert } from "lucide-react";
+import React, { ChangeEvent, ClipboardEventHandler, useEffect, useRef, useTransition } from "react";
+import Textarea from "react-textarea-autosize";
 import { toast } from "sonner";
+
+import { LoadingButton } from "~/components/ai/spinner-message";
+import { Button } from "~/components/ui/button";
 import { deleteAttachment } from "~/lib/server/actions";
+import { useUploadThing } from "~/lib/uploadthing";
+import { sleep } from "~/lib/utils";
+
 import { Separator } from "../ui/separator";
-import { ModelSelector } from "./model-select";
+
 import { AttachmentPreview, Loading } from "./attachment-preview";
+import { ModelSelector } from "./model-select";
 
 interface InputFieldProps {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -168,7 +159,7 @@ function InputField({
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col bg-card border focus-within:ring-2 focus-within:ring-primary w-full rounded-lg gap-0"
+      className="flex w-full flex-col gap-0 rounded-lg border bg-card focus-within:ring-2 focus-within:ring-primary"
     >
       {optimisticAttachments.length > 0 && (
         <>
@@ -179,11 +170,7 @@ function InputField({
                   {a.isUploading ? (
                     <Loading key={index} file={a} />
                   ) : (
-                    <AttachmentPreview
-                      file={a}
-                      key={index}
-                      handleRemove={removeAttachement}
-                    />
+                    <AttachmentPreview file={a} key={index} handleRemove={removeAttachement} />
                   )}
                 </div>
               ))}
@@ -193,14 +180,14 @@ function InputField({
         </>
       )}
 
-      <div className="flex items-center p-3 relative">
+      <div className="relative flex items-center p-3">
         <div className="grow">
           <Textarea
             onPaste={handlePaste}
             tabIndex={0}
             onKeyDown={onKeyDown}
             placeholder="Send a message..."
-            className="min-h-10 max-h-32 w-full resize-none bg-transparent px-3 py-2 focus-within:outline-hidden text-base"
+            className="max-h-32 min-h-10 w-full resize-none bg-transparent px-3 py-2 text-base focus-within:outline-hidden"
             autoFocus
             spellCheck={false}
             ref={inputRef}
@@ -254,7 +241,7 @@ function InputField({
         </div>
       </div>
 
-      <div className="flex gap-4 items-center border-t border-border px-3 py-1.5">
+      <div className="flex items-center gap-4 border-t border-border px-3 py-1.5">
         <ModelSelector />
         <Button
           variant={search ? "secondary" : "outline"}

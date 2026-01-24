@@ -1,16 +1,11 @@
 import "server-only";
+
+import { google } from "@ai-sdk/google";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
+import { UIMessage, convertToModelMessages, GeneratedFile, generateText, Output } from "ai";
 import { fileTypeFromBuffer } from "file-type";
-import {
-  UIMessage,
-  convertToModelMessages,
-  GeneratedFile,
-  generateText,
-  Output,
-} from "ai";
 import { UTApi } from "uploadthing/server";
-import { google } from "@ai-sdk/google";
 
 export const utpapi = new UTApi({
   token: process.env.UPLOADTHING_TOKEN,
@@ -39,7 +34,7 @@ async function getFileType(buffer: ArrayBuffer) {
 async function uploadImage(files: GeneratedFile[]) {
   const imageFiles = files.filter((f) => f.mediaType.startsWith("image/"));
   const uploadFiles = imageFiles.map(
-    (f) => new File([Buffer.from(f.base64)], "image", { type: f.mediaType })
+    (f) => new File([Buffer.from(f.base64)], "image", { type: f.mediaType }),
   );
   const result = await utpapi.uploadFiles(uploadFiles);
   return result.map((res) => {

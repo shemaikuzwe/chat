@@ -1,3 +1,6 @@
+import { CpuIcon } from "lucide-react";
+import React from "react";
+
 import {
   CIcon,
   CSharpIcon,
@@ -12,8 +15,6 @@ import {
   ReactIcon,
   TypeScriptIcon,
 } from "~/components/ui/icons";
-import { CpuIcon } from "lucide-react";
-import React from "react";
 
 function getLanguageIcon(language: string): React.ReactNode {
   switch (language) {
@@ -42,10 +43,10 @@ function getLanguageIcon(language: string): React.ReactNode {
     case "prisma":
       return <PrismaIcon size={20} />;
     case "go":
-    case "golang":  
+    case "golang":
       return <Go size={20} />;
     default:
-      return <span className="sm:text-xs lowercase">{language}</span>;
+      return <span className="lowercase sm:text-xs">{language}</span>;
   }
 }
 

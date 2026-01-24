@@ -1,6 +1,11 @@
 "use client";
-import Link from "next/link";
 import { Settings, LogOut, SquareChevronUp } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+import ModeToggle from "~/components/navbar/toggle-mode";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,11 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { Button } from "~/components/ui/button";
-import ModeToggle from "~/components/navbar/toggle-mode";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Session, signOut } from "~/lib/auth/auth-client";
-import { useRouter } from "next/navigation";
 
 interface Props {
   session: Session | null;
@@ -24,9 +25,9 @@ export default function UserButton({ session }: Props) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="p-0">
-        <div className="flex gap-2 cursor-pointer">
+        <div className="flex cursor-pointer gap-2">
           <Button variant="ghost" size="icon" className="relative ">
-            <Avatar className="rounded-full h-10 w-10">
+            <Avatar className="h-10 w-10 rounded-full">
               <AvatarImage src={session?.user?.image ?? ""} />
               <AvatarFallback>
                 {session?.user?.name
@@ -38,14 +39,10 @@ export default function UserButton({ session }: Props) {
             </Avatar>
           </Button>
 
-          <div className="flex items-center gap-0 w-full  ">
-            <div className="w-full flex flex-col group-data-[collapsible=icon]:hidden">
-              <span className="font-medium text-base">
-                {session?.user?.name}
-              </span>
-              <span className="text-sm text-muted-foreground">
-                {session?.user?.email}
-              </span>
+          <div className="flex w-full items-center gap-0  ">
+            <div className="flex w-full flex-col group-data-[collapsible=icon]:hidden">
+              <span className="text-base font-medium">{session?.user?.name}</span>
+              <span className="text-sm text-muted-foreground">{session?.user?.email}</span>
             </div>
 
             <SquareChevronUp className="h-4 w-4" />
@@ -54,21 +51,17 @@ export default function UserButton({ session }: Props) {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="center"
-        className="w-60 space-y-1 mb-2  pb-2 px-2 pt-0 mx-2 rounded-md"
+        className="mx-2 mb-2 w-60  space-y-1 rounded-md px-2 pt-0 pb-2"
       >
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">
-              {session?.user?.name}
-            </p>
-            <p className="text-xs leading-none text-muted-foreground">
-              {session?.user?.email}
-            </p>
+            <p className="text-sm leading-none font-medium">{session?.user?.name}</p>
+            <p className="text-xs leading-none text-muted-foreground">{session?.user?.email}</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href="/settings" className="flex cursor-pointer w-full items-center">
+          <Link href="/settings" className="flex w-full cursor-pointer items-center">
             <Settings className="mr-2 h-4 w-4" />
             Settings
           </Link>
@@ -84,7 +77,7 @@ export default function UserButton({ session }: Props) {
           <Button
             variant={"default"}
             size={"sm"}
-            className="flex items-center w-full justify-start cursor-pointer gap-1"
+            className="flex w-full cursor-pointer items-center justify-start gap-1"
             onClick={async () => {
               const { data } = await signOut();
               if (data?.success) {

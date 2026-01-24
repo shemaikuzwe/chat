@@ -1,17 +1,16 @@
-import { AssitantIcon } from "~/components/ui/icons";
-import ButtonRow from "~/components/ai/button-row";
-import { cn } from "~/lib/utils";
-import Markdown from "./markdown";
-import { RegenerateFunc } from "~/lib/types";
-import {
-  Reasoning,
-  ReasoningContent,
-  ReasoningTrigger,
-} from "~/components/ui/reasoning";
 import { Fragment } from "react";
+
+import ButtonRow from "~/components/ai/button-row";
+import { AssitantIcon } from "~/components/ui/icons";
+import { Reasoning, ReasoningContent, ReasoningTrigger } from "~/components/ui/reasoning";
 import { UIMessage } from "~/lib/ai/types";
-import SourcesView from "../chat/source-view";
+import { RegenerateFunc } from "~/lib/types";
+import { cn } from "~/lib/utils";
+
 import ImageGenerationView from "../chat/image-gen-view";
+import SourcesView from "../chat/source-view";
+
+import Markdown from "./markdown";
 
 export function AssistantMessage({
   className,
@@ -27,32 +26,23 @@ export function AssistantMessage({
   message?: UIMessage;
 }) {
   return (
-    <div className="group relative flex items-start flex-wrap md:-ml-12">
+    <div className="group relative flex flex-wrap items-start md:-ml-12">
       <div
         className={cn(
-          "flex size-6 shrink-0 select-none items-center justify-center rounded-md  bg-primary text-primary-foreground",
+          "flex size-6 shrink-0 items-center justify-center rounded-md bg-primary  text-primary-foreground select-none",
           className,
         )}
       >
         <AssitantIcon size={18} />
       </div>
-      <div
-        className={cn(
-          "ml-1 flex-1 flex-col text-sm md:text-sm lg:text-base ",
-          className,
-        )}
-      >
+      <div className={cn("ml-1 flex-1 flex-col text-sm md:text-sm lg:text-base ", className)}>
         {message
           ? message.parts.map((msg, index) => {
               switch (msg.type) {
                 case "reasoning":
                   return (
                     <Fragment key={index}>
-                      <Reasoning
-                        isStreaming={
-                          isLoading && index === message.parts.length - 1
-                        }
-                      >
+                      <Reasoning isStreaming={isLoading && index === message.parts.length - 1}>
                         <ReasoningTrigger />
                         <ReasoningContent>{msg.text}</ReasoningContent>
                       </Reasoning>
@@ -63,11 +53,7 @@ export function AssistantMessage({
                     <Fragment key={index}>
                       <Markdown isAnimating={isLoading}>{msg.text}</Markdown>
                       {!isLoading ? (
-                        <ButtonRow
-                          message={message}
-                          reload={regenerate}
-                          content={msg.type}
-                        />
+                        <ButtonRow message={message} reload={regenerate} content={msg.type} />
                       ) : null}
                     </Fragment>
                   );
@@ -80,12 +66,7 @@ export function AssistantMessage({
                     </div>
                   );
                 case "tool-web_search":
-                  return (
-                    <SourcesView
-                      key={index}
-                      sources={(msg as any)?.output?.results}
-                    />
-                  );
+                  return <SourcesView key={index} sources={(msg as any)?.output?.results} />;
 
                 case "tool-generate_image":
                   return <ImageGenerationView key={index} invocation={msg} />;

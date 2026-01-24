@@ -1,8 +1,10 @@
-import { Loader2, XIcon } from "lucide-react";
-import { Button } from "../ui/button";
 import type { FileUIPart } from "ai";
+import { Loader2, XIcon } from "lucide-react";
+
+import { Button } from "../ui/button";
+import { Card, CardContent } from "../ui/card";
+
 import { FilePreview } from "./file-preview";
-import { Card,CardContent } from "../ui/card";
 
 interface Props {
   file: FileUIPart;
@@ -10,8 +12,8 @@ interface Props {
 }
 export function AttachmentPreview({ file, handleRemove }: Props) {
   return (
-    <div className="rounded-md relative w-full max-w-48 transition-all duration-300 ease-in-out hover:shadow-md">
-      <div className="absolute z-10 right-1 top-1">
+    <div className="relative w-full max-w-48 rounded-md transition-all duration-300 ease-in-out hover:shadow-md">
+      <div className="absolute top-1 right-1 z-10">
         <Button
           variant={"destructive"}
           className="h-5 w-5"
@@ -29,16 +31,14 @@ export function AttachmentPreview({ file, handleRemove }: Props) {
 }
 export function Loading({ file }: { file: FileUIPart }) {
   return (
-    <Card className="group rounded-md relative w-full max-w-48 transition-all duration-300 ease-in-out hover:shadow-md">
-      <CardContent className="p-1 flex justify-center items-center gap-2">
-        <div className="flex items-center justify-center w-full h-12">
+    <Card className="group relative w-full max-w-48 rounded-md transition-all duration-300 ease-in-out hover:shadow-md">
+      <CardContent className="flex items-center justify-center gap-2 p-1">
+        <div className="flex h-12 w-full items-center justify-center">
           <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
         </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium truncate">{file.filename}</p>
-          <p className="text-xs text-muted-foreground truncate">
-            {file.mediaType}
-          </p>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-medium">{file.filename}</p>
+          <p className="truncate text-xs text-muted-foreground">{file.mediaType}</p>
         </div>
       </CardContent>
     </Card>

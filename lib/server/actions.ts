@@ -1,10 +1,12 @@
 "use server";
-import type { AuthStatus } from "~/lib/types";
-import { db } from "~/lib/drizzle";
-import { editChatSchema } from "~/lib/types/schema";
-import { z } from "zod";
-import { chats } from "~/lib/drizzle/schema";
 import { eq } from "drizzle-orm";
+import { z } from "zod";
+import type { AuthStatus } from "~/lib/types";
+
+import { db } from "~/lib/drizzle";
+import { chats } from "~/lib/drizzle/schema";
+import { editChatSchema } from "~/lib/types/schema";
+
 import { utpapi } from "./helpers";
 
 export async function deleteAttachment(attachemnt: string) {
@@ -13,7 +15,7 @@ export async function deleteAttachment(attachemnt: string) {
 }
 export async function deleteChat(
   prevState: AuthStatus | undefined,
-  formData: FormData
+  formData: FormData,
 ): Promise<AuthStatus> {
   console.log("running action");
   const validate = z
@@ -40,11 +42,9 @@ export async function deleteChat(
 
 export async function editChat(
   prevState: AuthStatus | undefined,
-  formData: FormData
+  formData: FormData,
 ): Promise<AuthStatus> {
-  const validate = editChatSchema.safeParse(
-    Object.fromEntries(formData.entries())
-  );
+  const validate = editChatSchema.safeParse(Object.fromEntries(formData.entries()));
   if (!validate.success) {
     return {
       status: "error",

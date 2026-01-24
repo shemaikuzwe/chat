@@ -1,12 +1,12 @@
-import { protectedProcedure, router } from "~/lib/backend/trpc/trpc";
-import { getChatById, getChats } from "~/lib/server";
+import { and, eq } from "drizzle-orm";
 import { z } from "zod";
+
+import { generateChatId } from "~/lib/ai/utis";
+import { protectedProcedure, router } from "~/lib/backend/trpc/trpc";
+import { chatStatus } from "~/lib/constants/chat";
 import { db } from "~/lib/drizzle";
 import { chats } from "~/lib/drizzle/schema";
-import { and, eq } from "drizzle-orm";
-import { nanoid } from "nanoid";
-import { generateChatId } from "~/lib/ai/utis";
-import { chatStatus } from "~/lib/constants/chat";
+import { getChatById, getChats } from "~/lib/server";
 
 export const chatRouter = router({
   getUserChats: protectedProcedure.query(async ({ ctx }) => {
@@ -14,21 +14,17 @@ export const chatRouter = router({
     const chats = await getChats(auth.user.id);
     return chats;
   }),
-  getChatById: protectedProcedure
-    .input(z.object({ id: z.string() }))
-    .query(async ({ input }) => {
-      const { id } = input;
-      const chat = await getChatById(id);
-      return chat;
-    }),
+  getChatById: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input }) => {
+    const { id } = input;
+    const chat = await getChatById(id);
+    return chat;
+  }),
   deleteChat: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const auth = ctx.auth;
       const { id } = input;
-      await db
-        .delete(chats)
-        .where(and(eq(chats.id, id), eq(chats.userId, auth.user.id)));
+      await db.delete(chats).where(and(eq(chats.id, id), eq(chats.userId, auth.user.id)));
     }),
   updateTitle: protectedProcedure
     .input(z.object({ id: z.string(), title: z.string() }))

@@ -1,16 +1,15 @@
 "use client";
 
-import { Button } from "~/components/ui/button";
 import { CheckIcon, CopyIcon } from "lucide-react";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import {
-  materialDark,
-  materialLight,
-} from "react-syntax-highlighter/dist/cjs/styles/prism";
-import { useClipBoard } from "~/lib/hooks";
 import { useTheme } from "next-themes";
-import { Card } from "../ui/card";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { materialDark, materialLight } from "react-syntax-highlighter/dist/cjs/styles/prism";
+
+import { Button } from "~/components/ui/button";
 import { getLanguageIcon } from "~/lib/helpers";
+import { useClipBoard } from "~/lib/hooks";
+
+import { Card } from "../ui/card";
 
 interface Props {
   language: string;
@@ -22,16 +21,14 @@ export default function Code({ code, language }: Props) {
   const { theme } = useTheme();
   const languageIcon = getLanguageIcon(language);
   return (
-    <Card className="relative w-full shadow-none  bg-card rounded-md overflow-hidden border">
-      <div className="flex items-center justify-between w-full px-1 bg-muted/50 text-zinc-800 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-700">
-        <span className="sm:text-xs lowercase flex items-center gap-1">
-          {languageIcon}
-        </span>
+    <Card className="relative w-full overflow-hidden  rounded-md border bg-card shadow-none">
+      <div className="flex w-full items-center justify-between border-b border-zinc-200 bg-muted/50 px-1 text-zinc-800 dark:border-zinc-700 dark:text-zinc-100">
+        <span className="flex items-center gap-1 lowercase sm:text-xs">{languageIcon}</span>
         <div className="flex items-center space-x-1 ">
           <Button
             variant="ghost"
             size="icon"
-            className="h-6 w-6 sm:h-8 sm:w-8 text-xs hover:bg-zinc-200 dark:hover:bg-zinc-700 focus-visible:ring-1 focus-visible:ring-zinc-300 dark:focus-visible:ring-zinc-600 focus-visible:ring-offset-0"
+            className="h-6 w-6 text-xs hover:bg-zinc-200 focus-visible:ring-1 focus-visible:ring-zinc-300 focus-visible:ring-offset-0 sm:h-8 sm:w-8 dark:hover:bg-zinc-700 dark:focus-visible:ring-zinc-600"
             onClick={() => {
               copyText(code);
             }}

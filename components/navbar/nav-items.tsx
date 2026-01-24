@@ -1,4 +1,11 @@
+import { ChevronRight, MessageSquarePlus } from "lucide-react";
+
 import NavItem from "~/components/navbar/nav-item";
+import { trpc } from "~/lib/backend/trpc/client";
+import { groupChats } from "~/lib/utils";
+
+import { ChatsSkeleton } from "../skeletons";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -7,15 +14,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "../ui/sidebar";
-import { groupChats } from "~/lib/utils";
-import { ChevronRight, MessageSquarePlus } from "lucide-react";
-import { ChatsSkeleton } from "../skeletons";
-import { trpc } from "~/lib/backend/trpc/client";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "../ui/collapsible";
 
 export default function NavItems() {
   const { data: chats, isLoading } = trpc.chat.getUserChats.useQuery();
@@ -35,7 +33,7 @@ export default function NavItems() {
             <Collapsible className="group/collapsible">
               <SidebarGroup className="group-data-[collapsible=icon]:hidden">
                 <SidebarGroupLabel asChild>
-                  <CollapsibleTrigger className="cursor-pointer hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors w-full flex items-center gap-2">
+                  <CollapsibleTrigger className="flex w-full cursor-pointer items-center gap-2 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
                     Archived
                     <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                   </CollapsibleTrigger>
@@ -56,7 +54,7 @@ export default function NavItems() {
             <Collapsible className="group/collapsible">
               <SidebarGroup className="group-data-[collapsible=icon]:hidden">
                 <SidebarGroupLabel asChild>
-                  <CollapsibleTrigger className="cursor-pointer hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors w-full flex items-center gap-2">
+                  <CollapsibleTrigger className="flex w-full cursor-pointer items-center gap-2 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
                     Pinned
                     <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                   </CollapsibleTrigger>
@@ -78,11 +76,7 @@ export default function NavItems() {
               <SidebarGroupLabel>Today</SidebarGroupLabel>
               <SidebarGroupContent className="list-none">
                 {groupedChats?.today
-                  .sort(
-                    (a, b) =>
-                      new Date(b.updatedAt).getTime() -
-                      new Date(a.updatedAt).getTime(),
-                  )
+                  .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
                   .map((chat) => (
                     <NavItem key={chat.id} chat={chat} />
                   ))}

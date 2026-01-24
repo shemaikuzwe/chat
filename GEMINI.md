@@ -38,19 +38,19 @@ To get started with this project, you'll need to have Node.js and pnpm installed
 
 ### Other useful commands:
 
-*   `pnpm run lint`: Lint the .
-*   `pnpm run typecheck`: Run the TypeScript compiler to check for type errors.
-*   `pnpm run db:push`: Push database schema changes.
-*   `pnpm run db:generate`: Generate database migration files.
-*   `pnpm run db:migrate`: Apply database migrations.
-*   `pnpm run db:studio`: Open the Drizzle Studio to view and manage your database.
+- `pnpm run lint`: Lint the .
+- `pnpm run typecheck`: Run the TypeScript compiler to check for type errors.
+- `pnpm run db:push`: Push database schema changes.
+- `pnpm run db:generate`: Generate database migration files.
+- `pnpm run db:migrate`: Apply database migrations.
+- `pnpm run db:studio`: Open the Drizzle Studio to view and manage your database.
 
 ## Development Conventions
 
-*   **Framework:** The project is built with [Next.js](https://nextjs.org/) and [React](https://reactjs.org/).
-*   **Authentication:** Authentication is handled by [NextAuth.js](https://next-auth.js.org/), with providers for Google and Github.
-*   **Database:** The project uses a PostgreSQL database with [Drizzle ORM](https://orm.drizzle.team/). The database schema is defined in `lib/drizzle/schema.ts`.
-*   **Styling:** The project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
-*   **UI Components:** The project uses [Radix UI](https://www.radix-ui.com/) and custom components for the user interface.
-*   **Linting and Formatting:** The project uses [ESLint](https://eslint.org/) for linting and [Prettier](https://prettier.io/) for  formatting.
-*   **Type Checking:** The project uses [TypeScript](https://www.typescriptlang.org/) for static type checking.
+- **Framework:** The project is built with [Next.js](https://nextjs.org/) and [React](https://reactjs.org/).
+- **Authentication:** Authentication is handled by [NextAuth.js](https://next-auth.js.org/), with providers for Google and Github.
+- **Database:** The project uses a PostgreSQL database with [Drizzle ORM](https://orm.drizzle.team/). The database schema is defined in `lib/drizzle/schema.ts`.
+- **Styling:** The project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
+- **UI Components:** The project uses [Radix UI](https://www.radix-ui.com/) and custom components for the user interface.
+- **Linting and Formatting:** The project uses [ESLint](https://eslint.org/) for linting and [Prettier](https://prettier.io/) for formatting.
+- **Type Checking:** The project uses [TypeScript](https://www.typescriptlang.org/) for static type checking.

@@ -1,6 +1,7 @@
 import { google } from "@ai-sdk/google";
 import { generateText, UIToolInvocation, tool } from "ai";
 import { z } from "zod";
+
 import { uploadImage } from "~/lib/server/helpers";
 
 export const generateImageTool = tool({
@@ -34,6 +35,4 @@ export const generateImageTool = tool({
   }),
 });
 
-export type GenerateImageUIToolInvocation = UIToolInvocation<
-  typeof generateImageTool
->;
+export type GenerateImageUIToolInvocation = UIToolInvocation<typeof generateImageTool>;

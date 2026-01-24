@@ -1,12 +1,10 @@
 import { UI_MESSAGE_STREAM_HEADERS } from "ai";
 import { after } from "next/server";
 import { createResumableStreamContext } from "resumable-stream/ioredis";
+
 import { getChatById } from "~/lib/server";
 
-export async function GET(
-  _: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const chat = await getChatById(id);
   if (!chat || chat.activeStreamId == null) {
@@ -17,8 +15,7 @@ export async function GET(
     waitUntil: after,
   });
 
-  return new Response(
-    await streamContext.resumeExistingStream(chat.activeStreamId),
-    { headers: UI_MESSAGE_STREAM_HEADERS }
-  );
+  return new Response(await streamContext.resumeExistingStream(chat.activeStreamId), {
+    headers: UI_MESSAGE_STREAM_HEADERS,
+  });
 }

@@ -1,10 +1,14 @@
 import "server-only";
-import { db } from "~/lib/drizzle";
+
+import { eq } from "drizzle-orm";
 import { cache } from "react";
-import { getChatTitle } from "~/lib/server/helpers";
+
+import { db } from "~/lib/drizzle";
 import { chats, userPreferences } from "~/lib/drizzle/schema";
-import { getSession } from "../auth";
+import { getChatTitle } from "~/lib/server/helpers";
+
 import { UIMessage } from "../ai/types";
+import { getSession } from "../auth";
 import { Customization } from "../types/schema";
 
 export const getChats = cache(async (userId: string | undefined) => {
@@ -42,6 +46,14 @@ export const getChatById = async (id: string | undefined) => {
     where: (chat, { eq }) => eq(chat.id, id),
   });
   return chat;
+};
+
+export const getUserPreferences = async (userId: string | undefined) => {
+  if (!userId) return undefined;
+  const preferences = await db.query.userPreferences.findFirst({
+    where: eq(userPreferences.userId, userId),
+  });
+  return preferences;
 };
 
 export async function saveChatData({

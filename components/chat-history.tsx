@@ -1,13 +1,14 @@
 "use client";
-import ChatItem from "~/components/chat-item";
-import SearchInput from "./search";
-import useSearch from "~/lib/hooks/use-search";
 import { MoveRight, Search } from "lucide-react";
-import {Chat,User} from "~/lib/drizzle"
-import { Button } from "./ui/button";
 import Link from "next/link";
-
 import { use } from "react";
+
+import ChatItem from "~/components/chat-item";
+import { Chat, User } from "~/lib/drizzle";
+import useSearch from "~/lib/hooks/use-search";
+
+import SearchInput from "./search";
+import { Button } from "./ui/button";
 interface Props {
   chatsPromise: Promise<Array<Chat & { user: User }>>;
 }
@@ -23,8 +24,8 @@ export default function ChatHistory({ chatsPromise }: Props) {
   });
 
   return (
-    <div className="w-full flex flex-col gap-3  p-4 h-full overflow-auto">
-      <div className="w-full flex justify-center items-center">
+    <div className="flex h-full w-full flex-col  gap-3 overflow-auto p-4">
+      <div className="flex w-full items-center justify-center">
         <div className="w-full max-w-sm">
           <SearchInput
             searchTerm={searchText}
@@ -38,13 +39,11 @@ export default function ChatHistory({ chatsPromise }: Props) {
       {chats && chats.length > 0 ? (
         chats.map((chat) => <ChatItem chat={chat} key={chat.id} />)
       ) : (
-        <div className="w-full h-full max-h-50 flex flex-col justify-center items-center">
+        <div className="flex h-full max-h-50 w-full flex-col items-center justify-center">
           <Search className="h-12 w-12" />
-          <span className="text-lg font-semibold mt-2">
-            No Recent Chats Found{" "}
-          </span>
+          <span className="mt-2 text-lg font-semibold">No Recent Chats Found </span>
           <Button variant={"default"} className="mt-2" asChild>
-            <Link href={"/"} className="flex gap-1 items-center">
+            <Link href={"/"} className="flex items-center gap-1">
               Start New Chat <MoveRight />
             </Link>
           </Button>

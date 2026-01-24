@@ -1,7 +1,6 @@
+import { useQuery } from "@tanstack/react-query";
 import { Trash2 } from "lucide-react";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+
 import {
   listSessions,
   revokeOtherSessions,
@@ -9,7 +8,8 @@ import {
   TSession,
   useSession,
 } from "~/lib/auth/auth-client";
-import { useQuery } from "@tanstack/react-query";
+
+import { SessionsSkeleton } from "../skeletons";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,7 +21,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
-import { SessionsSkeleton } from "../skeletons";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 export default function AccountSecurity() {
   const {
@@ -40,13 +42,10 @@ export default function AccountSecurity() {
   return (
     <div className="space-y-4">
       <h2 className="text-lg">Account and Security</h2>
-      <p className="text-sm text-muted-foreground">
-        Manage your account security settings
-      </p>
-      <div className="flex gap-2 justify-between items-center">
+      <p className="text-sm text-muted-foreground">Manage your account security settings</p>
+      <div className="flex items-center justify-between gap-2">
         <p className="text-sm text-muted-foreground">
-          Manage devices that have access to your account. Remove any devices
-          you don't recognize.
+          Manage devices that have access to your account. Remove any devices you don't recognize.
         </p>
         <AlertDialog>
           <AlertDialogTrigger asChild>
@@ -56,8 +55,7 @@ export default function AccountSecurity() {
             <AlertDialogHeader>
               <AlertDialogTitle>Are you sure?</AlertDialogTitle>
               <AlertDialogDescription>
-                This will log out all other devices currently signed into your
-                account.
+                This will log out all other devices currently signed into your account.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -89,16 +87,13 @@ export default function AccountSecurity() {
       )}
       <Card className="border-destructive/50">
         <CardHeader>
-          <CardTitle className="text-xl text-destructive">
-            Danger Zone
-          </CardTitle>
+          <CardTitle className="text-xl text-destructive">Danger Zone</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4 w-full">
+        <CardContent className="w-full space-y-4">
           <div className="space-y-2">
             <h3 className="font-medium">Delete Account</h3>
             <p className="text-sm text-muted-foreground">
-              Once you delete your account, there is no going back. Please be
-              certain.
+              Once you delete your account, there is no going back. Please be certain.
             </p>
           </div>
           <AlertDialog>
@@ -111,8 +106,8 @@ export default function AccountSecurity() {
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
+                  This action cannot be undone. This will permanently delete your account and remove
+                  your data from our servers.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -151,7 +146,7 @@ function Session({
             {isCurrent && (
               <Badge
                 variant="outline"
-                className="border-emerald-500/50 bg-emerald-500/10 text-emerald-500 text-xs px-2 py-0.5"
+                className="border-emerald-500/50 bg-emerald-500/10 px-2 py-0.5 text-xs text-emerald-500"
               >
                 Current
               </Badge>
@@ -161,9 +156,7 @@ function Session({
           <p className="text-xs text-muted-foreground">
             Expires: {new Date(session.expiresAt).toLocaleString()}
           </p>
-          <p className="text-xs text-muted-foreground">
-            IP: {session.ipAddress}
-          </p>
+          <p className="text-xs text-muted-foreground">IP: {session.ipAddress}</p>
         </div>
         <div className="flex items-center gap-1">
           <AlertDialog>
@@ -171,7 +164,7 @@ function Session({
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                className="h-8 w-8 text-destructive hover:bg-destructive/10 hover:text-destructive"
               >
                 <Trash2 className="h-4 w-4" />
               </Button>

@@ -1,13 +1,9 @@
 import { clsx, type ClassValue } from "clsx";
+import { isToday, isYesterday, subMonths, subWeeks, formatDistanceToNow } from "date-fns";
 import { twMerge } from "tailwind-merge";
+
 import { GroupedChats } from "~/lib/types";
-import {
-  isToday,
-  isYesterday,
-  subMonths,
-  subWeeks,
-  formatDistanceToNow,
-} from "date-fns";
+
 import { Chat } from "./ai/types";
 
 export function cn(...inputs: ClassValue[]) {
@@ -28,11 +24,11 @@ export async function fetcher(url: string) {
 export function groupChats(chats: Chat[]): GroupedChats {
   return chats.reduce(
     (acc, chat) => {
-      if (chat.status === "pinned") {
+      if (chat.status === "PINNED") {
         acc.pinned.push(chat);
         return acc;
       }
-      if (chat.status === "archived") {
+      if (chat.status === "ARCHIVED") {
         acc.archived.push(chat);
         return acc;
       }

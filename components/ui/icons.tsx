@@ -1,37 +1,24 @@
 "use client";
 
-import { Avatar, AvatarFallback } from "./avatar";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import type { SVGProps } from "react";
+
 import { useSession } from "~/lib/auth/auth-client";
 import { cn } from "~/lib/utils";
 
+import { Avatar, AvatarFallback } from "./avatar";
+
 export const XAIGrok: React.FC<IconProps> = ({ size = 24, className = "" }) => (
   <div className={cn("rounded-full border bg-black p-1", className)}>
-    <svg
-      width={size}
-      height={size}
-      xmlSpace="preserve"
-      fill="#ffff"
-      viewBox="0 0 841.89 595.28"
-    >
+    <svg width={size} height={size} xmlSpace="preserve" fill="#ffff" viewBox="0 0 841.89 595.28">
       <path d="m557.09 211.99 8.31 326.37h66.56l8.32-445.18zM640.28 56.91H538.72L379.35 284.53l50.78 72.52zM201.61 538.36h101.56l50.79-72.52-50.79-72.53zM201.61 211.99l228.52 326.37h101.56L303.17 211.99z" />
     </svg>
   </div>
 );
 
-export const OpenRouter: React.FC<IconProps> = ({
-  size = 6,
-  className = "",
-}) => (
+export const OpenRouter: React.FC<IconProps> = ({ size = 6, className = "" }) => (
   <div className={cn("rounded-full border bg-primary p-1", className)}>
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 512 512"
-      fill="#ffff"
-      stroke="#ffff"
-    >
+    <svg width={size} height={size} viewBox="0 0 512 512" fill="#ffff" stroke="#ffff">
       <g clip-path="url(#openrouter_dark__clip0_205_3)">
         <path
           d="M3 248.945C18 248.945 76 236 106 219C136 202 136 202 198 158C276.497 102.293 332 120.945 423 120.945"
@@ -49,9 +36,7 @@ export const OpenRouter: React.FC<IconProps> = ({
 );
 
 export const Groq: React.FC<IconProps> = ({ size = 6, className = "" }) => (
-  <div
-    className={cn("rounded-full border bg-primary-foreground p-1", className)}
-  >
+  <div className={cn("rounded-full border bg-primary-foreground p-1", className)}>
     <svg width={size} height={size} viewBox="0 0 201 201">
       <path fill="#F54F35" d="M0 0h201v201H0V0Z" />
       <path
@@ -62,18 +47,9 @@ export const Groq: React.FC<IconProps> = ({ size = 6, className = "" }) => (
   </div>
 );
 
-export const Anthropic: React.FC<IconProps> = ({
-  size = 24,
-  className = "",
-}) => (
+export const Anthropic: React.FC<IconProps> = ({ size = 24, className = "" }) => (
   <div className={cn("rounded-full border bg-black p-1", className)}>
-    <svg
-      width={size}
-      height={size}
-      fill="#ffff"
-      fillRule="evenodd"
-      viewBox="0 0 24 24"
-    >
+    <svg width={size} height={size} fill="#ffff" fillRule="evenodd" viewBox="0 0 24 24">
       <title>Anthropic</title>
       <path d="M13.827 3.52h3.603L24 20h-3.603l-6.57-16.48zm-7.258 0h3.767L16.906 20h-3.674l-1.343-3.461H5.017l-1.344 3.46H0L6.57 3.522zm4.132 9.959L8.453 7.687 6.205 13.48H10.7z" />
     </svg>
@@ -81,9 +57,7 @@ export const Anthropic: React.FC<IconProps> = ({
 );
 
 export const Kimi: React.FC<IconProps> = ({ size = 24, className = "" }) => (
-  <div
-    className={cn("rounded-full border bg-primary-foreground p-1", className)}
-  >
+  <div className={cn("rounded-full border bg-primary-foreground p-1", className)}>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={size}
@@ -104,12 +78,7 @@ export const Kimi: React.FC<IconProps> = ({ size = 24, className = "" }) => (
 
 export const Vercel: React.FC<IconProps> = ({ size = 24, className = "" }) => (
   <div className={cn("rounded-full border bg-black p-1", className)}>
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 256 222"
-      preserveAspectRatio="xMidYMid"
-    >
+    <svg width={size} height={size} viewBox="0 0 256 222" preserveAspectRatio="xMidYMid">
       <path fill="#fff" d="m128 0 128 221.705H0z" />
     </svg>
   </div>
@@ -117,12 +86,7 @@ export const Vercel: React.FC<IconProps> = ({ size = 24, className = "" }) => (
 
 export const OpenAI: React.FC<IconProps> = ({ size = 6, className = "" }) => (
   <div className={cn("rounded-full border bg-black p-1", className)}>
-    <svg
-      width={size}
-      height={size}
-      preserveAspectRatio="xMidYMid"
-      viewBox="0 0 256 260"
-    >
+    <svg width={size} height={size} preserveAspectRatio="xMidYMid" viewBox="0 0 256 260">
       <path
         fill="#fff"
         d="M239.184 106.203a64.716 64.716 0 0 0-5.576-53.103C219.452 28.459 191 15.784 163.213 21.74A65.586 65.586 0 0 0 52.096 45.22a64.716 64.716 0 0 0-43.23 31.36c-14.31 24.602-11.061 55.634 8.033 76.74a64.665 64.665 0 0 0 5.525 53.102c14.174 24.65 42.644 37.324 70.446 31.36a64.72 64.72 0 0 0 48.754 21.744c28.481.025 53.714-18.361 62.414-45.481a64.767 64.767 0 0 0 43.229-31.36c14.137-24.558 10.875-55.423-8.083-76.483Zm-97.56 136.338a48.397 48.397 0 0 1-31.105-11.255l1.535-.87 51.67-29.825a8.595 8.595 0 0 0 4.247-7.367v-72.85l21.845 12.636c.218.111.37.32.409.563v60.367c-.056 26.818-21.783 48.545-48.601 48.601Zm-104.466-44.61a48.345 48.345 0 0 1-5.781-32.589l1.534.921 51.722 29.826a8.339 8.339 0 0 0 8.441 0l63.181-36.425v25.221a.87.87 0 0 1-.358.665l-52.335 30.184c-23.257 13.398-52.97 5.431-66.404-17.803ZM23.549 85.38a48.499 48.499 0 0 1 25.58-21.333v61.39a8.288 8.288 0 0 0 4.195 7.316l62.874 36.272-21.845 12.636a.819.819 0 0 1-.767 0L41.353 151.53c-23.211-13.454-31.171-43.144-17.804-66.405v.256Zm179.466 41.695-63.08-36.63L161.73 77.86a.819.819 0 0 1 .768 0l52.233 30.184a48.6 48.6 0 0 1-7.316 87.635v-61.391a8.544 8.544 0 0 0-4.4-7.213Zm21.742-32.69-1.535-.922-51.619-30.081a8.39 8.39 0 0 0-8.492 0L99.98 99.808V74.587a.716.716 0 0 1 .307-.665l52.233-30.133a48.652 48.652 0 0 1 72.236 50.391v.205ZM88.061 139.097l-21.845-12.585a.87.87 0 0 1-.41-.614V65.685a48.652 48.652 0 0 1 79.757-37.346l-1.535.87-51.67 29.825a8.595 8.595 0 0 0-4.246 7.367l-.051 72.697Zm11.868-25.58 28.138-16.217 28.188 16.218v32.434l-28.086 16.218-28.188-16.218-.052-32.434Z"
@@ -132,15 +96,8 @@ export const OpenAI: React.FC<IconProps> = ({ size = 6, className = "" }) => (
 );
 
 export const Google: React.FC<IconProps> = ({ size = 24, className = "" }) => (
-  <div
-    className={cn("rounded-full border bg-primary-foreground p-1", className)}
-  >
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 256 262"
-      preserveAspectRatio="xMidYMid"
-    >
+  <div className={cn("rounded-full border bg-primary-foreground p-1", className)}>
+    <svg width={size} height={size} viewBox="0 0 256 262" preserveAspectRatio="xMidYMid">
       <path
         d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622 38.755 30.023 2.685.268c24.659-22.774 38.875-56.282 38.875-96.027"
         fill="#4285F4"
@@ -163,13 +120,7 @@ export const Google: React.FC<IconProps> = ({ size = 24, className = "" }) => (
 
 export const Qwen: React.FC<IconProps> = ({ size = 24, className = "" }) => (
   <div className={cn("rounded-full border bg-black p-1", className)}>
-    <svg
-      width={size}
-      height={size}
-      fill="#ffff"
-      fillRule="evenodd"
-      viewBox="0 0 24 24"
-    >
+    <svg width={size} height={size} fill="#ffff" fillRule="evenodd" viewBox="0 0 24 24">
       <title>Qwen</title>
       <path d="M12.604 1.34c.393.69.784 1.382 1.174 2.075a.18.18 0 00.157.091h5.552c.174 0 .322.11.446.327l1.454 2.57c.19.337.24.478.024.837-.26.43-.513.864-.76 1.3l-.367.658c-.106.196-.223.28-.04.512l2.652 4.637c.172.301.111.494-.043.77-.437.785-.882 1.564-1.335 2.34-.159.272-.352.375-.68.37-.777-.016-1.552-.01-2.327.016a.099.099 0 00-.081.05 575.097 575.097 0 01-2.705 4.74c-.169.293-.38.363-.725.364-.997.003-2.002.004-3.017.002a.537.537 0 01-.465-.271l-1.335-2.323a.09.09 0 00-.083-.049H4.982c-.285.03-.553-.001-.805-.092l-1.603-2.77a.543.543 0 01-.002-.54l1.207-2.12a.198.198 0 000-.197 550.951 550.951 0 01-1.875-3.272l-.79-1.395c-.16-.31-.173-.496.095-.965.465-.813.927-1.625 1.387-2.436.132-.234.304-.334.584-.335a338.3 338.3 0 012.589-.001.124.124 0 00.107-.063l2.806-4.895a.488.488 0 01.422-.246c.524-.001 1.053 0 1.583-.006L11.704 1c.341-.003.724.032.9.34zm-3.432.403a.06.06 0 00-.052.03L6.254 6.788a.157.157 0 01-.135.078H3.253c-.056 0-.07.025-.041.074l5.81 10.156c.025.042.013.062-.034.063l-2.795.015a.218.218 0 00-.2.116l-1.32 2.31c-.044.078-.021.118.068.118l5.716.008c.046 0 .08.02.104.061l1.403 2.454c.046.081.092.082.139 0l5.006-8.76.783-1.382a.055.055 0 01.096 0l1.424 2.53a.122.122 0 00.107.062l2.763-.02a.04.04 0 00.035-.02.041.041 0 000-.04l-2.9-5.086a.108.108 0 010-.113l.293-.507 1.12-1.977c.024-.041.012-.062-.035-.062H9.2c-.059 0-.073-.026-.043-.077l1.434-2.505a.107.107 0 000-.114L9.225 1.774a.06.06 0 00-.053-.031zm6.29 8.02c.046 0 .058.02.034.06l-.832 1.465-2.613 4.585a.056.056 0 01-.05.029.058.058 0 01-.05-.029L8.498 9.841c-.02-.034-.01-.052.028-.054l.216-.012 6.722-.012z" />
     </svg>
@@ -209,25 +160,13 @@ export const Meta: React.FC<IconProps> = ({ size = 24, className = "" }) => (
       viewBox="0 0 256 171"
     >
       <defs>
-        <linearGradient
-          id="meta__a"
-          x1="13.878%"
-          x2="89.144%"
-          y1="55.934%"
-          y2="58.694%"
-        >
+        <linearGradient id="meta__a" x1="13.878%" x2="89.144%" y1="55.934%" y2="58.694%">
           <stop offset="0%" stopColor="#0064E1" />
           <stop offset="40%" stopColor="#0064E1" />
           <stop offset="83%" stopColor="#0073EE" />
           <stop offset="100%" stopColor="#0082FB" />
         </linearGradient>
-        <linearGradient
-          id="meta__b"
-          x1="54.315%"
-          x2="54.315%"
-          y1="82.782%"
-          y2="39.307%"
-        >
+        <linearGradient id="meta__b" x1="54.315%" x2="54.315%" y1="82.782%" y2="39.307%">
           <stop offset="0%" stopColor="#0082FB" />
           <stop offset="100%" stopColor="#0064E0" />
         </linearGradient>
@@ -247,10 +186,7 @@ export const Meta: React.FC<IconProps> = ({ size = 24, className = "" }) => (
     </svg>
   </div>
 );
-export const DeepSeek: React.FC<IconProps> = ({
-  size = 24,
-  className = "",
-}) => (
+export const DeepSeek: React.FC<IconProps> = ({ size = 24, className = "" }) => (
   <div className={cn("rounded-full border bg-foreground p-1", className)}>
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -271,9 +207,7 @@ export const DeepSeek: React.FC<IconProps> = ({
 );
 
 export const Gemini: React.FC<IconProps> = ({ size = 24, className = "" }) => (
-  <div
-    className={cn("rounded-full border bg-primary-foreground p-1", className)}
-  >
+  <div className={cn("rounded-full border bg-primary-foreground p-1", className)}>
     <svg
       width={size}
       height={size}
@@ -301,13 +235,7 @@ export const Gemini: React.FC<IconProps> = ({ size = 24, className = "" }) => (
   </div>
 );
 
-export const AssitantIcon = ({
-  size = 16,
-  className,
-}: {
-  size?: number;
-  className?: string;
-}) => (
+export const AssitantIcon = ({ size = 16, className }: { size?: number; className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -362,10 +290,7 @@ interface IconProps {
   className?: string;
 }
 
-export const JavaScriptIcon: React.FC<IconProps> = ({
-  size = 24,
-  className = "",
-}) => {
+export const JavaScriptIcon: React.FC<IconProps> = ({ size = 24, className = "" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -379,10 +304,7 @@ export const JavaScriptIcon: React.FC<IconProps> = ({
     </svg>
   );
 };
-export const TypeScriptIcon: React.FC<IconProps> = ({
-  size = 24,
-  className = "",
-}) => {
+export const TypeScriptIcon: React.FC<IconProps> = ({ size = 24, className = "" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -400,9 +322,7 @@ export const TypeScriptIcon: React.FC<IconProps> = ({
   );
 };
 
-export const ReactIcon = (
-  props: SVGProps<SVGSVGElement> & { size?: number },
-) => (
+export const ReactIcon = (props: SVGProps<SVGSVGElement> & { size?: number }) => (
   <svg
     viewBox="0 0 256 228"
     width={props.size || 16}
@@ -418,9 +338,7 @@ export const ReactIcon = (
   </svg>
 );
 
-export const NextJsIcon = (
-  props: SVGProps<SVGSVGElement> & { size?: number },
-) => (
+export const NextJsIcon = (props: SVGProps<SVGSVGElement> & { size?: number }) => (
   <svg
     width={props.size}
     height={props.size}
@@ -443,25 +361,12 @@ export const NextJsIcon = (
       <circle cx={90} cy={90} r={90} fill="black" />
     </mask>
     <g mask="url(#mask0_408_139)">
-      <circle
-        cx={90}
-        cy={90}
-        r={87}
-        fill="black"
-        stroke="white"
-        strokeWidth={6}
-      />
+      <circle cx={90} cy={90} r={87} fill="black" stroke="white" strokeWidth={6} />
       <path
         d="M149.508 157.52L69.142 54H54V125.97H66.1136V69.3836L139.999 164.845C143.333 162.614 146.509 160.165 149.508 157.52Z"
         fill="url(#paint0_linear_408_139)"
       />
-      <rect
-        x={115}
-        y={54}
-        width={12}
-        height={72}
-        fill="url(#paint1_linear_408_139)"
-      />
+      <rect x={115} y={54} width={12} height={72} fill="url(#paint1_linear_408_139)" />
     </g>
     <defs>
       <linearGradient
@@ -490,9 +395,7 @@ export const NextJsIcon = (
   </svg>
 );
 
-export const PrismaIcon = (
-  props: SVGProps<SVGSVGElement> & { size: number },
-) => (
+export const PrismaIcon = (props: SVGProps<SVGSVGElement> & { size: number }) => (
   <svg
     viewBox="0 0 256 310"
     width={props.size || 16}
@@ -508,10 +411,7 @@ export const PrismaIcon = (
   </svg>
 );
 
-export const JavaIcon: React.FC<IconProps> = ({
-  size = 24,
-  className = "",
-}) => {
+export const JavaIcon: React.FC<IconProps> = ({ size = 24, className = "" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -543,10 +443,7 @@ export const JavaIcon: React.FC<IconProps> = ({
     </svg>
   );
 };
-export const CSharpIcon: React.FC<IconProps> = ({
-  size = 24,
-  className = "",
-}) => {
+export const CSharpIcon: React.FC<IconProps> = ({ size = 24, className = "" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -566,10 +463,7 @@ export const CSharpIcon: React.FC<IconProps> = ({
     </svg>
   );
 };
-export const CPlusPlusIcon: React.FC<IconProps> = ({
-  size = 24,
-  className = "",
-}) => {
+export const CPlusPlusIcon: React.FC<IconProps> = ({ size = 24, className = "" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -638,10 +532,7 @@ export const PHPIcon: React.FC<IconProps> = ({ size = 24, className = "" }) => {
   );
 };
 
-export const PythonIcon: React.FC<IconProps> = ({
-  size = 24,
-  className = "",
-}) => {
+export const PythonIcon: React.FC<IconProps> = ({ size = 24, className = "" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -717,10 +608,7 @@ export const CssIcon: React.FC<IconProps> = ({ size = 24, className = "" }) => {
         fill="#1572B6"
         d="M18.814 114.123L8.76 1.352h110.48l-10.064 112.754-45.243 12.543-45.119-12.526z"
       />
-      <path
-        fill="#33A9DC"
-        d="M64.001 117.062l36.559-10.136 8.601-96.354h-45.16v106.49z"
-      />
+      <path fill="#33A9DC" d="M64.001 117.062l36.559-10.136 8.601-96.354h-45.16v106.49z" />
       <path
         fill="#fff"
         d="M64.001 51.429h18.302l1.264-14.163H64.001V23.435h34.682l-.332 3.711-3.4 38.114h-30.95V51.429z"
@@ -741,10 +629,7 @@ export const CssIcon: React.FC<IconProps> = ({ size = 24, className = "" }) => {
   );
 };
 
-export const HtmlIcon: React.FC<IconProps> = ({
-  size = 24,
-  className = "",
-}) => {
+export const HtmlIcon: React.FC<IconProps> = ({ size = 24, className = "" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -753,10 +638,7 @@ export const HtmlIcon: React.FC<IconProps> = ({
       height={size}
       className={className}
     >
-      <path
-        fill="#E44D26"
-        d="M19.037 113.876L9.032 1.661h109.936l-10.016 112.198-45.019 12.48z"
-      />
+      <path fill="#E44D26" d="M19.037 113.876L9.032 1.661h109.936l-10.016 112.198-45.019 12.48z" />
       <path fill="#F16529" d="M64 116.8l36.378-10.086 8.559-95.878H64z" />
       <path
         fill="#EBEBEB"
@@ -770,9 +652,7 @@ export const HtmlIcon: React.FC<IconProps> = ({
   );
 };
 
-export const NodejsIcon = (
-  props: SVGProps<SVGSVGElement> & { size?: number },
-) => (
+export const NodejsIcon = (props: SVGProps<SVGSVGElement> & { size?: number }) => (
   <svg
     viewBox="0 0 256 292"
     xmlns="http://www.w3.org/2000/svg"
@@ -782,38 +662,20 @@ export const NodejsIcon = (
     {...props}
   >
     <defs>
-      <linearGradient
-        id="a"
-        x1="68.188%"
-        x2="27.823%"
-        y1="17.487%"
-        y2="89.755%"
-      >
+      <linearGradient id="a" x1="68.188%" x2="27.823%" y1="17.487%" y2="89.755%">
         <stop offset="0%" stopColor="#41873F" />
         <stop offset="32.88%" stopColor="#418B3D" />
         <stop offset="63.52%" stopColor="#419637" />
         <stop offset="93.19%" stopColor="#3FA92D" />
         <stop offset="100%" stopColor="#3FAE2A" />
       </linearGradient>
-      <linearGradient
-        id="c"
-        x1="43.277%"
-        x2="159.245%"
-        y1="55.169%"
-        y2="-18.306%"
-      >
+      <linearGradient id="c" x1="43.277%" x2="159.245%" y1="55.169%" y2="-18.306%">
         <stop offset="13.76%" stopColor="#41873F" />
         <stop offset="40.32%" stopColor="#54A044" />
         <stop offset="71.36%" stopColor="#66B848" />
         <stop offset="90.81%" stopColor="#6CC04A" />
       </linearGradient>
-      <linearGradient
-        id="f"
-        x1="-4.389%"
-        x2="101.499%"
-        y1="49.997%"
-        y2="49.997%"
-      >
+      <linearGradient id="f" x1="-4.389%" x2="101.499%" y1="49.997%" y2="49.997%">
         <stop offset="9.192%" stopColor="#6CC04A" />
         <stop offset="28.64%" stopColor="#66B848" />
         <stop offset="59.68%" stopColor="#54A044" />
@@ -851,9 +713,7 @@ export const NodejsIcon = (
   </svg>
 );
 
-export const DrizzleORM = (
-  props: SVGProps<SVGSVGElement> & { size?: number },
-) => (
+export const DrizzleORM = (props: SVGProps<SVGSVGElement> & { size?: number }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={props.size || 16}

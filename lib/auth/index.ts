@@ -1,27 +1,20 @@
 //  Add server only
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { headers } from "next/headers";
-import { db } from "../drizzle";
 import { lastLoginMethod } from "better-auth/plugins";
+import { headers } from "next/headers";
+
+import { db } from "../drizzle";
 
 const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL,
   database: drizzleAdapter(db, {
     provider: "pg",
   }),
-  plugins: [
-    lastLoginMethod(),
-  ],
+  plugins: [lastLoginMethod()],
   account: {
     accountLinking: {
-      trustedProviders: [
-        "google",
-        "github",
-        "apple",
-        "gitlab",
-        "email-password",
-      ],
+      trustedProviders: ["google", "github", "apple", "gitlab", "email-password"],
     },
     skipStateCookieCheck: true,
   },
@@ -47,7 +40,6 @@ const signOut = async () =>
     headers: await headers(),
   });
 
-const getSession = async () =>
-  await auth.api.getSession({ headers: await headers() });
+const getSession = async () => await auth.api.getSession({ headers: await headers() });
 
 export { auth, signIn, signOut, getSession };

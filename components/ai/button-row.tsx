@@ -1,27 +1,16 @@
-import {
-  Check,
-  Copy,
-  GitBranchIcon,
-  LucideIcon,
-  Repeat,
-  ThumbsDown,
-  ThumbsUp,
-} from "lucide-react";
-import { Button } from "~/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
+import { Check, Copy, GitBranchIcon, LucideIcon, Repeat, ThumbsDown, ThumbsUp } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
+
+import { Button } from "~/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
+import { UIMessage } from "~/lib/ai/types";
+import { trpc } from "~/lib/backend/trpc/client";
 import { useClipBoard } from "~/lib/hooks";
 import { RegenerateFunc } from "~/lib/types";
-import { UIMessage } from "~/lib/ai/types";
 import { formatNumber, cn } from "~/lib/utils";
-import { useParams, useRouter } from "next/navigation";
-import { trpc } from "~/lib/backend/trpc/client";
-import { useState } from "react";
-import { Loader2 } from "lucide-react";
 
 interface Props {
   content: string;
@@ -92,11 +81,9 @@ export default function ButtonRow({ content, reload, message }: Props) {
   }
 
   return (
-    <div className="flex gap-2 mt-2 justify-end">
-      <div className="flex justify-center items-center gap-2 font-sans italic">
-        {message?.metadata?.model && (
-          <span className="text-sm">{message.metadata.model}</span>
-        )}
+    <div className="mt-2 flex justify-end gap-2">
+      <div className="flex items-center justify-center gap-2 font-sans italic">
+        {message?.metadata?.model && <span className="text-sm">{message.metadata.model}</span>}
         {message?.metadata?.totalTokens && (
           <span className="text-sm">{`${formatNumber(message.metadata.totalTokens)} Tokens`}</span>
         )}
@@ -105,7 +92,7 @@ export default function ButtonRow({ content, reload, message }: Props) {
         <Tooltip key={index}>
           <TooltipTrigger asChild>
             <Button
-              className="w-fit h-fit  flex px-3 py-2 bg-card rounded-xl gap-1"
+              className="flex h-fit  w-fit gap-1 rounded-xl bg-card px-3 py-2"
               variant="ghost"
               size="icon"
               disabled={onClick === branch && branchMutation.isPending}
@@ -114,9 +101,7 @@ export default function ButtonRow({ content, reload, message }: Props) {
               <Icon
                 className={cn(
                   "h-2 w-2",
-                  onClick === branch &&
-                    branchMutation.isPending &&
-                    "animate-spin",
+                  onClick === branch && branchMutation.isPending && "animate-spin",
                 )}
               />
               {label && <span className="text-xs">{label}</span>}

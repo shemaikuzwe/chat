@@ -1,7 +1,9 @@
 "use client";
-import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
-import { LoginCard } from "./login-card";
 import { useState } from "react";
+
+import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
+
+import { LoginCard } from "./login-card";
 
 export function LoginForm({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);

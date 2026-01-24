@@ -1,6 +1,6 @@
-##  
+##
 
- Chat Chat bot
+Chat Chat bot
 
 > Some Features may not work or Contain bugs.
 >
@@ -19,7 +19,7 @@
 - [x] Update Chat from database
 - [x] Show Chat History
 - [ ] Canvas Feature
-- [ ] Run  using web container
+- [ ] Run using web container
 
 ## Technologies
 

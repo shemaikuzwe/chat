@@ -1,12 +1,15 @@
 "use client";
 
 import { ChevronLeft, ShieldCheck, Box, Brain } from "lucide-react";
+
 import { Button } from "~/components/ui/button";
-import { Separator } from "~/components/ui/separator";
 import { Card, CardContent } from "~/components/ui/card";
-import { AssitantIcon } from "../ui/icons";
-import Provider from "./provider";
+import { Separator } from "~/components/ui/separator";
 import { getLastUsedLoginMethod } from "~/lib/auth/auth-client";
+
+import { AssitantIcon } from "../ui/icons";
+
+import Provider from "./provider";
 
 export function LoginCard({
   setIsOpen,
@@ -15,34 +18,30 @@ export function LoginCard({
 }) {
   const lastMethod = getLastUsedLoginMethod();
   return (
-    <Card className="overflow-hidden border-none max-w-4xl w-full">
-      <CardContent className="p-0 flex flex-col md:flex-row min-h-145">
-        <div className="flex-1 p-8 flex flex-col relative">
+    <Card className="w-full max-w-4xl overflow-hidden border-none">
+      <CardContent className="flex min-h-145 flex-col p-0 md:flex-row">
+        <div className="relative flex flex-1 flex-col p-8">
           <Button
             variant="ghost"
             size="icon"
-            className="absolute left-6 top-6 rounded-full bg-muted/50 hover:bg-muted"
+            className="absolute top-6 left-6 rounded-full bg-muted/50 hover:bg-muted"
             onClick={() => setIsOpen(false)}
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
 
-          <div className="mt-12 flex flex-col items-center text-center space-y-6 max-w-sm mx-auto w-full">
-            <div className="flex items-center gap-2 mb-2">
+          <div className="mx-auto mt-12 flex w-full max-w-sm flex-col items-center space-y-6 text-center">
+            <div className="mb-2 flex items-center gap-2">
               <AssitantIcon />
               <span className="text-2xl font-bold tracking-tight">Chat</span>
             </div>
 
-            <p className="text-muted-foreground text-sm">
-              Sign in or create your Chat account
-            </p>
+            <p className="text-sm text-muted-foreground">Sign in or create your Chat account</p>
             <Provider name="google" lastUsed={lastMethod === "google"} />
 
-            <div className="w-full flex items-center gap-4 py-2">
+            <div className="flex w-full items-center gap-4 py-2">
               <Separator className="flex-1" />
-              <span className="text-xs text-muted-foreground uppercase">
-                Or
-              </span>
+              <span className="text-xs text-muted-foreground uppercase">Or</span>
               <Separator className="flex-1" />
             </div>
 
@@ -50,19 +49,13 @@ export function LoginCard({
               <Provider name="github" lastUsed={lastMethod === "github"} />
             </div>
 
-            <p className="text-[11px] text-muted-foreground leading-relaxed">
+            <p className="text-[11px] leading-relaxed text-muted-foreground">
               By clicking continue, you agree to our{" "}
-              <a
-                href="#"
-                className="underline hover:text-foreground underline-offset-2"
-              >
+              <a href="#" className="underline underline-offset-2 hover:text-foreground">
                 Terms of Service
               </a>{" "}
               and{" "}
-              <a
-                href="#"
-                className="underline hover:text-foreground underline-offset-2"
-              >
+              <a href="#" className="underline underline-offset-2 hover:text-foreground">
                 Privacy Policy
               </a>
               .
@@ -71,29 +64,27 @@ export function LoginCard({
         </div>
 
         {/* Right Pane */}
-        <div className="flex-1 bg-secondary/30 p-12 flex flex-col justify-between">
+        <div className="flex flex-1 flex-col justify-between bg-secondary/30 p-12">
           <div className="space-y-8">
             <div className="space-y-4">
-              <h2 className="text-3xl font-bold leading-tight">AI Chat App</h2>
-              <p className="text-muted-foreground leading-relaxed">
+              <h2 className="text-3xl leading-tight font-bold">AI Chat App</h2>
+              <p className="leading-relaxed text-muted-foreground">
                 Chat with all your favorite AI models in one app.
               </p>
             </div>
 
             <div className="space-y-6">
               <div className="flex items-start gap-4">
-                <div className="mt-1 p-2 rounded-lg bg-background shadow-xs">
+                <div className="mt-1 rounded-lg bg-background p-2 shadow-xs">
                   <ShieldCheck className="h-5 w-5 text-primary" />
                 </div>
                 <div>
                   <h3 className="font-semibold">Access All models</h3>
-                  <p className="text-sm text-muted-foreground">
-                    access to all models
-                  </p>
+                  <p className="text-sm text-muted-foreground">access to all models</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <div className="mt-1 p-2 rounded-lg bg-background shadow-xs">
+                <div className="mt-1 rounded-lg bg-background p-2 shadow-xs">
                   <Box className="h-5 w-5 text-primary" />
                 </div>
                 <div>
@@ -104,40 +95,38 @@ export function LoginCard({
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <div className="mt-1 p-2 rounded-lg bg-background shadow-xs">
+                <div className="mt-1 rounded-lg bg-background p-2 shadow-xs">
                   <Brain className="h-5 w-5 text-primary" />
                 </div>
                 <div>
                   <h3 className="font-semibold">Never used for training</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Your chats stay private
-                  </p>
+                  <p className="text-sm text-muted-foreground">Your chats stay private</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="pt-8 space-y-6">
-            <p className="text-xs text-center text-muted-foreground font-medium uppercase tracking-wider">
+          <div className="space-y-6 pt-8">
+            <p className="text-center text-xs font-medium tracking-wider text-muted-foreground uppercase">
               Access Models from
             </p>
             <div className="grid grid-cols-3 gap-6 opacity-60">
-              <div className="flex items-center justify-center grayscale hover:grayscale-0 transition-all">
+              <div className="flex items-center justify-center grayscale transition-all hover:grayscale-0">
                 <span className="text-[10px] font-bold">DEEPSEEK</span>
               </div>
-              <div className="flex items-center justify-center grayscale hover:grayscale-0 transition-all">
+              <div className="flex items-center justify-center grayscale transition-all hover:grayscale-0">
                 <span className="text-[10px] font-bold">LLAMA</span>
               </div>
-              <div className="flex items-center justify-center grayscale hover:grayscale-0 transition-all">
+              <div className="flex items-center justify-center grayscale transition-all hover:grayscale-0">
                 <span className="text-[10px] font-bold">QWEN</span>
               </div>
-              <div className="flex items-center justify-center grayscale hover:grayscale-0 transition-all">
+              <div className="flex items-center justify-center grayscale transition-all hover:grayscale-0">
                 <span className="text-[10px] font-bold">GLM</span>
               </div>
-              <div className="flex items-center justify-center grayscale hover:grayscale-0 transition-all">
+              <div className="flex items-center justify-center grayscale transition-all hover:grayscale-0">
                 <span className="text-[10px] font-bold">MISTRAL</span>
               </div>
-              <div className="flex items-center justify-center grayscale hover:grayscale-0 transition-all">
+              <div className="flex items-center justify-center grayscale transition-all hover:grayscale-0">
                 <span className="text-[10px] font-bold">KIMI</span>
               </div>
             </div>

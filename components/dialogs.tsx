@@ -1,4 +1,26 @@
+import {
+  AlertCircle,
+  Archive,
+  ArchiveRestore,
+  Check,
+  Copy,
+  Edit3,
+  ExternalLink,
+  LinkIcon,
+  Loader2,
+  Pin,
+  PinOff,
+  Save,
+  Share2,
+  Trash2,
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import type { Chat } from "~/lib/ai/types";
+
+import { Button } from "~/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -10,28 +32,8 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
-import { Button } from "~/components/ui/button";
-import { useClipBoard } from "~/lib/hooks";
-import {
-  AlertCircle,
-  Archive,
-  ArchiveRestore,
-  Check,
-  Copy,
-  Edit3,
-  Link,
-  Loader2,
-  Pin,
-  PinOff,
-  Save,
-  Share2,
-  Trash2,
-} from "lucide-react";
-import type { Chat } from "~/lib/ai/types";
-import { usePathname, useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { trpc, useTRPC } from "~/lib/backend/trpc/client";
-
+import { useClipBoard } from "~/lib/hooks";
 interface Props {
   chat: Chat;
   onSuccess?: () => void;
@@ -59,13 +61,23 @@ export function PinAction({ chat, onSuccess }: Props) {
       }
     >
       {isPending ? (
-        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+        <Loader2 className="h-4 w-4 animate-spin" />
       ) : chat.status === "PINNED" ? (
-        <PinOff className="w-4 h-4 mr-2" />
+        <PinOff className="h-4 w-4" />
       ) : (
-        <Pin className="w-4 h-4 mr-2" />
+        <Pin className="h-4 w-4" />
       )}
       {chat.status === "PINNED" ? "Unpin" : "Pin"}
+    </Button>
+  );
+}
+export function OpenNewTab({ chat }: Props) {
+  return (
+    <Button variant="ghost" asChild>
+      <Link href={`/chat/${chat.id}`} target="_blank">
+        <ExternalLink className="h-4 w-4" />
+        Open in New Tab
+      </Link>
     </Button>
   );
 }
@@ -92,11 +104,11 @@ export function ArchiveAction({ chat, onSuccess }: Props) {
       }
     >
       {isPending ? (
-        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+        <Loader2 className="h-4 w-4 animate-spin" />
       ) : chat.status === "ARCHIVED" ? (
-        <ArchiveRestore className="w-4 h-4 mr-2" />
+        <ArchiveRestore className="h-4 w-4" />
       ) : (
-        <Archive className="w-4 h-4 mr-2" />
+        <Archive className="h-4 w-4" />
       )}
       {chat.status === "ARCHIVED" ? "Unarchive" : "Archive"}
     </Button>
@@ -106,8 +118,7 @@ export function ArchiveAction({ chat, onSuccess }: Props) {
 export function DeleteDialog({ chat, onSuccess }: Props) {
   const pathname = usePathname();
   const router = useRouter();
-  const { mutate, isPending, isSuccess, isError } =
-    trpc.chat.deleteChat.useMutation();
+  const { mutate, isPending, isSuccess, isError } = trpc.chat.deleteChat.useMutation();
 
   useEffect(() => {
     if (isSuccess) {
@@ -128,21 +139,20 @@ export function DeleteDialog({ chat, onSuccess }: Props) {
       <DialogTrigger asChild>
         <Button
           variant="ghost"
-          className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-100"
+          className="w-full justify-start text-red-500 hover:bg-red-100 hover:text-red-600"
         >
-          <Trash2 className="w-4 h-4 mr-2" />
+          <Trash2 className="h-4 w-4" />
           Delete
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-106">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <AlertCircle className="w-5 h-5 text-red-500" />
+            <AlertCircle className="h-5 w-5 text-red-500" />
             Confirm Deletion
           </DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete this chat? This action cannot be
-            undone.
+            Are you sure you want to delete this chat? This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
 
@@ -160,12 +170,12 @@ export function DeleteDialog({ chat, onSuccess }: Props) {
           >
             {isPending ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin" />
                 Deleting...
               </>
             ) : (
               <>
-                <Trash2 className="w-4 h-4 mr-2" />
+                <Trash2 className="h-4 w-4" />
                 Delete
               </>
             )}
@@ -188,14 +198,14 @@ export function RenameDialog({ chat, onSuccess }: Props) {
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="ghost" className="w-full justify-start">
-          <Edit3 className="w-4 h-4 mr-2" />
+          <Edit3 className="h-4 w-4" />
           Rename
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-106">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Edit3 className="w-5 h-5" />
+            <Edit3 className="h-5 w-5" />
             Rename Chat
           </DialogTitle>
           <DialogDescription>Enter a new name for your chat.</DialogDescription>
@@ -222,12 +232,12 @@ export function RenameDialog({ chat, onSuccess }: Props) {
           >
             {isPending ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Saving...
               </>
             ) : (
               <>
-                <Save className="w-4 h-4 mr-2" />
+                <Save className="mr-2 h-4 w-4" />
                 Save
               </>
             )}
@@ -246,31 +256,29 @@ export function ShareDialog({ chat }: Props) {
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="ghost" className="w-full justify-start">
-          <Share2 className="w-4 h-4 mr-2" />
+          <Share2 className="h-4 w-4 " />
           Share
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-106">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Link className="w-5 h-5" />
+            <LinkIcon className="h-5 w-5" />
             Share Chat
           </DialogTitle>
-          <DialogDescription>
-            Copy the link below to share this chat with others.
-          </DialogDescription>
+          <DialogDescription>Copy the link below to share this chat with others.</DialogDescription>
         </DialogHeader>
         <div className="flex items-center space-x-2">
           <Input value={link} readOnly className="flex-1" />
           <Button onClick={() => copyText(link)} className="shrink-0">
             {isCopied ? (
               <>
-                <Check className="w-4 h-4 mr-2" />
+                <Check className="mr-2 h-4 w-4" />
                 Copied!
               </>
             ) : (
               <>
-                <Copy className="w-4 h-4 mr-2" />
+                <Copy className="mr-2 h-4 w-4" />
                 Copy
               </>
             )}

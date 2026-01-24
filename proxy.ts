@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+
 import { getSession } from "./lib/auth";
 
 export default async function proxy(request: NextRequest) {
@@ -15,5 +16,5 @@ export default async function proxy(request: NextRequest) {
   return NextResponse.next();
 }
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"]
+  matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
 };

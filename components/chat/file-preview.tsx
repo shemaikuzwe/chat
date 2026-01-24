@@ -1,3 +1,12 @@
+import type { FileUIPart } from "ai";
+import { DownloadIcon, FileIcon, FullscreenIcon, MinimizeIcon, XIcon } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+
+import { cn } from "~/lib/utils";
+
+import { Button } from "../ui/button";
 import {
   Dialog,
   DialogClose,
@@ -6,33 +15,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { Button } from "../ui/button";
-import {
-  DownloadIcon,
-  FileIcon,
-  FullscreenIcon,
-  MinimizeIcon,
-  XIcon,
-} from "lucide-react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { useEffect, useRef, useState } from "react";
-import { toast } from "sonner";
-import Image from "next/image";
-import PDF from "../ui/pfd";
-import type { FileUIPart } from "ai";
-import { cn } from "~/lib/utils";
 import { IconUser } from "../ui/icons";
+import PDF from "../ui/pfd";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 interface Props {
   file: FileUIPart;
   className?: string;
   message?: string;
 }
-export function FilePreview({
-  file,
-  message,
-  className = "h-40 w-40 rounded-md",
-}: Props) {
+export function FilePreview({ file, message, className = "h-40 w-40 rounded-md" }: Props) {
   console.log("FilePreview", file);
   const divRef = useRef<HTMLDivElement>(null);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -45,7 +37,7 @@ export function FilePreview({
           width={0}
           height={0}
           sizes="100vw"
-          className={cn("w-auto h-auto", className)}
+          className={cn("h-auto w-auto", className)}
         />
       );
     }
@@ -110,18 +102,17 @@ export function FilePreview({
   return (
     <Dialog>
       <DialogTrigger asChild>{displayPreview(className, false)}</DialogTrigger>
-      <DialogContent showCloseButton={false} className={cn("max-w-full mb-5 h-full bg-background/50 ")}>
-        <DialogHeader className="flex items-start  flex-row justify-between w-full px-4">
-          <div className="flex gap-2 justify-center items-start">
-            <div className="w-10 h-10">
+      <DialogContent
+        showCloseButton={false}
+        className={cn("mb-5 h-full max-w-full bg-background/50 ")}
+      >
+        <DialogHeader className="flex w-full  flex-row items-start justify-between px-4">
+          <div className="flex items-start justify-center gap-2">
+            <div className="h-10 w-10">
               <IconUser />
             </div>
             <div>
-              {message && (
-                <DialogTitle className="font-medium text-sm">
-                  {message}
-                </DialogTitle>
-              )}
+              {message && <DialogTitle className="text-sm font-medium">{message}</DialogTitle>}
               <span className="text-sm text-muted-foreground">
                 {/*{formatDate(new Date(message.created_at), "HH:mm")}*/}
               </span>
@@ -157,27 +148,17 @@ export function FilePreview({
           </div>
         </DialogHeader>
 
-        <div ref={divRef} className="flex justify-center items-center">
+        <div ref={divRef} className="flex items-center justify-center">
           {displayPreview(
-            `rounded-md object-contain ${
-              isFullScreen ? "h-full w-full" : "max-h-[80vh] w-auto"
-            }`,
-            true
+            `rounded-md object-contain ${isFullScreen ? "h-full w-full" : "max-h-[80vh] w-auto"}`,
+            true,
           )}
           {isFullScreen && (
             <div className={"absolute top-10 right-25 flex gap-2"}>
-              <Button
-                onClick={toogleFullScreen}
-                variant={"secondary"}
-                title="Exit Fullscreen"
-              >
-                <MinimizeIcon className="w-full h-full" />
+              <Button onClick={toogleFullScreen} variant={"secondary"} title="Exit Fullscreen">
+                <MinimizeIcon className="h-full w-full" />
               </Button>
-              <Button
-                variant={"secondary"}
-                onClick={handleDownload}
-                title="Download"
-              >
+              <Button variant={"secondary"} onClick={handleDownload} title="Download">
                 <DownloadIcon />
               </Button>
             </div>

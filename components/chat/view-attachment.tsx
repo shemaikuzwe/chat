@@ -3,19 +3,16 @@
 import { FileIcon, Download, Eye } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardFooter } from "~/components/ui/card";
 import { Attachment } from "~/lib/types";
 
-export default function ViewAttachment({
-  attachment,
-}: {
-  attachment: Attachment;
-}) {
+export default function ViewAttachment({ attachment }: { attachment: Attachment }) {
   const isImage = attachment.contentType?.startsWith("image/");
 
   return (
-    <Card className=" rounded-md h-fit transition-all duration-300 ease-in-out hover:shadow-lg">
+    <Card className=" h-fit rounded-md transition-all duration-300 ease-in-out hover:shadow-lg">
       <CardContent className="p-1">
         {isImage ? (
           <div className="rounded-sm">
@@ -28,17 +25,15 @@ export default function ViewAttachment({
             />
           </div>
         ) : (
-          <div className="flex items-center justify-center aspect-square rounded-md">
+          <div className="flex aspect-square items-center justify-center rounded-md">
             <FileIcon className="h-20 w-20 text-blue-500" />
           </div>
         )}
       </CardContent>
-      <CardFooter className="flex justify-between items-center p-1 bg-muted/50">
-        <div className="truncate mr-2">
-          <p className="font-medium text-sm">{attachment.name}</p>
-          <p className="text-xs text-gray-500">
-            {isImage ? "Image" : attachment.contentType}
-          </p>
+      <CardFooter className="flex items-center justify-between bg-muted/50 p-1">
+        <div className="mr-2 truncate">
+          <p className="text-sm font-medium">{attachment.name}</p>
+          <p className="text-xs text-gray-500">{isImage ? "Image" : attachment.contentType}</p>
         </div>
       </CardFooter>
     </Card>

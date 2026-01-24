@@ -4,7 +4,7 @@ import { generateChatId } from "~/lib/ai/utis";
 export default function Home() {
   const chatId = generateChatId();
   return (
-    <div className={"flex justify-center h-full w-full "}>
+    <div className={"flex h-full w-full justify-center "}>
       <Chat chatId={chatId} initialMessages={[]} />
     </div>
   );

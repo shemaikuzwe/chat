@@ -1,9 +1,10 @@
 import "server-only";
-import { cacheTag } from "next/cache";
-import { db } from "../drizzle";
-import { eq, or } from "drizzle-orm";
-import { model as modelSchema } from "../drizzle/schema";
 
+import { eq, or } from "drizzle-orm";
+import { cacheTag } from "next/cache";
+
+import { db } from "../drizzle";
+import { model as modelSchema } from "../drizzle/schema";
 
 export async function getModels() {
   "use cache";

@@ -1,20 +1,16 @@
 "use client";
-import Link from "next/link";
-import {
-  SidebarMenuAction,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "~/components/ui/sidebar";
-import { usePathname } from "next/navigation";
-import { useAnimatedText, useLocalStorage } from "~/lib/hooks";
-import { Chat } from "~/lib/ai/types";
 import { GitBranch, Loader2 } from "lucide-react";
-import ChatOptionsMenu from "../chat-options";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
+  ArchiveAction,
+  DeleteDialog,
+  OpenNewTab,
+  PinAction,
+  RenameDialog,
+  ShareDialog,
+} from "~/components/dialogs";
 import { Button } from "~/components/ui/button";
 import {
   ContextMenu,
@@ -22,14 +18,13 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "~/components/ui/context-menu";
-import {
-  ArchiveAction,
-  DeleteDialog,
-  PinAction,
-  RenameDialog,
-  ShareDialog,
-} from "~/components/dialogs";
+import { SidebarMenuAction, SidebarMenuButton, SidebarMenuItem } from "~/components/ui/sidebar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
+import { Chat } from "~/lib/ai/types";
 import { trpc, useTRPC } from "~/lib/backend/trpc/client";
+import { useAnimatedText, useLocalStorage } from "~/lib/hooks";
+
+import ChatOptionsMenu from "../chat-options";
 
 interface NavItemProps {
   chat: Chat;
@@ -53,26 +48,17 @@ export default function NavItem({ chat }: NavItemProps) {
     <SidebarMenuItem>
       <ContextMenu>
         <ContextMenuTrigger asChild>
-          <SidebarMenuButton
-            asChild
-            isActive={isActive}
-            className="group/chat-item"
-          >
+          <SidebarMenuButton asChild isActive={isActive} className="group/chat-item">
             <Link href={path}>
               {chat.parentChatId && (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-5 w-5 p-0 shrink-0"
-                      asChild
-                    >
+                    <Button variant="ghost" size="icon" className="h-5 w-5 shrink-0 p-0" asChild>
                       <Link
                         href={`/chat/${chat.parentChatId}`}
                         onClick={(e) => e.stopPropagation()}
                       >
-                        <GitBranch className="w-3 h-3" />
+                        <GitBranch className="h-3 w-3" />
                       </Link>
                     </Button>
                   </TooltipTrigger>
@@ -82,15 +68,16 @@ export default function NavItem({ chat }: NavItemProps) {
                 </Tooltip>
               )}
               <span className="truncate">{text}</span>
-              {chat?.isPending && (
-                <Loader2 className="w-4 h-4 animate-spin ml-auto" />
-              )}
+              {chat?.isPending && <Loader2 className="ml-auto h-4 w-4 animate-spin" />}
             </Link>
           </SidebarMenuButton>
         </ContextMenuTrigger>
-        <ContextMenuContent className="w-40 mx-3">
+        <ContextMenuContent className="mx-3 w-45">
           <ContextMenuItem asChild>
             <PinAction chat={chat} />
+          </ContextMenuItem>
+          <ContextMenuItem asChild>
+            <OpenNewTab chat={chat} />
           </ContextMenuItem>
           <ContextMenuItem asChild>
             <ArchiveAction chat={chat} />

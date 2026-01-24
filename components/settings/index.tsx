@@ -1,29 +1,32 @@
 "use client";
 
 import { User, CreditCard, Shield } from "lucide-react";
+
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "~/components/ui/tabs";
-import Personalization from "./user";
-import Subscription from "./subscription";
-import AccountSecurity from "./account";
+
 import { ScrollArea } from "../ui/scroll-area";
+
+import AccountSecurity from "./account";
+import Subscription from "./subscription";
+import Personalization from "./user";
 
 export function Settings() {
   return (
-    <div className=" max-w-5xl mx-auto p-2 space-y-8 h-full">
+    <div className=" mx-auto h-full max-w-5xl space-y-8 p-2">
       <h1 className="text-3xl font-bold">Settings</h1>
 
       <Tabs defaultValue="personalization" className="w-full">
         <TabsList>
           <TabsTrigger value="personalization" className="space-x-2">
-            <User className="w-4 h-4" />
+            <User className="h-4 w-4" />
             <span>Personalization</span>
           </TabsTrigger>
           <TabsTrigger value="subscription" className="space-x-2">
-            <CreditCard className="w-4 h-4" />
+            <CreditCard className="h-4 w-4" />
             <span>Subscription</span>
           </TabsTrigger>
           <TabsTrigger value="security" className="space-x-2">
-            <Shield className="w-4 h-4" />
+            <Shield className="h-4 w-4" />
             <span>Account and Security</span>
           </TabsTrigger>
         </TabsList>

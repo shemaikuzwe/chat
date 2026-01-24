@@ -1,5 +1,10 @@
 "use client";
 import { Ellipsis } from "lucide-react";
+import type { Chat } from "~/lib/ai/types";
+
+import { trpc, useTRPC } from "~/lib/backend/trpc/client";
+
+import { ArchiveAction, DeleteDialog, PinAction, RenameDialog, ShareDialog } from "./dialogs";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -7,15 +12,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import {
-  ArchiveAction,
-  DeleteDialog,
-  PinAction,
-  RenameDialog,
-  ShareDialog,
-} from "./dialogs";
-import type { Chat } from "~/lib/ai/types";
-import { trpc, useTRPC } from "~/lib/backend/trpc/client";
 import { SidebarMenuAction } from "./ui/sidebar";
 
 export default function ChatOptionsMenu({ chat }: { chat: Chat }) {
@@ -33,7 +29,7 @@ export default function ChatOptionsMenu({ chat }: { chat: Chat }) {
           <span className="sr-only">More</span>
         </SidebarMenuAction>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="rounded-lg w-40 mx-3 ">
+      <DropdownMenuContent className="mx-3 w-40 rounded-lg ">
         <DropdownMenuItem asChild>
           <PinAction chat={chat} />
         </DropdownMenuItem>

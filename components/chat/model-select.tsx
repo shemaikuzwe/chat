@@ -1,19 +1,17 @@
 "use client";
-import { ModelIcons } from "~/lib/ai/models";
-import { useState, useMemo, useEffect } from "react";
-import { Search } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/components/ui/popover";
-import { Button } from "~/components/ui/button";
-import { ScrollArea } from "~/components/ui/scroll-area";
-import { cn } from "~/lib/utils";
-import type { Model } from "~/lib/drizzle";
 import cookies from "js-cookie";
-import { ModelSelectorSkelton } from "../skeletons";
+import { Search } from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
+import type { Model } from "~/lib/drizzle";
+
+import { Button } from "~/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
+import { ScrollArea } from "~/components/ui/scroll-area";
+import { ModelIcons } from "~/lib/ai/models";
 import { trpc } from "~/lib/backend/trpc/client";
+import { cn } from "~/lib/utils";
+
+import { ModelSelectorSkelton } from "../skeletons";
 
 export function ModelSelector() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -46,9 +44,7 @@ export function ModelSelector() {
 
   const filteredModels = useMemo(() => {
     return models?.filter((model) => {
-      const matchesSearch = model.name
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase());
+      const matchesSearch = model.name.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesSearch;
     });
   }, [searchQuery, models]);
@@ -59,9 +55,7 @@ export function ModelSelector() {
     setSearchQuery("");
   };
 
-  const SelectedModelIcon = selectedModel
-    ? ModelIcons[selectedModel.type]
-    : null;
+  const SelectedModelIcon = selectedModel ? ModelIcons[selectedModel.type] : null;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -71,21 +65,16 @@ export function ModelSelector() {
         ) : (
           <Button
             variant="outline"
-            className="w-fit max-w-xs justify-between h-auto p-1.5 focus-within:bg-transparent bg-none outline-hidden border-none shadow-none"
+            className="h-auto w-fit max-w-xs justify-between border-none bg-none p-1.5 shadow-none outline-hidden focus-within:bg-transparent"
             onClick={() => setOpen(!open)}
           >
             {selectedModel && (
-              <div
-                key={selectedModel.id}
-                className="flex items-center space-x-3"
-              >
+              <div key={selectedModel.id} className="flex items-center space-x-3">
                 <div className="shrink-0">
                   {SelectedModelIcon && <SelectedModelIcon size={28} />}
                 </div>
-                <div className="flex-1 min-w-0 text-left">
-                  <div className="font-medium text-sm">
-                    {selectedModel.name}
-                  </div>
+                <div className="min-w-0 flex-1 text-left">
+                  <div className="text-sm font-medium">{selectedModel.name}</div>
                 </div>
               </div>
             )}
@@ -94,14 +83,14 @@ export function ModelSelector() {
       </PopoverTrigger>
 
       <PopoverContent className="w-100 p-0" align="start">
-        <div className="p-4 border-b">
+        <div className="border-b p-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+            <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-muted-foreground" />
             <input
               placeholder="Search models..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-10  outline-0 border-0 shadow-none  focus:border-0 focus:outline-0 focus-within:border-0 focus-within:outline-hidden "
+              className="h-10 border-0  pl-10 shadow-none outline-0  focus-within:border-0 focus-within:outline-hidden focus:border-0 focus:outline-0 "
             />
           </div>
         </div>
@@ -117,7 +106,7 @@ export function ModelSelector() {
                     key={model.id}
                     disabled={model.isPremium || false}
                     className={cn(
-                      "flex items-start w-full gap-2 p-3 rounded-lg cursor-pointer transition-colors hover:bg-muted/50 disabled:cursor-not-allowed disabled:text-muted-foreground disabled:bg-none ",
+                      "flex w-full cursor-pointer items-start gap-2 rounded-lg p-3 transition-colors hover:bg-muted/50 disabled:cursor-not-allowed disabled:bg-none disabled:text-muted-foreground ",
                       selectedModel?.id === model.id && "bg-muted/30",
                     )}
                     onClick={() => handleModelSelect(model)}
@@ -131,13 +120,13 @@ export function ModelSelector() {
                   >
                     <div className="shrink-0 ">{<Icon size={18} />}</div>
                     <div className="flex min-w-0">
-                      <div className="font-medium text-sm">{model.name}</div>
+                      <div className="text-sm font-medium">{model.name}</div>
                     </div>
                   </button>
                 );
               })
             ) : (
-              <div className="text-center py-8 text-muted-foreground">
+              <div className="py-8 text-center text-muted-foreground">
                 <p className="text-sm">No models found matching your search.</p>
               </div>
             )}

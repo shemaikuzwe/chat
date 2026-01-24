@@ -9,11 +9,12 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
-import { UIMessage } from "../ai/types";
 import { nanoid } from "nanoid";
-import { ModelMeta } from "../types";
-import { modelTypes, providers } from "../constants/models";
+
+import { UIMessage } from "../ai/types";
 import { chatStatus } from "../constants/chat";
+import { modelTypes, providers } from "../constants/models";
+import { ModelMeta } from "../types";
 
 const timestamps = {
   createdAt: timestamp("created_at", { mode: "string" }).notNull().defaultNow(),
@@ -146,15 +147,12 @@ export const model = pgTable("model", {
   ...timestamps,
 });
 
-export const userPreferencesRelations = relations(
-  userPreferences,
-  ({ one }) => ({
-    user: one(user, {
-      fields: [userPreferences.userId],
-      references: [user.id],
-    }),
+export const userPreferencesRelations = relations(userPreferences, ({ one }) => ({
+  user: one(user, {
+    fields: [userPreferences.userId],
+    references: [user.id],
   }),
-);
+}));
 export const userRelations = relations(user, ({ many, one }) => {
   return {
     accounts: many(account),

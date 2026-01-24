@@ -1,12 +1,14 @@
 import "./globals.css";
-import ThemeProvider from "~/components/providers/theme-provider";
-import { TooltipProvider } from "~/components/ui/tooltip";
-import { Toaster } from "~/components/ui/sonner";
-import { cn } from "~/lib/utils";
-import { Geist } from "next/font/google";
+
 import type { Metadata } from "next";
+import { Geist } from "next/font/google";
+
 import Providers from "~/components/providers";
+import ThemeProvider from "~/components/providers/theme-provider";
+import { Toaster } from "~/components/ui/sonner";
+import { TooltipProvider } from "~/components/ui/tooltip";
 import { TRPCProvider } from "~/lib/backend/trpc/client";
+import { cn } from "~/lib/utils";
 
 export const metadata: Metadata = {
   title: {
@@ -53,7 +55,7 @@ export default function RootLayout({
           >
             <Providers>
               <Toaster />
-           
+
               <TooltipProvider>{children}</TooltipProvider>
             </Providers>
           </ThemeProvider>

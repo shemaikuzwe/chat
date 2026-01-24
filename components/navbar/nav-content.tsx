@@ -1,5 +1,12 @@
 "use client";
+import Link from "next/link";
 import React, { Suspense } from "react";
+
+import { useSession } from "~/lib/auth/auth-client";
+
+import { LoginForm } from "../auth/login-form";
+import UserSkelton from "../skeletons";
+import { Button } from "../ui/button";
 import { AssitantIcon } from "../ui/icons";
 import { ScrollArea } from "../ui/scroll-area";
 import {
@@ -11,14 +18,10 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "../ui/sidebar";
-import UserButton from "./user";
-import Link from "next/link";
-import NavLinks from "./nav-links";
+
 import NavItems from "./nav-items";
-import { Button } from "../ui/button";
-import { LoginForm } from "../auth/login-form";
-import { useSession } from "~/lib/auth/auth-client";
-import UserSkelton from "../skeletons";
+import NavLinks from "./nav-links";
+import UserButton from "./user";
 
 export default function NavContent() {
   const { state } = useSidebar();
@@ -33,13 +36,13 @@ export default function NavContent() {
       collapsible={"icon"}
       className="group px-0"
     >
-      <SidebarHeader className="p-2 space-y-2 border-b">
+      <SidebarHeader className="space-y-2 border-b p-2">
         <Link href={"/"} className="flex items-center gap-1">
-          <div className="text-primary-foreground bg-primary rounded-md size p-0.5">
+          <div className="size rounded-md bg-primary p-0.5 text-primary-foreground">
             <AssitantIcon size={28} />
           </div>
 
-          <span className="font-semibold text-center text-xl group-data-[collapsible=icon]:hidden">
+          <span className="text-center text-xl font-semibold group-data-[collapsible=icon]:hidden">
             Chat
           </span>
         </Link>
@@ -52,9 +55,7 @@ export default function NavContent() {
           </ScrollArea>
         ) : (
           <SidebarMenu>
-            <SidebarMenuItem className="text-center mt-5">
-              Login to save chats
-            </SidebarMenuItem>
+            <SidebarMenuItem className="mt-5 text-center">Login to save chats</SidebarMenuItem>
           </SidebarMenu>
         )}
       </SidebarContent>
@@ -66,7 +67,7 @@ export default function NavContent() {
             <UserButton session={session?.data} />
           </Suspense>
         ) : (
-          <div className="w-full flex gap-2">
+          <div className="flex w-full gap-2">
             <LoginForm>
               <Button className="w-full max-w-xs" variant={"outline"}>
                 Login

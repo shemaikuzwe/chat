@@ -8,7 +8,7 @@ function useSearch<T>(
     predicate: (item: T, query: string) => boolean;
     debounce?: number;
     searchParams?: string;
-  }
+  },
 ) {
   const params = useSearchParams();
   const [filtered, setFiltered] = useState(items);

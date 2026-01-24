@@ -1,16 +1,15 @@
-import Chat from "~/components/chat";
-import { capitalize } from "~/lib/utils";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+
+import Chat from "~/components/chat";
 import { trpc } from "~/lib/backend/trpc/server";
+import { capitalize } from "~/lib/utils";
 
 interface PageParams {
   params: Promise<{ id: string }>;
 }
 
-export async function generateMetadata({
-  params,
-}: PageParams): Promise<Metadata> {
+export async function generateMetadata({ params }: PageParams): Promise<Metadata> {
   const { id } = await params;
 
   const chat = await trpc.chat.getChatById({ id });
@@ -24,11 +23,5 @@ export default async function Page({ params }: PageParams) {
   const chat = await trpc.chat.getChatById({ id });
   if (!chat) notFound();
   const messages = chat.messages;
-  return (
-    <Chat
-      chatId={id}
-      initialMessages={messages}
-      chatTitle={chat.title ?? undefined}
-    />
-  );
+  return <Chat chatId={id} initialMessages={messages} chatTitle={chat.title ?? undefined} />;
 }

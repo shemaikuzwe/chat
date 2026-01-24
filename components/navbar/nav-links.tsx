@@ -1,15 +1,10 @@
 import { BookOpen, Plus, SquarePlus } from "lucide-react";
-import {
-  SidebarGroup,
-  SidebarContent,
-  SidebarMenuItem,
-  SidebarMenuButton,
-} from "../ui/sidebar";
 import Link from "next/link";
-
-
 import { usePathname } from "next/navigation";
+
 import { cn } from "~/lib/utils";
+
+import { SidebarGroup, SidebarContent, SidebarMenuItem, SidebarMenuButton } from "../ui/sidebar";
 
 export default function NavLinks() {
   const links = [
@@ -21,7 +16,7 @@ export default function NavLinks() {
     {
       label: "History",
       href: "/history",
-      icon: <BookOpen className="w-4 h-4" />,
+      icon: <BookOpen className="h-4 w-4" />,
     },
   ];
   const pathname = usePathname();
@@ -33,24 +28,14 @@ export default function NavLinks() {
       <SidebarContent>
         <SidebarMenuItem>
           {links.map((link) => (
-            <SidebarMenuButton  tooltip={link.label} key={link.label} asChild>
+            <SidebarMenuButton tooltip={link.label} key={link.label} asChild>
               <Link
                 href={link.href}
-                className={cn(
-                  "flex space-x-1",
-                  isActive(link.href) && "bg-muted",
-                )}
+                className={cn("flex space-x-1", isActive(link.href) && "bg-muted")}
               >
-                <div
-                  className={cn(
-                    "flex items-center justify-center rounded-md")}
-                >
-                  {link.icon}
-                </div>
+                <div className={cn("flex items-center justify-center rounded-md")}>{link.icon}</div>
 
-                <span className={"group-data-[collapsible=icon]:hidden "}>
-                  {link.label}
-                </span>
+                <span className={"group-data-[collapsible=icon]:hidden "}>{link.label}</span>
               </Link>
             </SidebarMenuButton>
           ))}

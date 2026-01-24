@@ -1,9 +1,11 @@
-import { saveUserPreferences } from "~/lib/server";
-import { protectedProcedure, router } from "../trpc/trpc";
-import { customizationSchema } from "~/lib/types/schema";
-import { db } from "~/lib/drizzle";
 import { eq } from "drizzle-orm";
+
+import { db } from "~/lib/drizzle";
 import { userPreferences } from "~/lib/drizzle/schema";
+import { saveUserPreferences } from "~/lib/server";
+import { customizationSchema } from "~/lib/types/schema";
+
+import { protectedProcedure, router } from "../trpc/trpc";
 
 export const userRouter = router({
   saveUserPreferences: protectedProcedure

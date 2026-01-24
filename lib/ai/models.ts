@@ -1,20 +1,11 @@
-import {
-  DeepSeek,
-  OpenAI,
-  Anthropic,
-  Google,
-  OpenRouter,
-} from "~/components/ui/icons";
 import { google } from "@ai-sdk/google";
 import { groq } from "@ai-sdk/groq";
 import { openrouter } from "@openrouter/ai-sdk-provider";
-import {
-  LanguageModel,
-  extractReasoningMiddleware,
-  gateway,
-  wrapLanguageModel,
-} from "ai";
+import { LanguageModel, extractReasoningMiddleware, gateway, wrapLanguageModel } from "ai";
 import React from "react";
+
+import { DeepSeek, OpenAI, Anthropic, Google, OpenRouter } from "~/components/ui/icons";
+
 import { modelTypes, providers } from "../constants/models";
 
 export interface Model {

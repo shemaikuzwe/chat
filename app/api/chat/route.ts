@@ -1,20 +1,17 @@
-import type { NextRequest } from "next/server";
-import { systemPrompt } from "~/lib/ai/prompt";
-import {
-  convertToModelMessages,
-  generateId,
-  stepCountIs,
-  streamText,
-} from "ai";
-import { getChatById, saveChatData } from "~/lib/server";
+import { webSearch } from "@exalabs/ai-sdk";
+import { convertToModelMessages, generateId, stepCountIs, streamText } from "ai";
 import { cookies } from "next/headers";
+import type { NextRequest } from "next/server";
 import { after, NextResponse } from "next/server";
 import { createResumableStreamContext } from "resumable-stream/ioredis";
-import { generateMessageId } from "~/lib/ai/utis";
-import { webSearch } from "@exalabs/ai-sdk";
-import { getModelByIdOrDefault } from "~/lib/server/ai";
+
 import { modelProvider } from "~/lib/ai/models";
+import { systemPrompt } from "~/lib/ai/prompt";
 import { generateImageTool } from "~/lib/ai/tools/generate-image";
+import { generateMessageId } from "~/lib/ai/utis";
+import { getSession } from "~/lib/auth";
+import { getChatById, getUserPreferences, saveChatData } from "~/lib/server";
+import { getModelByIdOrDefault } from "~/lib/server/ai";
 import { chatSchema } from "~/lib/types/ai";
 
 export const maxDuration = 300;
@@ -22,8 +19,10 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const parsedBody = chatSchema.parse(body);
+    const session = await getSession();
 
     const { id, message, trigger, messageId, search } = parsedBody;
+
     console.log("search", search);
     const cookieStore = await cookies();
     const modelId = cookieStore.get("model.id")?.value;
@@ -31,6 +30,7 @@ export async function POST(request: NextRequest) {
     if (!model) return NextResponse.json("Unimplemented", { status: 405 });
 
     const chat = await getChatById(id);
+    const userPreferences = await getUserPreferences(session?.user.id);
     let messages = chat?.messages ?? [];
     if (trigger === "submit-message") {
       messages = [...messages, message];
@@ -44,13 +44,9 @@ export async function POST(request: NextRequest) {
       if (messageIndex === -1) {
         throw new Error(`message ${messageId} not found`);
       }
-
-      // set the messages to the message before the assistant message
       messages = messages.slice(
         0,
-        messages[messageIndex].role === "assistant"
-          ? messageIndex
-          : messageIndex + 1,
+        messages[messageIndex].role === "assistant" ? messageIndex : messageIndex + 1,
       );
     }
     const coreMessage = await convertToModelMessages(messages);
@@ -63,7 +59,13 @@ export async function POST(request: NextRequest) {
     const result = streamText({
       model: modelProvider[model.provider](model.model),
       messages: coreMessage,
-      system: systemPrompt,
+      system: systemPrompt({
+        tools: [
+          { name: "web_search", description: "Search the web for information" },
+          { name: "generate_image", description: "Generate an image" },
+        ],
+        userPreferences,
+      }),
       tools: {
         web_search: webSearch({ numResults: 5 }),
         generate_image: generateImageTool,
@@ -112,12 +114,8 @@ export async function POST(request: NextRequest) {
         await saveChatData({ id, streamId: streamId });
       },
     });
-    
   } catch (err) {
     console.error(err);
-    return NextResponse.json(
-      { message: "Something went wrong" },
-      { status: 500 },
-    );
+    return NextResponse.json({ message: "Something went wrong" }, { status: 500 });
   }
 }

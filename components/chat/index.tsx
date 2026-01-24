@@ -1,35 +1,34 @@
 "use client";
-import React, { useEffect, useOptimistic, useState } from "react";
-import { ScrollArea } from "~/components/ui/scroll-area";
 import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport, FileUIPart } from "ai";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React, { useEffect, useOptimistic, useState } from "react";
+
+import EmptyScreen from "~/components/chat/empty-messages";
 import InputField from "~/components/chat/input";
 import Messages from "~/components/chat/messages";
 import ScrollAnchor from "~/components/chat/scroll-anchor";
-import EmptyScreen from "~/components/chat/empty-messages";
-import { useLocalStorage, useScroll } from "~/lib/hooks";
-import { cn } from "~/lib/utils";
-import { usePathname } from "next/navigation";
 import { Button } from "~/components/ui/button";
-import Link from "next/link";
-import { useIsMobile } from "~/lib/hooks/use-mobile";
-import { AutoScroller } from "./auto-scoller";
-import { DefaultChatTransport, FileUIPart } from "ai";
-import { generateMessageId } from "~/lib/ai/utis";
-import { LoginForm } from "../auth/login-form";
-import { useSession } from "~/lib/auth/auth-client";
+import { ScrollArea } from "~/components/ui/scroll-area";
 import { type Chat as TChat, UIMessage } from "~/lib/ai/types";
+import { generateMessageId } from "~/lib/ai/utis";
+import { useSession } from "~/lib/auth/auth-client";
 import { useTRPC } from "~/lib/backend/trpc/client";
+import { useLocalStorage, useScroll } from "~/lib/hooks";
+import { useIsMobile } from "~/lib/hooks/use-mobile";
+import { cn } from "~/lib/utils";
+
+import { LoginForm } from "../auth/login-form";
+
+import { AutoScroller } from "./auto-scoller";
 
 interface ChatProps {
   initialMessages: UIMessage[];
   chatId: string;
   chatTitle?: string;
 }
-export default function Chat({
-  chatId,
-  initialMessages,
-  chatTitle,
-}: ChatProps) {
+export default function Chat({ chatId, initialMessages, chatTitle }: ChatProps) {
   const trpc = useTRPC();
   const [_new, setChatId] = useLocalStorage<string | null>("chatId", null);
   const [input, setInput] = useState("");
@@ -38,46 +37,46 @@ export default function Chat({
   const isLoggedIn = isPending ? true : !!data?.user;
   const path = usePathname();
   const [attachments, setAttachments] = useState<Array<FileUIPart>>([]);
-  const [optimisticAttachments, setOptimisticAttachments] =
-    useOptimistic<Array<FileUIPart & { isUploading?: boolean }>>(attachments);
+  const [optimisticAttachments, setOptimisticAttachments] = useOptimistic<
+    Array<FileUIPart & { isUploading?: boolean }>
+  >(attachments);
 
-  const { messages, status, error, sendMessage, regenerate, stop } =
-    useChat<UIMessage>({
-      messages: initialMessages,
-      id: chatId,
-      transport: new DefaultChatTransport({
-        prepareSendMessagesRequest: ({ id, messages, trigger, messageId }) => {
-          switch (trigger) {
-            case "regenerate-message":
-              return {
-                body: {
-                  trigger,
-                  id,
-                  messageId,
-                  search,
-                },
-              };
-            case "submit-message":
-              // avoid sending all messages
-              return {
-                body: {
-                  trigger: trigger,
-                  id,
-                  message: messages[messages.length - 1],
-                  messageId,
-                  search,
-                },
-              };
-          }
-        },
-      }),
-      resume: isLoggedIn,
-      generateId: generateMessageId,
-      onFinish: (data) => {
-        setChatId(chatId);
-        trpc.chat.getUserChats.invalidate();
+  const { messages, status, error, sendMessage, regenerate, stop } = useChat<UIMessage>({
+    messages: initialMessages,
+    id: chatId,
+    transport: new DefaultChatTransport({
+      prepareSendMessagesRequest: ({ id, messages, trigger, messageId }) => {
+        switch (trigger) {
+          case "regenerate-message":
+            return {
+              body: {
+                trigger,
+                id,
+                messageId,
+                search,
+              },
+            };
+          case "submit-message":
+            // avoid sending all messages
+            return {
+              body: {
+                trigger: trigger,
+                id,
+                message: messages[messages.length - 1],
+                messageId,
+                search,
+              },
+            };
+        }
       },
-    });
+    }),
+    resume: isLoggedIn,
+    generateId: generateMessageId,
+    onFinish: (data) => {
+      setChatId(chatId);
+      trpc.chat.getUserChats.invalidate();
+    },
+  });
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -108,18 +107,13 @@ export default function Chat({
   }
   const loading = ["streaming", "submitted"].includes(status);
   const isEmpty = messages.length === 0;
-  const {
-    isAtBottom,
-    scrollToBottom,
-    messagesRef,
-    visibilityRef,
-    handleScroll,
-  } = useScroll<HTMLDivElement>();
+  const { isAtBottom, scrollToBottom, messagesRef, visibilityRef, handleScroll } =
+    useScroll<HTMLDivElement>();
   const isMobile = useIsMobile();
   return (
-    <div className="flex flex-col h-screen w-full overflow-hidden">
+    <div className="flex h-screen w-full flex-col overflow-hidden">
       {!isLoggedIn ? (
-        <div className="w-fit h-10 flex justify-end mb-3 mt-3 mx-3 gap-2 pl-0 absolute top-1 right-1 z-10">
+        <div className="absolute top-1 right-1 z-10 mx-3 mt-3 mb-3 flex h-10 w-fit justify-end gap-2 pl-0">
           <LoginForm>
             <Button variant="outline">Login</Button>
           </LoginForm>
@@ -131,7 +125,7 @@ export default function Chat({
         isMobile &&
         !isEmpty &&
         !path.includes(chatId) && (
-          <div className="w-fit h-10 flex gap-10 justify-start mb-3 mx-0 pl-0 absolute top-1 right-1 z-10">
+          <div className="absolute top-1 right-1 z-10 mx-0 mb-3 flex h-10 w-fit justify-start gap-10 pl-0">
             <span className="text-sm">
               {chatTitle
                 ? chatTitle?.length > 35
@@ -149,13 +143,10 @@ export default function Chat({
         <EmptyScreen onSubmit={(msg) => sendMessage({ text: msg })} />
       ) : (
         <>
-          <ScrollArea
-            onScrollCapture={handleScroll}
-            className="grow w-full overflow-y-auto mt-3"
-          >
+          <ScrollArea onScrollCapture={handleScroll} className="mt-3 w-full grow overflow-y-auto">
             <AutoScroller
               ref={visibilityRef}
-              className="min-h-full flex flex-col max-w-5xl px-40 mx-auto"
+              className="mx-auto flex min-h-full max-w-5xl flex-col px-40"
             >
               <Messages
                 isLoading={loading}
@@ -166,16 +157,13 @@ export default function Chat({
               />
             </AutoScroller>
           </ScrollArea>
-          <div className="mx-auto flex justify-center items-center pb-2 pt-0 z-10">
-            <ScrollAnchor
-              isAtBottom={isAtBottom}
-              scrollToBottom={scrollToBottom}
-            />
+          <div className="z-10 mx-auto flex items-center justify-center pt-0 pb-2">
+            <ScrollAnchor isAtBottom={isAtBottom} scrollToBottom={scrollToBottom} />
           </div>
         </>
       )}
-      <div className={cn("w-full z-10", isEmpty ? "" : "mb-14")}>
-        <div className={cn("mx-auto p-2 max-w-2xl")}>
+      <div className={cn("z-10 w-full", isEmpty ? "" : "mb-14")}>
+        <div className={cn("mx-auto max-w-2xl p-2")}>
           <div className="w-full">
             <InputField
               isLoading={loading}

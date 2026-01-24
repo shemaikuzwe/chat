@@ -8,8 +8,8 @@ interface AutoScrollerProps {
 const AutoScroller = forwardRef<HTMLDivElement, AutoScrollerProps>(
   ({ children, className }, ref) => {
     useEffect(() => {
-      if (!ref || typeof ref === 'function' || !ref.current) return;
-      
+      if (!ref || typeof ref === "function" || !ref.current) return;
+
       const observer = new MutationObserver(async () => {
         if (ref.current) {
           ref.current.scroll({
@@ -18,23 +18,23 @@ const AutoScroller = forwardRef<HTMLDivElement, AutoScrollerProps>(
           });
         }
       });
-      
+
       observer.observe(ref.current, {
         childList: true,
         subtree: true,
       });
-      
+
       return () => {
         observer.disconnect();
       };
     }, [ref]);
-    
+
     return (
       <div ref={ref} className={className}>
         {children}
       </div>
     );
-  }
+  },
 );
 
 AutoScroller.displayName = "AutoScroller";

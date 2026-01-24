@@ -1,7 +1,8 @@
 import { Search } from "lucide-react";
-import { Input } from "~/components/ui/input";
-import React from "react";
 import Form from "next/form";
+import React from "react";
+
+import { Input } from "~/components/ui/input";
 import { cn } from "~/lib/utils";
 
 interface SearchProps {
@@ -20,9 +21,9 @@ export default function SearchInput({
   className,
 }: SearchProps) {
   return (
-    <div className="flex items-center space-x-2 w-full bg-card  shadow-none rounded-md">
+    <div className="flex w-full items-center space-x-2 rounded-md  bg-card shadow-none">
       <Form action={""} className="relative w-full">
-        <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500" />
+        <Search className="absolute top-1/2 left-2 -translate-y-1/2 transform text-gray-500" />
         <Input
           placeholder={placeholder}
           value={searchTerm}

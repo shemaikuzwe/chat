@@ -1,7 +1,9 @@
-import { cn } from "~/lib/utils";
-import { Button } from "../ui/button";
 import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+
+import { cn } from "~/lib/utils";
+
+import { Button } from "../ui/button";
 
 interface Props {
   isAtBottom: boolean;
@@ -30,8 +32,8 @@ function ScrollAnchor({ isAtBottom, scrollToBottom }: Props) {
             variant={"outline"}
             size={"icon"}
             className={cn(
-              "z-10 border  transition-opacity duration-300 bg-background  rounded-full ",
-              isAtBottom ? "opacity-0" : "opacity-100"
+              "z-10 rounded-full  border bg-background transition-opacity  duration-300 ",
+              isAtBottom ? "opacity-0" : "opacity-100",
             )}
             onClick={scrollToBottom}
           >
