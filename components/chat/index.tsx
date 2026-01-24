@@ -97,6 +97,9 @@ export default function Chat({
             updatedAt: new Date().toISOString(),
             userId: data?.user?.id ?? "",
             isPending: true,
+            status: "active",
+            parentChatId: null,
+            parentChatTitle: null,
           },
         ];
       });
@@ -152,7 +155,7 @@ export default function Chat({
           >
             <AutoScroller
               ref={visibilityRef}
-              className="min-h-full w-full flex flex-col lg:max-w-2xl mx-auto p-1"
+              className="min-h-full flex flex-col max-w-5xl px-40 mx-auto"
             >
               <Messages
                 isLoading={loading}

@@ -8,15 +8,28 @@ import {
 import { usePathname } from "next/navigation";
 import { useAnimatedText, useLocalStorage } from "~/lib/hooks";
 import { Chat } from "~/lib/ai/types";
-import { Loader2 } from "lucide-react";
+import { GitBranch, Loader2 } from "lucide-react";
 import ChatOptionsMenu from "../chat-options";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
+import { Button } from "~/components/ui/button";
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
-} from "../ui/context-menu";
-import { DeleteDialog, RenameDialog, ShareDialog } from "../dialogs";
+} from "~/components/ui/context-menu";
+import {
+  ArchiveAction,
+  DeleteDialog,
+  PinAction,
+  RenameDialog,
+  ShareDialog,
+} from "~/components/dialogs";
+import { trpc, useTRPC } from "~/lib/backend/trpc/client";
 
 interface NavItemProps {
   chat: Chat;
@@ -46,6 +59,28 @@ export default function NavItem({ chat }: NavItemProps) {
             className="group/chat-item"
           >
             <Link href={path}>
+              {chat.parentChatId && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-5 w-5 p-0 shrink-0"
+                      asChild
+                    >
+                      <Link
+                        href={`/chat/${chat.parentChatId}`}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <GitBranch className="w-3 h-3" />
+                      </Link>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    Branched from: {chat.parentChatTitle || "Untitled chat"}
+                  </TooltipContent>
+                </Tooltip>
+              )}
               <span className="truncate">{text}</span>
               {chat?.isPending && (
                 <Loader2 className="w-4 h-4 animate-spin ml-auto" />
@@ -53,7 +88,13 @@ export default function NavItem({ chat }: NavItemProps) {
             </Link>
           </SidebarMenuButton>
         </ContextMenuTrigger>
-        <ContextMenuContent className="w-32 mx-3">
+        <ContextMenuContent className="w-40 mx-3">
+          <ContextMenuItem asChild>
+            <PinAction chat={chat} />
+          </ContextMenuItem>
+          <ContextMenuItem asChild>
+            <ArchiveAction chat={chat} />
+          </ContextMenuItem>
           <ContextMenuItem asChild>
             <RenameDialog chat={chat} />
           </ContextMenuItem>

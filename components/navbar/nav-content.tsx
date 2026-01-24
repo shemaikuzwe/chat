@@ -40,11 +40,11 @@ export default function NavContent() {
           </div>
 
           <span className="font-semibold text-center text-xl group-data-[collapsible=icon]:hidden">
-             Chat
+            Chat
           </span>
         </Link>
       </SidebarHeader>
-      <SidebarContent className="group-data-[collapsible=icon]:hidden">
+      <SidebarContent>
         {isPending ? null : isLoggedIn ? (
           <ScrollArea className="grow">
             <NavLinks />
@@ -58,7 +58,7 @@ export default function NavContent() {
           </SidebarMenu>
         )}
       </SidebarContent>
-      <SidebarFooter className="group-data-[collapsible=icon]:hidden gap-2 border-t">
+      <SidebarFooter className="gap-2 border-t">
         {isPending ? (
           <UserSkelton />
         ) : isLoggedIn ? (

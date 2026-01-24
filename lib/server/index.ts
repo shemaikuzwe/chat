@@ -15,10 +15,21 @@ export const getChats = cache(async (userId: string | undefined) => {
         messages: false,
         activeStreamId: false,
       },
+      with: {
+        parentChat: {
+          columns: {
+            id: true,
+            title: true,
+          },
+        },
+      },
       where: (chat, { eq }) => eq(chat.userId, userId),
       orderBy: (chat, { desc }) => desc(chat.updatedAt),
     });
-    return chats;
+    return chats.map(({ parentChat, ...chat }) => ({
+      ...chat,
+      parentChatTitle: parentChat?.title ?? null,
+    }));
   } catch (e) {
     console.error("error:", e);
     return [];

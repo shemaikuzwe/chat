@@ -3,13 +3,20 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "../ui/sidebar";
 import { groupChats } from "~/lib/utils";
-import { MessageSquarePlus } from "lucide-react";
+import { ChevronRight, MessageSquarePlus } from "lucide-react";
 import { ChatsSkeleton } from "../skeletons";
 import { trpc } from "~/lib/backend/trpc/client";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../ui/collapsible";
+
 export default function NavItems() {
   const { data: chats, isLoading } = trpc.chat.getUserChats.useQuery();
   const groupedChats = groupChats(chats || []);
@@ -24,6 +31,48 @@ export default function NavItems() {
         </SidebarGroup>
       ) : chats && chats.length > 0 ? (
         <>
+          {groupedChats.archived.length > 0 && (
+            <Collapsible className="group/collapsible">
+              <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+                <SidebarGroupLabel asChild>
+                  <CollapsibleTrigger className="cursor-pointer hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors w-full flex items-center gap-2">
+                    Archived
+                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                  </CollapsibleTrigger>
+                </SidebarGroupLabel>
+                <CollapsibleContent>
+                  <SidebarGroupContent className="list-none">
+                    <SidebarMenu>
+                      {groupedChats.archived.map((chat) => (
+                        <NavItem key={chat.id} chat={chat} />
+                      ))}
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </CollapsibleContent>
+              </SidebarGroup>
+            </Collapsible>
+          )}
+          {groupedChats.pinned.length > 0 && (
+            <Collapsible className="group/collapsible">
+              <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+                <SidebarGroupLabel asChild>
+                  <CollapsibleTrigger className="cursor-pointer hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors w-full flex items-center gap-2">
+                    Pinned
+                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                  </CollapsibleTrigger>
+                </SidebarGroupLabel>
+                <CollapsibleContent>
+                  <SidebarGroupContent className="list-none">
+                    <SidebarMenu>
+                      {groupedChats.pinned.map((chat) => (
+                        <NavItem key={chat.id} chat={chat} />
+                      ))}
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </CollapsibleContent>
+              </SidebarGroup>
+            </Collapsible>
+          )}
           {groupedChats.today.length > 0 && (
             <SidebarGroup className="group-data-[collapsible=icon]:hidden">
               <SidebarGroupLabel>Today</SidebarGroupLabel>

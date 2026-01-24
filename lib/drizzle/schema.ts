@@ -13,6 +13,7 @@ import { UIMessage } from "../ai/types";
 import { nanoid } from "nanoid";
 import { ModelMeta } from "../types";
 import { modelTypes, providers } from "../constants/models";
+import { chatStatus } from "../constants/chat";
 
 const timestamps = {
   createdAt: timestamp("created_at", { mode: "string" }).notNull().defaultNow(),
@@ -104,6 +105,7 @@ export const verification = pgTable(
   },
   (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
+export const status = pgEnum("status", chatStatus);
 
 export const chats = pgTable(
   "chats",
@@ -115,6 +117,8 @@ export const chats = pgTable(
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
     activeStreamId: text("active_stream_id"),
+    status: status(),
+    parentChatId: text("parent_chat_id"),
     ...timestamps,
   },
   (chats) => [
@@ -163,8 +167,14 @@ export const userRelations = relations(user, ({ many, one }) => {
   };
 });
 
-export const chatRelations = relations(chats, ({ one }) => ({
+export const chatRelations = relations(chats, ({ one, many }) => ({
   user: one(user, { fields: [chats.userId], references: [user.id] }),
+  parentChat: one(chats, {
+    fields: [chats.parentChatId],
+    references: [chats.id],
+    relationName: "parentChat",
+  }),
+  branchedChats: many(chats, { relationName: "parentChat" }),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({

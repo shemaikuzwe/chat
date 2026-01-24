@@ -1,4 +1,4 @@
-import { BookOpen } from "lucide-react";
+import { BookOpen, Plus, SquarePlus } from "lucide-react";
 import {
   SidebarGroup,
   SidebarContent,
@@ -7,7 +7,7 @@ import {
 } from "../ui/sidebar";
 import Link from "next/link";
 
-import { AssitantIcon } from "../ui/icons";
+
 import { usePathname } from "next/navigation";
 import { cn } from "~/lib/utils";
 
@@ -16,7 +16,7 @@ export default function NavLinks() {
     {
       label: "New chat",
       href: "/",
-      icon: <AssitantIcon size={18} />,
+      icon: <Plus size={18} />,
     },
     {
       label: "History",
@@ -30,24 +30,20 @@ export default function NavLinks() {
   };
   return (
     <SidebarGroup>
-      <SidebarContent className="list-none">
+      <SidebarContent>
         <SidebarMenuItem>
           {links.map((link) => (
-            <SidebarMenuButton key={link.label} asChild>
+            <SidebarMenuButton  tooltip={link.label} key={link.label} asChild>
               <Link
                 href={link.href}
                 className={cn(
                   "flex space-x-1",
-                  isActive(link.href) && "bg-muted"
+                  isActive(link.href) && "bg-muted",
                 )}
               >
                 <div
                   className={cn(
-                    "flex items-center justify-center rounded-md p-1",
-                    isActive(link.href)
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-background"
-                  )}
+                    "flex items-center justify-center rounded-md")}
                 >
                   {link.icon}
                 </div>

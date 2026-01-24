@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { UIMessage as TUIMessage,UITools } from "ai";
-import { GenerateImageUIToolInvocation } from "./tools/generate-image";
+import { UIMessage as TUIMessage } from "ai";
+import { chatStatus } from "../constants/chat";
 
 export const messageMetadataSchema = z.object({
   createdAt: z.number().optional(),
@@ -15,5 +15,8 @@ export type Chat = {
   updatedAt: string;
   id: string;
   userId: string;
+  status: (typeof chatStatus)[number];
   isPending?: boolean;
+  parentChatId?: string | null;
+  parentChatTitle?: string | null;
 };

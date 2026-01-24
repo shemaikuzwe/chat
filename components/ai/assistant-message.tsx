@@ -27,7 +27,7 @@ export function AssistantMessage({
   message?: UIMessage;
 }) {
   return (
-    <div className="group relative flex items-start  md:-ml-12">
+    <div className="group relative flex items-start flex-wrap md:-ml-12">
       <div
         className={cn(
           "flex size-6 shrink-0 select-none items-center justify-center rounded-md  bg-primary text-primary-foreground",
@@ -81,7 +81,10 @@ export function AssistantMessage({
                   );
                 case "tool-web_search":
                   return (
-                    <SourcesView key={index} sources={msg?.output?.results} />
+                    <SourcesView
+                      key={index}
+                      sources={(msg as any)?.output?.results}
+                    />
                   );
 
                 case "tool-generate_image":

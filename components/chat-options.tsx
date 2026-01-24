@@ -7,16 +7,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { DeleteDialog, RenameDialog, ShareDialog } from "./dialogs";
+import {
+  ArchiveAction,
+  DeleteDialog,
+  PinAction,
+  RenameDialog,
+  ShareDialog,
+} from "./dialogs";
 import type { Chat } from "~/lib/ai/types";
-import { useTRPC } from "~/lib/backend/trpc/client";
+import { trpc, useTRPC } from "~/lib/backend/trpc/client";
 import { SidebarMenuAction } from "./ui/sidebar";
 
 export default function ChatOptionsMenu({ chat }: { chat: Chat }) {
-  const trpc = useTRPC();
+  const utils = useTRPC();
 
   const onSuccess = () => {
-    trpc.chat.getUserChats.invalidate();
+    utils.chat.getUserChats.invalidate();
   };
 
   return (
@@ -27,7 +33,13 @@ export default function ChatOptionsMenu({ chat }: { chat: Chat }) {
           <span className="sr-only">More</span>
         </SidebarMenuAction>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="rounded-lg w-32 mx-3 ">
+      <DropdownMenuContent className="rounded-lg w-40 mx-3 ">
+        <DropdownMenuItem asChild>
+          <PinAction chat={chat} />
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <ArchiveAction chat={chat} />
+        </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <ShareDialog chat={chat} />
         </DropdownMenuItem>

@@ -14,11 +14,15 @@ import { Button } from "~/components/ui/button";
 import { useClipBoard } from "~/lib/hooks";
 import {
   AlertCircle,
+  Archive,
+  ArchiveRestore,
   Check,
   Copy,
   Edit3,
   Link,
   Loader2,
+  Pin,
+  PinOff,
   Save,
   Share2,
   Trash2,
@@ -26,11 +30,77 @@ import {
 import type { Chat } from "~/lib/ai/types";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { trpc } from "~/lib/backend/trpc/client";
+import { trpc, useTRPC } from "~/lib/backend/trpc/client";
 
 interface Props {
   chat: Chat;
   onSuccess?: () => void;
+}
+
+export function PinAction({ chat, onSuccess }: Props) {
+  const utils = useTRPC();
+  const { mutate, isPending } = trpc.chat.updateStatus.useMutation({
+    onSuccess: () => {
+      utils.chat.getUserChats.invalidate();
+      onSuccess?.();
+    },
+  });
+
+  return (
+    <Button
+      variant="ghost"
+      className="w-full justify-start"
+      disabled={isPending}
+      onClick={() =>
+        mutate({
+          id: chat.id,
+          status: chat.status === "PINNED" ? "DEFAULT" : "PINNED",
+        })
+      }
+    >
+      {isPending ? (
+        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+      ) : chat.status === "PINNED" ? (
+        <PinOff className="w-4 h-4 mr-2" />
+      ) : (
+        <Pin className="w-4 h-4 mr-2" />
+      )}
+      {chat.status === "PINNED" ? "Unpin" : "Pin"}
+    </Button>
+  );
+}
+
+export function ArchiveAction({ chat, onSuccess }: Props) {
+  const utils = useTRPC();
+  const { mutate, isPending } = trpc.chat.updateStatus.useMutation({
+    onSuccess: () => {
+      utils.chat.getUserChats.invalidate();
+      onSuccess?.();
+    },
+  });
+
+  return (
+    <Button
+      variant="ghost"
+      className="w-full justify-start"
+      disabled={isPending}
+      onClick={() =>
+        mutate({
+          id: chat.id,
+          status: chat.status === "ARCHIVED" ? "DEFAULT" : "ARCHIVED",
+        })
+      }
+    >
+      {isPending ? (
+        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+      ) : chat.status === "ARCHIVED" ? (
+        <ArchiveRestore className="w-4 h-4 mr-2" />
+      ) : (
+        <Archive className="w-4 h-4 mr-2" />
+      )}
+      {chat.status === "ARCHIVED" ? "Unarchive" : "Archive"}
+    </Button>
+  );
 }
 
 export function DeleteDialog({ chat, onSuccess }: Props) {
@@ -41,6 +111,9 @@ export function DeleteDialog({ chat, onSuccess }: Props) {
 
   useEffect(() => {
     if (isSuccess) {
+      if (pathname.includes(chat.id)) {
+        router.push("/");
+      }
       onSuccess?.();
     }
   }, [isSuccess]);
@@ -49,7 +122,7 @@ export function DeleteDialog({ chat, onSuccess }: Props) {
       toast.error("Failed to delete chat");
     }
   }, [isError]);
-  
+
   return (
     <Dialog>
       <DialogTrigger asChild>

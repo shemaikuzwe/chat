@@ -8,7 +8,7 @@ interface Props {
 }
 export default function Markdown({ children, isAnimating }: Props) {
   return (
-    <div className="prose dark:prose-invert sm:prose sm:dark:prose-invert md:prose-lg md:dark:prose-lg">
+    <div className="prose dark:prose-invert sm:prose sm:dark:prose-invert md:prose-lg md:dark:prose-lg max-w-none">
       <Streamdown
         controls={{
           mermaid: {

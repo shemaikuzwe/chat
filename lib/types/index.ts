@@ -8,6 +8,8 @@ export type AuthStatus = {
   message: string;
 };
 export type GroupedChats = {
+  pinned: Chat[];
+  archived: Chat[];
   today: Chat[];
   yesterday: Chat[];
   lastWeek: Chat[];

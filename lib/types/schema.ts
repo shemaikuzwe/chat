@@ -17,6 +17,7 @@ const editChatSchema = z.object({
     .max(40, {
       message: "Please use ashort title",
     }),
+  pinned: z.boolean().optional(),
 });
 
 const customizationSchema = z.object({

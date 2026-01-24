@@ -17,7 +17,11 @@ import { toast } from "sonner";
 import { useClipBoard } from "~/lib/hooks";
 import { RegenerateFunc } from "~/lib/types";
 import { UIMessage } from "~/lib/ai/types";
-import { formatNumber } from "~/lib/utils";
+import { formatNumber, cn } from "~/lib/utils";
+import { useParams, useRouter } from "next/navigation";
+import { trpc } from "~/lib/backend/trpc/client";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 interface Props {
   content: string;
@@ -26,6 +30,23 @@ interface Props {
 }
 export default function ButtonRow({ content, reload, message }: Props) {
   const [isCopied, copyText] = useClipBoard();
+  const params = useParams();
+  const router = useRouter();
+
+  const branchMutation = trpc.chat.branchChat.useMutation({
+    onSuccess: (data) => {
+      router.push(`/chat/${data.id}`);
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to branch chat");
+    },
+  });
+
+  async function branch() {
+    const id = params.id as string;
+    if (!id) return;
+    branchMutation.mutate({ id, messageId: message.id });
+  }
   const buttons: Array<{
     icon: LucideIcon;
     tooltip: string;
@@ -39,9 +60,9 @@ export default function ButtonRow({ content, reload, message }: Props) {
       label: isCopied ? "Copied!" : "Copy",
     },
     {
-      icon: GitBranchIcon,
-      tooltip: "Branch",
-      onClick: () => {},
+      icon: branchMutation.isPending ? Loader2 : GitBranchIcon,
+      tooltip: branchMutation.isPending ? "Branching..." : "Branch",
+      onClick: branch,
     },
     {
       icon: Repeat,
@@ -87,9 +108,17 @@ export default function ButtonRow({ content, reload, message }: Props) {
               className="w-fit h-fit  flex px-3 py-2 bg-card rounded-xl gap-1"
               variant="ghost"
               size="icon"
+              disabled={onClick === branch && branchMutation.isPending}
               onClick={() => onClick()}
             >
-              <Icon className="h-2 w-2" />
+              <Icon
+                className={cn(
+                  "h-2 w-2",
+                  onClick === branch &&
+                    branchMutation.isPending &&
+                    "animate-spin",
+                )}
+              />
               {label && <span className="text-xs">{label}</span>}
 
               <span className="sr-only">{tooltip}</span>

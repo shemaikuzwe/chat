@@ -28,6 +28,14 @@ export async function fetcher(url: string) {
 export function groupChats(chats: Chat[]): GroupedChats {
   return chats.reduce(
     (acc, chat) => {
+      if (chat.status === "pinned") {
+        acc.pinned.push(chat);
+        return acc;
+      }
+      if (chat.status === "archived") {
+        acc.archived.push(chat);
+        return acc;
+      }
       const chatDate = new Date(chat.updatedAt);
       if (isToday(chatDate)) {
         acc.today.push(chat);
@@ -43,12 +51,14 @@ export function groupChats(chats: Chat[]): GroupedChats {
       return acc;
     },
     {
+      pinned: [],
+      archived: [],
       today: [],
       yesterday: [],
       lastWeek: [],
       lastMonth: [],
       older: [],
-    } as GroupedChats
+    } as GroupedChats,
   );
 }
 
@@ -59,6 +69,6 @@ export function formatTime(chatDate: Date): string {
   return `${formated} ago`;
 }
 
-export function formatNumber(num: number|string): string {
+export function formatNumber(num: number | string): string {
   return new Intl.NumberFormat("en-US").format(Number(num));
 }
