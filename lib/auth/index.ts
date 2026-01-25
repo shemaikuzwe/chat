@@ -2,19 +2,56 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { lastLoginMethod } from "better-auth/plugins";
+import {
+  polar,
+  checkout,
+  portal,
+  usage,
+  webhooks,
+} from "@polar-sh/better-auth";
 import { headers } from "next/headers";
-
+import { Polar } from "@polar-sh/sdk";
 import { db } from "../drizzle";
+import { products } from "../constants/products";
+
+const polarClient = new Polar({
+  accessToken: process.env.POLAR_ACCESS_TOKEN,
+
+  server: "sandbox",
+});
 
 const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL,
   database: drizzleAdapter(db, {
     provider: "pg",
   }),
-  plugins: [lastLoginMethod()],
+  plugins: [
+    lastLoginMethod(),
+    polar({
+      client: polarClient,
+      createCustomerOnSignUp: true,
+      use: [
+        checkout({
+          products: products,
+          successUrl: "/",
+        }),
+        portal(),
+        usage(),
+        webhooks({
+          secret: process.env.POLAR_WEBHOOK_SECRET!,
+        }),
+      ],
+    }),
+  ],
   account: {
     accountLinking: {
-      trustedProviders: ["google", "github", "apple", "gitlab", "email-password"],
+      trustedProviders: [
+        "google",
+        "github",
+        "apple",
+        "gitlab",
+        "email-password",
+      ],
     },
     skipStateCookieCheck: true,
   },
@@ -40,6 +77,7 @@ const signOut = async () =>
     headers: await headers(),
   });
 
-const getSession = async () => await auth.api.getSession({ headers: await headers() });
+const getSession = async () =>
+  await auth.api.getSession({ headers: await headers() });
 
 export { auth, signIn, signOut, getSession };

@@ -29,7 +29,9 @@ export async function POST(request: NextRequest) {
     const session = await getSession();
 
     const { id, message, trigger, messageId, search } = parsedBody;
-    const validatedMessage = await safeValidateUIMessages<UIMessage>(message);
+    const validatedMessage = await safeValidateUIMessages<UIMessage>({
+      messages: [message],
+    });
     if (!validatedMessage.success) {
       return NextResponse.json(validatedMessage.error, { status: 400 });
     }

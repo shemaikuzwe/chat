@@ -1,3 +1,4 @@
+import { polarClient } from "@polar-sh/better-auth";
 import { lastLoginMethodClient } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 
@@ -11,7 +12,7 @@ const {
   revokeSession,
   revokeOtherSessions,
 } = createAuthClient({
-  plugins: [lastLoginMethodClient()],
+  plugins: [lastLoginMethodClient(), polarClient()],
 });
 type Session = typeof $Infer.Session;
 type TSession = typeof $Infer.Session.session;
