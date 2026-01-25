@@ -13,7 +13,7 @@ export const chatRouter = router({
     .input(
       z.object({
         cursor: z.number().nullish(),
-        limit: z.number().min(1).max(100).default(50),
+        limit: z.number().min(1).default(25),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -23,7 +23,7 @@ export const chatRouter = router({
 
       const chats = await getChats(auth.user.id, limit, offset);
 
-      let nextCursor: typeof offset | undefined = undefined;
+      let nextCursor: number | undefined = undefined;
       if (chats.length === limit) {
         nextCursor = offset + limit;
       }
@@ -33,17 +33,21 @@ export const chatRouter = router({
         nextCursor,
       };
     }),
-  getChatById: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input }) => {
-    const { id } = input;
-    const chat = await getChatById(id);
-    return chat;
-  }),
+  getChatById: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input }) => {
+      const { id } = input;
+      const chat = await getChatById(id);
+      return chat;
+    }),
   deleteChat: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const auth = ctx.auth;
       const { id } = input;
-      await db.delete(chats).where(and(eq(chats.id, id), eq(chats.userId, auth.user.id)));
+      await db
+        .delete(chats)
+        .where(and(eq(chats.id, id), eq(chats.userId, auth.user.id)));
     }),
   updateTitle: protectedProcedure
     .input(z.object({ id: z.string(), title: z.string() }))

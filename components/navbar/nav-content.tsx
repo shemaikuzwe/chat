@@ -31,10 +31,11 @@ export default function NavContent() {
   const isPending = session.isPending;
   const isLoggedIn = !!session?.data;
 
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, isRefetching } =
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     trpc.chat.getUserChats.useInfiniteQuery(
       {
-        limit: 50,
+        limit: 25,
+
       },
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
