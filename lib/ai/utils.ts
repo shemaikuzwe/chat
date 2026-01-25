@@ -13,5 +13,5 @@ export function generateMessageId() {
 }
 
 export const generateChatId = () => {
-  return customAlphabet(alphabet, 7)();
+  return customAlphabet(alphabet, 10)();
 };

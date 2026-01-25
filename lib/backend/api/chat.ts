@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 
-import { generateChatId } from "~/lib/ai/utis";
+import { generateChatId } from "~/lib/ai/utils";
 import { protectedProcedure, router } from "~/lib/backend/trpc/trpc";
 import { chatStatus } from "~/lib/constants/chat";
 import { db } from "~/lib/drizzle";
@@ -14,14 +14,16 @@ export const chatRouter = router({
       z.object({
         cursor: z.number().nullish(),
         limit: z.number().min(1).default(25),
+        search: z.string().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
       const auth = ctx.auth;
       const limit = input.limit;
       const offset = input.cursor ?? 0;
+      const search = input.search;
 
-      const chats = await getChats(auth.user.id, limit, offset);
+      const chats = await getChats(auth.user.id, limit, offset, search);
 
       let nextCursor: number | undefined = undefined;
       if (chats.length === limit) {

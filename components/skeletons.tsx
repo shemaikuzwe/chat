@@ -44,19 +44,6 @@ function ChatItemSkeleton() {
 export function ChatHistorySkeleton() {
   return (
     <div className="flex h-full w-full flex-col  gap-3 overflow-auto p-4">
-      <div className="flex w-full items-center justify-center">
-        <div className="w-full max-w-sm">
-          <SearchInput
-            searchTerm={""}
-            setSearchTerm={() => {
-              return;
-            }}
-            placeholder="Search Chat..."
-            searchParams="chat"
-            className="w-full"
-          />
-        </div>
-      </div>
       {Array.from({ length: 3 }).map((_, index) => (
         <ChatItemSkeleton key={index} />
       ))}

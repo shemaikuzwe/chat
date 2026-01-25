@@ -1,5 +1,5 @@
 import Chat from "~/components/chat";
-import { generateChatId } from "~/lib/ai/utis";
+import { generateChatId } from "~/lib/ai/utils";
 
 export default function Home() {
   const chatId = generateChatId();

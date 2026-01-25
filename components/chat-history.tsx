@@ -1,54 +1,83 @@
 "use client";
-import { MoveRight, Search } from "lucide-react";
+import { Loader2, MoveRight, Search } from "lucide-react";
 import Link from "next/link";
-import { use } from "react";
 
 import ChatItem from "~/components/chat-item";
-import { Chat, User } from "~/lib/drizzle";
-import useSearch from "~/lib/hooks/use-search";
 
 import SearchInput from "./search";
 import { Button } from "./ui/button";
-interface Props {
-  chatsPromise: Promise<Array<Chat & { user: User }>>;
-}
-export default function ChatHistory({ chatsPromise }: Props) {
-  const initialChats = use(chatsPromise);
+import { trpc } from "~/lib/backend/trpc/client";
+import { ChatHistorySkeleton } from "~/components/skeletons";
+import { useState } from "react";
+import { ScrollArea } from "./ui/scroll-area";
 
-  const [searchText, setSearchText, chats] = useSearch(initialChats, {
-    predicate: (item, query) => {
-      return item.title?.toLocaleLowerCase().includes(query);
-    },
-    debounce: 400,
-    searchParams: "chat",
-  });
+export default function ChatHistory() {
+  const [search, setSearch] = useState("");
+  const { data, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage } =
+    trpc.chat.getUserChats.useInfiniteQuery(
+      {
+        limit: 25,
+        search,
+      },
+      { getNextPageParam: (lastPage) => lastPage.nextCursor, initialCursor: 0 },
+    );
+  const chats = data?.pages.flatMap((page) => page.chats);
 
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+    const target = e.target as HTMLDivElement;
+    const offset = 50;
+    const isAtBottom =
+      target.scrollTop + target.clientHeight >= target.scrollHeight - offset;
+
+    if (isAtBottom && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  };
   return (
-    <div className="flex h-full w-full flex-col  gap-3 overflow-auto p-4">
+    <div className="flex flex-col h-full">
       <div className="flex w-full items-center justify-center">
         <div className="w-full max-w-sm">
           <SearchInput
-            searchTerm={searchText}
-            setSearchTerm={setSearchText}
+            searchTerm={search}
+            setSearchTerm={setSearch}
             placeholder="Search Chat..."
             searchParams="chat"
             className="w-full"
           />
         </div>
       </div>
-      {chats && chats.length > 0 ? (
-        chats.map((chat) => <ChatItem chat={chat} key={chat.id} />)
-      ) : (
-        <div className="flex h-full max-h-50 w-full flex-col items-center justify-center">
-          <Search className="h-12 w-12" />
-          <span className="mt-2 text-lg font-semibold">No Recent Chats Found </span>
-          <Button variant={"default"} className="mt-2" asChild>
-            <Link href={"/"} className="flex items-center gap-1">
-              Start New Chat <MoveRight />
-            </Link>
-          </Button>
-        </div>
-      )}
+      <ScrollArea
+        className="h-[calc(100vh-100px)]"
+        onScrollCapture={handleScroll}
+      >
+        {isLoading ? (
+          <ChatHistorySkeleton />
+        ) : (
+          <div className="flex flex-col  gap-3 w-full p-4">
+            {chats && chats.length > 0 ? (
+              chats.map((chat) => <ChatItem chat={chat} key={chat.id} />)
+            ) : (
+              <div className="flex h-full max-h-50 w-full flex-col items-center justify-center">
+                <Search className="h-12 w-12" />
+                <span className="mt-2 text-lg font-semibold">
+                  No Recent Chats Found{" "}
+                </span>
+                <Button variant={"default"} className="mt-2" asChild>
+                  <Link href={"/"} className="flex items-center gap-1">
+                    Start New Chat <MoveRight />
+                  </Link>
+                </Button>
+              </div>
+            )}
+            {isFetchingNextPage && (
+              <div className="flex justify-center p-2">
+                <Loader2 className="size-4 animate-spin text-muted-foreground" />
+              </div>
+            )}
+          </div>
+        )}
+      </ScrollArea>
     </div>
   );
 }

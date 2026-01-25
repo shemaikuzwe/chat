@@ -1,5 +1,11 @@
 import { webSearch } from "@exalabs/ai-sdk";
-import { convertToModelMessages, generateId, stepCountIs, streamText } from "ai";
+import {
+  convertToModelMessages,
+  generateId,
+  stepCountIs,
+  streamText,
+  safeValidateUIMessages,
+} from "ai";
 import { cookies } from "next/headers";
 import type { NextRequest } from "next/server";
 import { after, NextResponse } from "next/server";
@@ -8,10 +14,11 @@ import { createResumableStreamContext } from "resumable-stream/ioredis";
 import { modelProvider } from "~/lib/ai/models";
 import { systemPrompt } from "~/lib/ai/prompt";
 import { generateImageTool } from "~/lib/ai/tools/generate-image";
-import { generateMessageId } from "~/lib/ai/utis";
+import { UIMessage } from "~/lib/ai/types";
+import { generateMessageId } from "~/lib/ai/utils";
 import { getSession } from "~/lib/auth";
-import { getChatById, getUserPreferences, saveChatData } from "~/lib/server";
-import { getModelByIdOrDefault } from "~/lib/server/ai";
+import { getUserPreferences, saveChatData } from "~/lib/server";
+import { getModelByIdOrDefault, getUpdatedChatMessages } from "~/lib/server/ai";
 import { chatSchema } from "~/lib/types/ai";
 
 export const maxDuration = 300;
@@ -22,33 +29,23 @@ export async function POST(request: NextRequest) {
     const session = await getSession();
 
     const { id, message, trigger, messageId, search } = parsedBody;
+    const validatedMessage = await safeValidateUIMessages<UIMessage>(message);
+    if (!validatedMessage.success) {
+      return NextResponse.json(validatedMessage.error, { status: 400 });
+    }
 
-    console.log("search", search);
     const cookieStore = await cookies();
     const modelId = cookieStore.get("model.id")?.value;
     const model = await getModelByIdOrDefault(modelId);
     if (!model) return NextResponse.json("Unimplemented", { status: 405 });
 
-    const chat = await getChatById(id);
     const userPreferences = await getUserPreferences(session?.user.id);
-    let messages = chat?.messages ?? [];
-    if (trigger === "submit-message") {
-      messages = [...messages, message];
-    }
-    if (trigger === "regenerate-message") {
-      const messageIndex =
-        messageId == null
-          ? messages.length - 1
-          : messages.findIndex((message) => message.id === messageId);
-
-      if (messageIndex === -1) {
-        throw new Error(`message ${messageId} not found`);
-      }
-      messages = messages.slice(
-        0,
-        messages[messageIndex].role === "assistant" ? messageIndex : messageIndex + 1,
-      );
-    }
+    const messages = await getUpdatedChatMessages({
+      id,
+      message: validatedMessage.data[0],
+      trigger,
+      messageId,
+    });
     const coreMessage = await convertToModelMessages(messages);
 
     await saveChatData({
@@ -116,6 +113,9 @@ export async function POST(request: NextRequest) {
     });
   } catch (err) {
     console.error(err);
-    return NextResponse.json({ message: "Something went wrong" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Something went wrong" },
+      { status: 500 },
+    );
   }
 }

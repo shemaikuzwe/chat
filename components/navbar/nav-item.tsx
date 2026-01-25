@@ -49,7 +49,7 @@ export default function NavItem({ chat }: NavItemProps) {
         <ContextMenuTrigger asChild>
           <SidebarMenuButton asChild isActive={isActive} className="group/chat-item">
             <Link href={path}>
-              {chat.parentChatId && (
+              {chat.parentChatId && chat.parentChatTitle && (
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button variant="ghost" size="icon" className="h-5 w-5 shrink-0 p-0" asChild>

@@ -1,6 +1,7 @@
 import { Search } from "lucide-react";
 import Form from "next/form";
 import React from "react";
+import { useDebouncedCallback } from "use-debounce";
 
 import { Input } from "~/components/ui/input";
 import { cn } from "~/lib/utils";
@@ -20,6 +21,9 @@ export default function SearchInput({
   searchParams,
   className,
 }: SearchProps) {
+  const handleSearch = useDebouncedCallback((search: string) => {
+    setSearchTerm(search);
+  }, 500);
   return (
     <div className="flex w-full items-center space-x-2 rounded-md  bg-card shadow-none">
       <Form action={""} className="relative w-full">
@@ -28,7 +32,7 @@ export default function SearchInput({
           placeholder={placeholder}
           value={searchTerm}
           name={searchParams}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => handleSearch(e.target.value)}
           className={cn("pl-8", className)}
         />
       </Form>

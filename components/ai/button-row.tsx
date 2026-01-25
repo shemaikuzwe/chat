@@ -1,7 +1,6 @@
 import { Check, Copy, GitBranchIcon, LucideIcon, Repeat, ThumbsDown, ThumbsUp } from "lucide-react";
 import { Loader2 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "~/components/ui/button";

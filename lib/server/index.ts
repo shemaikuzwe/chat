@@ -11,36 +11,53 @@ import { UIMessage } from "../ai/types";
 import { getSession } from "../auth";
 import { Customization } from "../types/schema";
 
-export const getChats = cache(async (userId: string | undefined, limit = 50, offset = 0) => {
-  if (!userId) return [];
-  try {
-    const chats = await db.query.chats.findMany({
-      columns: {
-        messages: false,
-        activeStreamId: false,
-      },
-      with: {
-        parentChat: {
-          columns: {
-            id: true,
-            title: true,
+export const getChats = cache(
+  async (
+    userId: string | undefined,
+    limit = 25,
+    offset = 0,
+    search?: string,
+  ) => {
+    if (!userId) return [];
+    try {
+      const chats = await db.query.chats.findMany({
+        columns: {
+          messages: false,
+          activeStreamId: false,
+        },
+        with: {
+          user: {
+            columns: {
+              name: true,
+              email: true,
+              image: true,
+            },
+          },
+          parentChat: {
+            columns: {
+              id: true,
+              title: true,
+            },
           },
         },
-      },
-      where: (chat, { eq }) => eq(chat.userId, userId),
-      orderBy: (chat, { desc }) => desc(chat.updatedAt),
-      limit,
-      offset,
-    });
-    return chats.map(({ parentChat, ...chat }) => ({
-      ...chat,
-      parentChatTitle: parentChat?.title ?? null,
-    }));
-  } catch (e) {
-    console.error("error:", e);
-    return [];
-  }
-});
+        where: (chat, { eq, ilike, and }) =>
+          search
+            ? and(eq(chat.userId, userId), ilike(chat.title, `%${search}%`))
+            : eq(chat.userId, userId),
+        orderBy: (chat, { desc }) => desc(chat.updatedAt),
+        limit,
+        offset,
+      });
+      return chats.map(({ parentChat, ...chat }) => ({
+        ...chat,
+        parentChatTitle: parentChat?.title ?? null,
+      }));
+    } catch (e) {
+      console.error("error:", e);
+      return [];
+    }
+  },
+);
 
 export const getChatById = async (id: string | undefined) => {
   if (!id) return null;
