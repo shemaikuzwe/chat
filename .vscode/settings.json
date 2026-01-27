@@ -1,6 +1,6 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.experimental.useTsgo": false,
+  "typescript.experimental.useTsgo": true,
   "recommendations": ["oxc.oxc-vscode"],
   "editor.codeActionsOnSave": {
     "source.fixAll.oxc": "always"

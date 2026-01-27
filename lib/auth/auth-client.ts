@@ -11,6 +11,7 @@ const {
   listSessions,
   revokeSession,
   revokeOtherSessions,
+  checkout
 } = createAuthClient({
   plugins: [lastLoginMethodClient(), polarClient()],
 });
@@ -27,4 +28,5 @@ export {
   type TSession,
   revokeSession,
   revokeOtherSessions,
+  checkout
 };

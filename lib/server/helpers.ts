@@ -3,7 +3,13 @@ import "server-only";
 import { google } from "@ai-sdk/google";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
-import { UIMessage, convertToModelMessages, GeneratedFile, generateText, Output } from "ai";
+import {
+  UIMessage,
+  convertToModelMessages,
+  GeneratedFile,
+  generateText,
+  Output,
+} from "ai";
 import { fileTypeFromBuffer } from "file-type";
 import { UTApi } from "uploadthing/server";
 
@@ -20,10 +26,11 @@ async function getChatTitle(messages: UIMessage[]) {
   const { output } = await generateText({
     model: google("gemini-2.5-flash"),
     system: `you are a chat title generator assistant  based The main context in chat messages.
-    if you are given a chat message generate a small title for it`,
+    if you are given a chat message generate a small title for it not over 30 characters`,
     messages: modelMessages,
     output: Output.text(),
   });
+  console.log("generated title", output);
   return output;
 }
 async function getFileType(buffer: ArrayBuffer) {

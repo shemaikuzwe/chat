@@ -93,8 +93,8 @@ export async function saveChatData({
     const userId = existing ? existing.userId : session.user.id;
     let title = existing?.title;
     if (!title && generateTitle) {
-      console.log("genereted chat title");
       title = await getChatTitle(messages ?? []);
+      
     }
     if (!userId) return null;
     await db
@@ -104,6 +104,7 @@ export async function saveChatData({
         title: title,
         userId: userId,
         ...(messages ? { messages } : {}),
+        ...(title ? { title } : {}),
         ...(streamId !== undefined ? { activeStreamId: streamId } : {}),
       })
       .onConflictDoUpdate({

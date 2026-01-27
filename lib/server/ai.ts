@@ -1,9 +1,9 @@
 import "server-only";
 
-import { eq, or } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { cacheTag } from "next/cache";
 
-import { db } from "../drizzle";
+import { db, Model } from "../drizzle";
 import { model as modelSchema } from "../drizzle/schema";
 import { UIMessage } from "../ai/types";
 import { getChatById } from ".";
@@ -15,9 +15,17 @@ export async function getModels() {
   return models;
 }
 export async function getModelByIdOrDefault(id: string | undefined) {
-  const model = await db.query.model.findFirst({
-    where: or(eq(modelSchema.id, id ?? ""), eq(modelSchema.isDefault, true)),
-  });
+  let model: Model | undefined;
+  if (id) {
+    model = await db.query.model.findFirst({
+      where: eq(modelSchema.id, id),
+    });
+  }
+  if (!model) {
+    model = await db.query.model.findFirst({
+      where: eq(modelSchema.isDefault, true),
+    });
+  }
   return model;
 }
 export async function getUpdatedChatMessages({

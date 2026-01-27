@@ -26,7 +26,8 @@ export default function Customization() {
       mutate(value);
     },
   });
-  const { mutate, isPending, isError, isSuccess } = trpc.user.saveUserPreferences.useMutation();
+  const { mutate, isPending, isError, isSuccess } =
+    trpc.user.saveUserPreferences.useMutation();
   useEffect(() => {
     if (isSuccess) {
       toast.success("Success", {
@@ -59,10 +60,13 @@ export default function Customization() {
         <form.Field
           name="name"
           children={(field) => {
-            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+            const isInvalid =
+              field.state.meta.isTouched && !field.state.meta.isValid;
             return (
               <Field data-invalid={isInvalid} className="space-y-2">
-                <FieldLabel htmlFor={field.name}>What should we call you?</FieldLabel>
+                <FieldLabel htmlFor={field.name}>
+                  What should we call you?
+                </FieldLabel>
                 <div className="relative">
                   <Input
                     id="name"
@@ -73,7 +77,7 @@ export default function Customization() {
                     className="border-border bg-transparent pr-12 focus-visible:ring-1 focus-visible:ring-ring"
                   />
                   <span className="absolute top-1/2 right-3 -translate-y-1/2 text-xs text-muted-foreground">
-                    {field.state.value.length}/50
+                    {field.state.value.length}/100
                   </span>
                 </div>
               </Field>
@@ -83,7 +87,8 @@ export default function Customization() {
         <form.Field
           name="occupation"
           children={(field) => {
-            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+            const isInvalid =
+              field.state.meta.isTouched && !field.state.meta.isValid;
             return (
               <Field data-invalid={isInvalid} className="space-y-2">
                 <FieldLabel htmlFor={field.name}>What do you do?</FieldLabel>
@@ -97,7 +102,7 @@ export default function Customization() {
                     className="border-border bg-transparent pr-12 focus-visible:ring-1 focus-visible:ring-ring"
                   />
                   <span className="absolute top-1/2 right-3 -translate-y-1/2 text-xs text-muted-foreground">
-                    {field.state.value.length}/50
+                    {field.state.value.length}/100
                   </span>
                 </div>
               </Field>
@@ -107,10 +112,13 @@ export default function Customization() {
         <form.Field
           name="bio"
           children={(field) => {
-            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+            const isInvalid =
+              field.state.meta.isTouched && !field.state.meta.isValid;
             return (
               <Field data-invalid={isInvalid} className="space-y-2">
-                <FieldLabel htmlFor={field.name}>Tell us about yourself</FieldLabel>
+                <FieldLabel htmlFor={field.name}>
+                  Tell us about yourself
+                </FieldLabel>
                 <div className="relative">
                   <Textarea
                     id="bio"
@@ -122,7 +130,7 @@ export default function Customization() {
                     className="border-border bg-transparent pr-12 focus-visible:ring-1 focus-visible:ring-ring"
                   />
                   <span className="absolute top-1/2 right-3 -translate-y-1/2 text-xs text-muted-foreground">
-                    {field.state.value.length}/50
+                    {field.state.value.length}/500
                   </span>
                 </div>
               </Field>
@@ -132,10 +140,13 @@ export default function Customization() {
         <form.Field
           name="customInstructions"
           children={(field) => {
-            const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+            const isInvalid =
+              field.state.meta.isTouched && !field.state.meta.isValid;
             return (
               <Field data-invalid={isInvalid} className="space-y-2">
-                <FieldLabel htmlFor={field.name}>Custom Instructions</FieldLabel>
+                <FieldLabel htmlFor={field.name}>
+                  Custom Instructions
+                </FieldLabel>
                 <div className="relative">
                   <Textarea
                     value={field.state.value}
@@ -146,7 +157,7 @@ export default function Customization() {
                     className="border-border bg-transparent pr-12 focus-visible:ring-1 focus-visible:ring-ring"
                   />
                   <span className="absolute top-1/2 right-3 -translate-y-1/2 text-xs text-muted-foreground">
-                    {field.state.value.length}/50
+                    {field.state.value.length}/500
                   </span>
                 </div>
               </Field>
@@ -154,7 +165,9 @@ export default function Customization() {
           }}
         />
 
-        <Button disabled={isPending}>{isPending ? "Saving..." : "Save Preferences"}</Button>
+        <Button disabled={isPending}>
+          {isPending ? "Saving..." : "Save Preferences"}
+        </Button>
       </form>
     </section>
   );

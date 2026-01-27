@@ -21,16 +21,16 @@ const editChatSchema = z.object({
 });
 
 const customizationSchema = z.object({
-  name: z.string().max(20, {
+  name: z.string().max(100, {
     message: "Name is too long",
   }),
-  occupation: z.string().max(20, {
+  occupation: z.string().max(100, {
     message: "Occupation is too long",
   }),
-  bio: z.string().max(50, {
+  bio: z.string().max(500, {
     message: "Bio is too long",
   }),
-  customInstructions: z.string().max(50, {
+  customInstructions: z.string().max(500, {
     message: "Custom instructions is too long",
   }),
 });

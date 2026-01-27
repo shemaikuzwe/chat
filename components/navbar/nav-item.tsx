@@ -8,7 +8,6 @@ import {
   DeleteDialog,
   OpenNewTab,
   PinAction,
-  RenameDialog,
   ShareDialog,
 } from "~/components/dialogs";
 import { Button } from "~/components/ui/button";
@@ -17,6 +16,7 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
+  
 } from "~/components/ui/context-menu";
 import { SidebarMenuButton, SidebarMenuItem } from "~/components/ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
@@ -80,9 +80,6 @@ export default function NavItem({ chat }: NavItemProps) {
           </ContextMenuItem>
           <ContextMenuItem asChild>
             <ArchiveAction chat={chat} />
-          </ContextMenuItem>
-          <ContextMenuItem asChild>
-            <RenameDialog chat={chat} />
           </ContextMenuItem>
           <ContextMenuItem asChild>
             <ShareDialog chat={chat} />

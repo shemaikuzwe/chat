@@ -12,7 +12,6 @@ import {
 import { headers } from "next/headers";
 import { Polar } from "@polar-sh/sdk";
 import { db } from "../drizzle";
-import { products } from "../constants/products";
 
 const polarClient = new Polar({
   accessToken: process.env.POLAR_ACCESS_TOKEN,
@@ -32,8 +31,18 @@ const auth = betterAuth({
       createCustomerOnSignUp: true,
       use: [
         checkout({
-          products: products,
+          products: [
+            {
+              productId: "2503e827-61f6-49e5-9c7a-3e29b1f6c80a",
+              slug: "pro",
+            },
+            {
+              productId: "cf90ca91-02df-43f0-9d1f-9b8adb189f52",
+              slug: "pro-plus",
+            },
+          ],
           successUrl: "/",
+          
         }),
         portal(),
         usage(),
